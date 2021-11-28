@@ -5,3 +5,6 @@ https://github.com/MyRobotLab/pyrobotlab/blob/develop/home/kwatters/DHParamsIK3D
 
 The ik3d service is based off the Stanford university open source class "introduction to robotics'
 https://www.youtube.com/playlist?list=PL65CC0384A1798ADF
+
+Spot Micro Quadruped Project
+https://github.com/mike4192/spotMicro
