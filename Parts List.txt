@@ -114,3 +114,10 @@ https://www.thingiverse.com/thing:4767006
 Spot Micro Clone by cguweb
 SM2StandLeg.stl X 2
 SM2Stand.stl
+
+## Power Supply. ##
+
+2 x XL4005 5A adjustable voltage Buck Mode SMPS
+2 x M2.5 12mm long stand off with M2.5 male thread one end and female on the other.
+2 x M2.5 15mm long stand off with M2.5mm female threads both ends.
+4 x M2.5 6mm long screws.
