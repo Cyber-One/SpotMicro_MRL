@@ -118,6 +118,7 @@ SM2Stand.stl
 ## Power Supply. ##
 
 2 x XL4005 5A adjustable voltage Buck Mode SMPS
+1 x Dual MBR20100CT Diode
 2 x M2.5 12mm long stand off with M2.5 male thread one end and female on the other.
 2 x M2.5 15mm long stand off with M2.5mm female threads both ends.
 4 x M2.5 6mm long screws.
