@@ -121,6 +121,16 @@ execfile(RuningFolder+'/Servos.py')
 #execfile(RuningFolder+'/Life.py')
 
 #################################################################
+# When not activly executing a command, we don't want the       #
+# robot to just stand there,  This file is responsible for      #
+# giving our robot a bitof life.                                #
+# By blinking the eyes, coordinating the left and right eyes    #
+# and performing other random like movements, just to make our  #
+# robot appear to be alive.                                     #
+#################################################################
+execfile(RuningFolder+'/Gestures.py')
+
+#################################################################
 # If your robot has cameras in it's eye, then we may want to    #
 # add in Open Computer Vison to help the robot make sense of    #
 # the world around it.                                          #
