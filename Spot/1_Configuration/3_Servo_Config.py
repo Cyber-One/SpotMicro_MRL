@@ -34,10 +34,14 @@ print "Creating the Servo Config"
 # In some cases, the direction of travel is sometime in the     #
 # oposite direction to what we need.  In this case, swap the    #
 # Min and Max pos, this will swap the direction to what we need.#
-
+#################################################################
+#                                                               #
 # The Front Left Shoulder Servo                                 #
-# TThis servo swings the leg in and out relative to the line    #
-# of the body.                                                  #
+# This servo swings the leg in and out relative to the line     #
+# of the body.  The min is closer to the centerline and max is  #
+# further out                                                   #
+#                                                               #
+#################################################################
 EnableFLShoulder = True # True or False
 # This is the controller the Front Left Shoulder Servo is       #
 # attached to                                                   #
@@ -54,111 +58,166 @@ FLShoulderMaxPos = 140
 # This is the speed that the Front Left Shoulder moves at.      #
 # -1 is no speed limit, the Front Left Shoulder will move as    #
 # fast as possible.                                             #
-FLShoulderVelocity = -1
+FLShoulderVelocity = 375
 
-# The Front Left Arm
+#################################################################
+#                                                               #
+# The Front Left Arm                                            #
+# This servo moves the arm (between the shoulder and the wrist) #
+# back and forward.  Min is all the way back and max is all the #
+# way forward.                                                  #
+#                                                               #
+#################################################################
 EnableFLArm = True
 FLArmAttachment = "Back"
 FLArmPin = 15
 FLArmMinPos = 0
 FLArmMaxPos = 180
-FLArmVelocity = -1
+FLArmVelocity = 375
 
-# The Front Left Wrist
+#################################################################
+#                                                               #
+# The Front Left Wrist                                          #
+# The wrist is between the arm and the foot.  Min is all the    #
+# way back while max is all the way forwrd.                     #
+#                                                               #
+#################################################################
 EnableFLWrist = True
 FLWristAttachment = "Back"
 FLWristPin = 14
 FLWristMinPos = 0
 FLWristMaxPos = 180
-FLWristVelocity = -1
+FLWristVelocity = 375
 
 
 #################################################################
 #                                                               #
-# Servo Front Right Leg Group                                    #
+# Servo Front Right Leg Group                                   #
 #                                                               #
 #################################################################
-
-# The Front Right Shoulder
+#                                                               #
+# The Front Right Shoulder                                      #
+# This servo swings the leg in and out relative to the line     #
+# of the body.  The min is closer to the centerline and max is  #
+# further out                                                   #
+#                                                               #
+#################################################################
 EnableFRShoulder = True
 FRShoulderAttachment = "Back"
 FRShoulderPin = 13
 FRShoulderMinPos = 0
 FRShoulderMaxPos = 180
-FRShoulderVelocity = -1
+FRShoulderVelocity = 375
 
-# The Front Right Arm
+#################################################################
+#                                                               #
+# The Front Right Arm                                           #
+# This servo moves the arm (between the shoulder and the wrist) #
+# back and forward.  Min is all the way back and max is all the #
+# way forward.                                                  #
+#                                                               #
+#################################################################
 EnableFRArm = True
 FRArmAttachment = "Back"
 FRArmPin = 15
 FRArmMinPos = 0
 FRArmMaxPos = 180
-FRArmVelocity = -1
+FRArmVelocity = 375
 
+#################################################################
+#                                                               #
 # The Front Right Wrist
 EnableFRWrist = True
 FRWristAttachment = "Back"
 FRWristPin = 14
 FRWristMinPos = 0
 FRWristMaxPos = 180
-FRWristVelocity = -1
+FRWristVelocity = 375
 
 #################################################################
 #                                                               #
-# Servo Back Left Leg Group                                    #
+# Servo Back Left Leg Group                                     #
 #                                                               #
 #################################################################
-
-# The Back Left Shoulder
+#                                                               #
+# The Back Left Shoulder                                        #
+# This servo swings the leg in and out relative to the line     #
+# of the body.  The min is closer to the centerline and max is  #
+# further out                                                   #
+#                                                               #
+#################################################################
 EnableBLShoulder = True
 BLShoulderAttachment = "Back"
 BLShoulderPin = 13
 BLShoulderMinPos = 0
 BLShoulderMaxPos = 180
-BLShoulderVelocity = -1
+BLShoulderVelocity = 375
 
-# The Back Left Arm
+#################################################################
+#                                                               #
+# The Back Left Arm                                             #
+# This servo moves the arm (between the shoulder and the wrist) #
+# back and forward.  Min is all the way back and max is all the #
+# way forward.                                                  #
+#                                                               #
+#################################################################
 EnableBLArm = True
 BLArmAttachment = "Back"
 BLArmPin = 15
 BLArmMinPos = 0
 BLArmMaxPos = 180
-BLArmVelocity = -1
+BLArmVelocity = 375
 
+#################################################################
+#                                                               #
 # The Back Left Wrist
 EnableBLWrist = True
 BLWristAttachment = "Back"
 BLWristPin = 14
 BLWristMinPos = 0
 BLWristMaxPos = 180
-BLWristVelocity = -1
+BLWristVelocity = 375
 
 #################################################################
 #                                                               #
 # Servo Back Right Leg Group                                    #
 #                                                               #
 #################################################################
-
-# The Back Right Shoulder
+#                                                               #
+# The Back Right Shoulder                                       #
+# This servo swings the leg in and out relative to the line     #
+# of the body.  The min is closer to the centerline and max is  #
+# further out                                                   #
+#                                                               #
+#################################################################
 EnableBRShoulder = True
 BRShoulderAttachment = "Back"
 BRShoulderPin = 13
 BRShoulderMinPos = 0
 BRShoulderMaxPos = 180
-BRShoulderVelocity = -1
+BRShoulderVelocity = 375
 
-# The Back Right Arm
+#################################################################
+#                                                               #
+# The Back Right Arm                                            #
+# This servo moves the arm (between the shoulder and the wrist) #
+# back and forward.  Min is all the way back and max is all the #
+# way forward.                                                  #
+#                                                               #
+#################################################################
 EnableBRArm = True
 BRArmAttachment = "Back"
 BRArmPin = 15
 BRArmMinPos = 0
 BRArmMaxPos = 180
-BRArmVelocity = -1
+BRArmVelocity = 375
 
+#################################################################
+#                                                               #
 # The Back Right Wrist
 EnableBRWrist = True
 BRWristAttachment = "Back"
 BRWristPin = 14
 BRWristMinPos = 0
 BRWristMaxPos = 180
-BRWristVelocity = -1
+BRWristVelocity = 375
