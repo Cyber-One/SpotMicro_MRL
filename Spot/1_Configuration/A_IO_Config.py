@@ -40,17 +40,17 @@ print "Creating the Input/Output Config"
 # transmission using the transmit pin, the times how long it    #
 # takes for the receive pin to be pulsed high.                  #
 # From there it can do the math to get a distance.              #
-# Pin 1 is used for the Transmit of the pulse.                  #
-# Pin 2 is used for the receive of the return pulse.            #
-EnableLeftUltrasonic = True                 #
-LeftUltrasonicAttachment = "arduinoNano"    # "arduioLeft"
-LeftUltrasonicPin1 = 10                     # 64
-LeftUltrasonicPin2 = 9                      # 63
+# Pin 1 is used for the Transmit of the pulse.        Trigger   #
+# Pin 2 is used for the receive of the return pulse.  Echo      #
+EnableLeftUltrasonic = True
+LeftUltrasonicAttachment = "arduinoNano"
+LeftUltrasonicPin1 = 3
+LeftUltrasonicPin2 = 4
 
-EnableRightUltraSonic = True                #
-RightUltrasonicAttachment = "arduinoNano"   # "arduioRight"
-RightUltrasonicPin1 = 12                    # 64
-RightUltrasonicPin2 = 11                    # 63
+EnableRightUltraSonic = True
+RightUltrasonicAttachment = "arduinoNano"
+RightUltrasonicPin1 = 5
+RightUltrasonicPin2 = 6
 
 # Time between Pings in milli-seconds.
 PingTime = 1000
