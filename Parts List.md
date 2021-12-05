@@ -1,3 +1,4 @@
+# Parts List by section.
 ## Right Front Arm. ##
 
 http://www.thingiverse.com/thing:3445283
@@ -58,7 +59,7 @@ R_wrist_mg.stl
 8  x M4 Hex Nuts	(Used on the shoulder and wrist servos)
 4  x M4 Square Nuts	(Used on the arm servo, imbedded in the arm)
 
-# Left Back Arm. ##
+## Left Back Arm. ##
 
 http://www.thingiverse.com/thing:3445283
 Spotmicro - robot dog by KDY0523
@@ -123,3 +124,4 @@ SM2Stand.stl
 2 x M2.5 15mm long stand off with M2.5mm female threads both ends.
 4 x M2.5 6mm long screws.
 1 x 100mm long 2.5mm wide cable tie.
+1 x 6mm diameter 1 meter long Spiral Wrap (This gets cut into 5 length, 1 x 100mm the rest evenly divied into 4)
