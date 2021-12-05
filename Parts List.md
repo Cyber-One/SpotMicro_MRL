@@ -125,3 +125,19 @@ SM2Stand.stl
 4 x M2.5 6mm long screws.
 1 x 100mm long 2.5mm wide cable tie.
 1 x 6mm diameter 1 meter long Spiral Wrap (This gets cut into 5 length, 1 x 100mm the rest evenly divied into 4)
+
+## Front Cover. ##
+
+http://www.thingiverse.com/thing:3445283
+Spotmicro - robot dog by KDY0523
+F_cover.stl
+L_ultra_sonic.stl
+R_ultra_sonic.stl
+
+https://www.thingiverse.com/thing:3638679
+SpotPupPi (Spotmini) by TezBot
+Pi_Camera_LEDs.stl
+
+2 x ultrasonic sensors, HC04
+1 x Raspberry Pi Camera 8MP
+4 x M1.7 5mm long self tapping screw to hold in the camera.
