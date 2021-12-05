@@ -48,13 +48,13 @@ EnableFLShoulder = True # True or False
 FLShoulderAttachment = "Back"
 # The controller will have a number of pis, this is the pin     #
 # this servo is connected to.                                   #
-FLShoulderPin = 9
+FLShoulderPin = 12
 # The is the value from testing where the Front Left Shoulder   #
 # is all the way towards the center line of the both            #
-FLShoulderMinPos = 70
+FLShoulderMinPos = 0
 # This is the value from testing where the Front Left Shoulder  #
 # is all the way as far from the centerline as is possible      #
-FLShoulderMaxPos = 140
+FLShoulderMaxPos = 180
 # This is the speed that the Front Left Shoulder moves at.      #
 # -1 is no speed limit, the Front Left Shoulder will move as    #
 # fast as possible.                                             #
@@ -70,7 +70,7 @@ FLShoulderVelocity = 375
 #################################################################
 EnableFLArm = True
 FLArmAttachment = "Back"
-FLArmPin = 15
+FLArmPin = 13
 FLArmMinPos = 0
 FLArmMaxPos = 180
 FLArmVelocity = 375
@@ -104,7 +104,7 @@ FLWristVelocity = 375
 #################################################################
 EnableFRShoulder = True
 FRShoulderAttachment = "Back"
-FRShoulderPin = 13
+FRShoulderPin = 0
 FRShoulderMinPos = 0
 FRShoulderMaxPos = 180
 FRShoulderVelocity = 375
@@ -119,7 +119,7 @@ FRShoulderVelocity = 375
 #################################################################
 EnableFRArm = True
 FRArmAttachment = "Back"
-FRArmPin = 15
+FRArmPin = 1
 FRArmMinPos = 0
 FRArmMaxPos = 180
 FRArmVelocity = 375
@@ -129,7 +129,7 @@ FRArmVelocity = 375
 # The Front Right Wrist
 EnableFRWrist = True
 FRWristAttachment = "Back"
-FRWristPin = 14
+FRWristPin = 2
 FRWristMinPos = 0
 FRWristMaxPos = 180
 FRWristVelocity = 375
@@ -148,7 +148,7 @@ FRWristVelocity = 375
 #################################################################
 EnableBLShoulder = True
 BLShoulderAttachment = "Back"
-BLShoulderPin = 13
+BLShoulderPin = 8
 BLShoulderMinPos = 0
 BLShoulderMaxPos = 180
 BLShoulderVelocity = 375
@@ -163,7 +163,7 @@ BLShoulderVelocity = 375
 #################################################################
 EnableBLArm = True
 BLArmAttachment = "Back"
-BLArmPin = 15
+BLArmPin = 9
 BLArmMinPos = 0
 BLArmMaxPos = 180
 BLArmVelocity = 375
@@ -173,7 +173,7 @@ BLArmVelocity = 375
 # The Back Left Wrist
 EnableBLWrist = True
 BLWristAttachment = "Back"
-BLWristPin = 14
+BLWristPin = 10
 BLWristMinPos = 0
 BLWristMaxPos = 180
 BLWristVelocity = 375
@@ -192,7 +192,7 @@ BLWristVelocity = 375
 #################################################################
 EnableBRShoulder = True
 BRShoulderAttachment = "Back"
-BRShoulderPin = 13
+BRShoulderPin = 4
 BRShoulderMinPos = 0
 BRShoulderMaxPos = 180
 BRShoulderVelocity = 375
@@ -207,7 +207,7 @@ BRShoulderVelocity = 375
 #################################################################
 EnableBRArm = True
 BRArmAttachment = "Back"
-BRArmPin = 15
+BRArmPin = 5
 BRArmMinPos = 0
 BRArmMaxPos = 180
 BRArmVelocity = 375
@@ -217,7 +217,7 @@ BRArmVelocity = 375
 # The Back Right Wrist
 EnableBRWrist = True
 BRWristAttachment = "Back"
-BRWristPin = 14
+BRWristPin = 6
 BRWristMinPos = 0
 BRWristMaxPos = 180
 BRWristVelocity = 375
