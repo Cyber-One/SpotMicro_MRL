@@ -141,3 +141,18 @@ Pi_Camera_LEDs.stl
 2 x ultrasonic sensors, HC04
 1 x Raspberry Pi Camera 8MP
 4 x M1.7 5mm long self tapping screw to hold in the camera.
+
+## Rear Cover. ##
+
+http://www.thingiverse.com/thing:3445283
+Spotmicro - robot dog by KDY0523
+R_cover.stl
+B_cover_mg.stl
+foot.stl x 4
+
+4 x M2.5 6mm long brass stand off's
+8 x M2.5 5mm long screws
+4 x M3 flat washers
+4 x M3 Spring washers
+1 x 2x16 line LCD display I2C
+1 x DPST switch
