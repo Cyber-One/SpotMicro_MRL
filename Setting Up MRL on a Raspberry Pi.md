@@ -9,7 +9,8 @@ In either case you will need to use a flash program to copy it to the MicroSD ca
 You can use the Raspberry Pi Imager https://www.raspberrypi.com/software/ or another imager, 
 I used BalenaEtcher https://www.balena.io/etcher/
 Using either program flash your chosen OS to the MicroSD Card.
-After flashin, remove and re-insert the microSD card, In a windows system, it will ask you to format the card (DONT, cancel the request.)
+After flashing, remove and re-insert the microSD card. 
+In a windows system, it will ask you to format the card (DONT, cancel the request.)
 You will find it will give you two new drives, the one you want is boot, the other is not accessable in windows, and windows will want to format it.
 Opening the boot drive you will find a number of files, we only want to touch one of those files. :-)
 Using Notpad++ or Notepad, edit the config.txt file.
@@ -124,10 +125,7 @@ cd ..
 Download the latest MyRobotLab from:
 http://myrobotlab.org/
 
-Please Like, Subscribe and ring the notification bell to be alerted when the next video is released.
-It also a form of support that costs you nothing, but does help the channel a lot.
-
-Also please consider joining my VIP's GoLucky and Louwrens Burger and my other Patreons Lmorales45 and Ratchet in supporting the channel on Patreon.
+Please consider joining my VIP's GoLucky and Louwrens Burger and my other Patreons Lmorales45 and Ratchet in supporting the channel on Patreon.
 https://www.patreon.com/Cyber_One
 
 You can also support MyRobotLab at
@@ -136,25 +134,6 @@ https://www.patreon.com/myrobotlab
 Maybe drop into the Cyber_One Discord server for a chat :-)
 https://discord.gg/WzrBUTkthQ
 
-You can join the MyRobotLab Discord server with the following link.
+You can join the MyRobotLab Discord server with the following link and keep up with the latest developments there.
 https://discord.gg/XygZbWwsCq
 
-I have a number of Play-Lists that may also interest you:
-Fred's modified Inmoov Robot Head created in the Fred's Head Series.
-https://www.youtube.com/playlist?list=PLgXTfFM40HqEbnFfhaLPmLv_RS1ZRCilI
-Fred's Head, a better stand. (This series)
-https://youtube.com/playlist?list=PLgXTfFM40HqHV5EPKPULJDfbuXK1KUeeS
-The Inmoov Walking Robot Series.
-https://youtube.com/playlist?list=PLgXTfFM40HqEMwg9rJ078INRYWDCG66B3
-Fred's Static Leg build and attach series, now finished.
-https://youtube.com/playlist?list=PLgXTfFM40HqHhaHpmX4HQO9xJAz-pAsOm
-The Creality CR10S5 3D Printer Series.
-https://youtube.com/playlist?list=PLgXTfFM40HqH2fJ3Wsu2wX90h1_V4uI5n
-The Cocoon Create Touch 3D Printer Series.
-https://youtube.com/playlist?list=PLgXTfFM40HqHJlvRuSbhYUvdWBraW9tri
-My Industrial videos.
-https://youtube.com/playlist?list=PLgXTfFM40HqFNvDBGjblVrEkl3jrQKMDE
-And finally some of my unboxing videos.
-https://youtube.com/playlist?list=PLgXTfFM40HqFXHXRLBa9tsLhRQGcORZQO
-
-See you in the next video :-).
