@@ -35,7 +35,7 @@ execfile(RuningFolder+'/1_Configuration/2_Controller_Config.py')
 #################################################################
 if EnableRaspberryPi == True:
     print "-Starting the Raspberry Pi Service"
-    raspi = Runtime.createAndStart("raspi","RasPi")
+    raspi = Runtime.start("raspi","RasPi")
 
 #################################################################
 # Start the Arduino Nano connected using /dev/ttyUSB0           #
