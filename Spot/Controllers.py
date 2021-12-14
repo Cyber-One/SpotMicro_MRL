@@ -113,7 +113,7 @@ def TestArduinoControllerExists(ControllerName, CurrentState):
 EnableAdafruit16CServoDriverBack = TestI2CControllerExists(BackServoDriverAttached, EnableAdafruit16CServoDriverBack)
 if EnableAdafruit16CServoDriverBack == True:
     print "--Starting the Adafruit16CServoDriver for the Back"
-    Back = Runtime.createAndStart("Back", "Adafruit16CServoDriver")
+    Back = Runtime.start("Back", "Adafruit16CServoDriver")
     Back.attach(runtime.getService(BackServoDriverAttached), BackServoDriverPort, BackServoDriverAddr)
 
 #################################################################
@@ -122,7 +122,7 @@ if EnableAdafruit16CServoDriverBack == True:
 EnableAdafruit16CServoDriverFront = TestI2CControllerExists(FrontArmServoDriverAttached, EnableAdafruit16CServoDriverFront)
 if EnableAdafruit16CServoDriverFront == True:
     print "--Starting the Adafruit16CServoDriver for the Right Arm"
-    Front = Runtime.createAndStart("Front", "Adafruit16CServoDriver")
+    Front = Runtime.start("Front", "Adafruit16CServoDriver")
     Front.attach(runtime.getService(FrontArmServoDriverAttached), FrontArmServoDriverPort, FrontArmServoDriverAddr)
 
 #################################################################
