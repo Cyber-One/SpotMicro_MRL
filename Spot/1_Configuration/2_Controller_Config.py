@@ -43,7 +43,7 @@ EnableRaspberryPi = True   # True for on, False for off
 # Ultrasonic Sensors and the PIR sensor.
 # The Arduino also has an I2C Port 0 if we need to use it.
 EnableArduinoNano = True  # True for on, False for off
-ArduinoNanoComPort = "/dev/ttyUSB0" # Refer to notes above
+ArduinoNanoComPort = "/dev/ttyAMA0" # Refer to notes above
 
 ##############################################################
 #                                                            #
