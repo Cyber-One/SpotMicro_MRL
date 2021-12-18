@@ -78,8 +78,8 @@ FLArmVelocity = 375
 #################################################################
 #                                                               #
 # The Front Left Wrist                                          #
-# The wrist is between the arm and the foot.  Min is all the    #
-# way back while max is all the way forwrd.                     #
+# This servo swings the lower leg back and forward.             #
+# Min is all the way forward and max is all the way back.       #
 #                                                               #
 #################################################################
 EnableFLWrist = True
@@ -127,11 +127,15 @@ FRArmVelocity = 375
 #################################################################
 #                                                               #
 # The Front Right Wrist
+# This servo swings the lower leg back and forward.             #
+# Min is all the way forward and max is all the way back.       #
+#                                                               #
+#################################################################
 EnableFRWrist = True
 FRWristAttachment = "Back"
 FRWristPin = 2
-FRWristMinPos = 0
-FRWristMaxPos = 180
+FRWristMinPos = 180
+FRWristMaxPos = 0
 FRWristVelocity = 375
 
 #################################################################
@@ -164,13 +168,17 @@ BLShoulderVelocity = 375
 EnableBLArm = True
 BLArmAttachment = "Back"
 BLArmPin = 9
-BLArmMinPos = 0
-BLArmMaxPos = 180
+BLArmMinPos = 180
+BLArmMaxPos = 0
 BLArmVelocity = 375
 
 #################################################################
 #                                                               #
-# The Back Left Wrist
+# The Back Left Wrist                                           #
+# This servo swings the lower leg back and forward.             #
+# Min is all the way forward and max is all the way back.       #
+#                                                               #
+#################################################################
 EnableBLWrist = True
 BLWristAttachment = "Back"
 BLWristPin = 10
@@ -214,10 +222,14 @@ BRArmVelocity = 375
 
 #################################################################
 #                                                               #
-# The Back Right Wrist
+# The Back Right Wrist                                          #
+# This servo swings the lower leg back and forward.             #
+# Min is all the way forward and max is all the way back.       #
+#                                                               #
+#################################################################
 EnableBRWrist = True
 BRWristAttachment = "Back"
 BRWristPin = 6
-BRWristMinPos = 0
-BRWristMaxPos = 180
+BRWristMinPos = 180
+BRWristMaxPos = 0
 BRWristVelocity = 375
