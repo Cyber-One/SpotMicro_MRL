@@ -140,7 +140,7 @@ if EnableMPU6050B == True:
 # PCF8574 8 channel I/O Expander to provide the signals we need #
 # to driver the LCD display.                                    #
 #################################################################
-EnableLCD = TestI2CControllerExists(PCF8574AAttached, EnableLCD)
+EnableLCD = TestI2CControllerExists(LCDAttached, EnableLCD)
 if EnableLCD == True:
     LCDPCF8574 = Runtime.createAndStart("LCDPCF8574","PCF8574")
     LCDPCF8574.setBus(LCDPort)
