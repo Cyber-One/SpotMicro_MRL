@@ -55,48 +55,48 @@ RightUltrasonicPin2 = 6
 # Time between Pings in milli-seconds.
 PingTime = 1000
 
-#############################################################
-#                                                           #
-# The Battery Voltage Monitor                               #
-#                                                           #
-#############################################################
-# Battery Voltage can be a very important thing to monitor  #
-# when your robot is running on batteries.  For the most    #
-# part this is done with a simple resistor divider network. #
-# For this to work, an analog pin needs to be allocated     #
-# from one of the installed Arduino's.  A resistor divider  #
-# network, two resistors connected in series is connected   #
-# between the ground and the battery power.  The junction   #
-# of the two resistors is then connected to teh Arduino's   #
-# analoginput.                                              #
-# The resistors are selected so that at no time would the   #
-# voltage at the Arduino exceed 5 volts.                    #
-# For Spots build, he's using 7.4Vdc batteries, so if we    #
-# use a 10K resistor between gnd and the input and a 56K    #
-# resistor between the input and the battery, we should be  #
-# safe up to 33Vdc                                          #
-# To enable, the Enable Battery monitor must be set to a    #
-# value between 1 and 2, with each of the inputs defined`   #
-# below.                                                    #
-#############################################################
+#################################################################
+#                                                               #
+# The Battery Voltage Monitor                                   #
+#                                                               #
+#################################################################
+# Battery Voltage can be a very important thing to monitor      #
+# when your robot is running on batteries.  For the most        #
+# part this is done with a simple resistor divider network.     #
+# For this to work, an analog pin needs to be allocated         #
+# from one of the installed Arduino's.  A resistor divider      #
+# network, two resistors connected in series is connected       #
+# between the ground and the battery power.  The junction       #
+# of the two resistors is then connected to teh Arduino's       #
+# analoginput.                                                  #
+# The resistors are selected so that at no time would the       #
+# voltage at the Arduino exceed 5 volts.                        #
+# For Spots build, he's using 7.4Vdc batteries, so if we        #
+# use a 10K resistor between gnd and the input and a 56K        #
+# resistor between the input and the battery, we should be      #
+# safe up to 33Vdc                                              #
+# To enable, the Enable Battery monitor must be set to a        #
+# value between 1 and 2, with each of the inputs defined`       #
+# below.                                                        #
+#################################################################
 EnableBatteryMonitor = 2
 BatteryMonitorAttachment = "arduinoNano"
 BatteryMonitorPin1 = "A0" # On the Arduino Nano, this = A0
 BatteryMonitorPin2 = "A1" # On the Arduino Nano, this = A1
 BatteryMonitorPollInterval = 10000 # milli-seconds
 
-#############################################################
-#                                                           #
-# MPU6050 Inertial Measurment Unit (IMU)                    #
-#                                                           #
-#############################################################
-# It would be good to know when the body was level.         #
-# This can achived by installing an Inertial Measurment     #
-# Unit (IMU).  The IMU we can use here is the MPU6050,      #
-# a reasonably cheap I2C device that provides acelleration  #
-# in 3 axis of the linear direction as well as 3 axis of    #
-# rotational motion.                                        #
-#############################################################
+#################################################################
+#                                                               #
+# MPU6050 Inertial Measurment Unit (IMU)                        #
+#                                                               #
+#################################################################
+# It would be good to know when the body was level.             #
+# This can achived by installing an Inertial Measurment         #
+# Unit (IMU).  The IMU we can use here is the MPU6050,          #
+# a reasonably cheap I2C device that provides acelleration      #
+# in 3 axis of the linear direction as well as 3 axis of        #
+# rotational motion.                                            #
+#################################################################
 EnableMPU6050A = True                   # True or False
 MPU6050AAttached = "raspi"
 MPU6050APort = "1"
@@ -107,11 +107,31 @@ MPU6050BAttached = "arduinoNano"
 MPU6050BPort = "0"
 MPU6050BAddr = "0x68"
 
-##############################################################
-#                                                            #
-# Ibus Remote Control Service                                #
-#                                                            #
-##############################################################
+
+#################################################################
+#                                                               #
+# HD44780 2 line 16 Character I2C LCD Display                   #
+#                                                               #
+#################################################################
+# The HD44780 LCD driver is able to drive up to 40 characters   #
+# over 2 lines, There are some displays, that will split at the #
+# 20th character to create a 4 line 20 character display        #
+# The LCD dispaly is not inherintly an I2C device, so we use a  #
+# PCF8574 8 channel I/O Expander to provide the signals we need #
+# to driver the LCD display.                                    #
+#################################################################
+EnableLCD = True
+LCDAttached = "raspi"
+LCDPort = "1"
+LCDAddr = "0x27"
+LCDStartMessage1 = "Cyber_One  Spot "
+LCDStartMessage2 = "MyRobotLab Micro"
+
+#################################################################
+#                                                               #
+# Ibus Remote Control Service                                   #
+#                                                               #
+#################################################################
 # Not yet available
 EnableIBus = False
 IbusAttach = "arduinoLeft"
