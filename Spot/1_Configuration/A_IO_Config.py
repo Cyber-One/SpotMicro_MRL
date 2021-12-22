@@ -99,13 +99,13 @@ BatteryMonitorPollInterval = 10000 # milli-seconds
 #################################################################
 EnableMPU6050A = True                   # True or False
 MPU6050AAttached = "raspi"
-MPU6050APort = "1"
+MPU6050ABus = "1"
 MPU6050AAddr = "0x68"
 
 EnableMPU6050B = False                   # True or False
-MPU6050BAttached = "arduinoNano"
-MPU6050BPort = "0"
-MPU6050BAddr = "0x68"
+MPU6050BAttached = "raspi"
+MPU6050BBus = "1"
+MPU6050BAddr = "0x69"
 
 
 #################################################################
@@ -122,7 +122,7 @@ MPU6050BAddr = "0x68"
 #################################################################
 EnableLCD = True
 LCDAttached = "raspi"
-LCDPort = "1"
+LCDBus = "1"
 LCDAddr = "0x27"
 LCDStartMessage1 = "Cyber_One  Spot "
 LCDStartMessage2 = "MyRobotLab Micro"

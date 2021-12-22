@@ -105,7 +105,7 @@ if EnableBatteryMonitor > 0 and EnableBatteryMonitor < 5:
 EnableMPU6050A = TestI2CControllerExists(MPU6050AAttached, EnableMPU6050A)
 if EnableMPU6050A == True:
     MPU6050A = Runtime.createAndStart("MPU6050A","Mpu6050")
-    MPU6050A.attach(runtime.getService(MPU6050AAttached), MPU6050APort, MPU6050AAddr)
+    MPU6050A.attach(runtime.getService(MPU6050AAttached), MPU6050ABus, MPU6050AAddr)
     #MPU6050A.initialize()
     MPU6050A.dmpInitialize()
     #MPU6050A.refresh()
@@ -118,7 +118,7 @@ if EnableMPU6050A == True:
 EnableMPU6050B = TestI2CControllerExists(MPU6050BAttached, EnableMPU6050B)
 if EnableMPU6050B == True:
     MPU6050B = Runtime.createAndStart("MPU6050B","Mpu6050")
-    MPU6050B.attach(runtime.getService(MPU6050BAttached), MPU6050BPort, MPU6050BAddr)
+    MPU6050B.attach(runtime.getService(MPU6050BAttached), MPU6050BBus, MPU6050BAddr)
     #MPU6050B.initialize()
     MPU6050B.dmpInitialize()
     #MPU6050B.refresh()
@@ -143,9 +143,10 @@ if EnableMPU6050B == True:
 EnableLCD = TestI2CControllerExists(LCDAttached, EnableLCD)
 if EnableLCD == True:
     LCDPCF8574 = Runtime.createAndStart("LCDPCF8574","PCF8574")
-    LCDPCF8574.setBus(LCDPort)
-    LCDPCF8574.setAddress(LCDAddr)
-    LCDPCF8574.attach(runtime.getService(LCDAttached))
+    #LCDPCF8574.setBus(LCDBus)
+    #LCDPCF8574.setAddress(LCDAddr)
+    #LCDPCF8574.attach(runtime.getService(LCDAttached))
+    LCDPCF8574.attach(runtime.getService(LCDAttached), LCDBus, LCDAddr)
     LCDHD44780 = Runtime.createAndStart("LCDHD44780","Hd44780")
     LCDHD44780.attach(LCDPCF8574)
     LCDHD44780.clear()
