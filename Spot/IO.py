@@ -130,6 +130,32 @@ if EnableMPU6050B == True:
 
 #################################################################
 #                                                               #
+# HD44780 2 line 16 Character I2C LCD Display                   #
+#                                                               #
+#################################################################
+# The HD44780 LCD driver is able to drive up to 40 characters   #
+# over 2 lines, There are some displays, that will split at the #
+# 20th character to create a 4 line 20 character display        #
+# The LCD dispaly is not inherintly an I2C device, so we use a  #
+# PCF8574 8 channel I/O Expander to provide the signals we need #
+# to driver the LCD display.                                    #
+#################################################################
+EnableLCD = TestI2CControllerExists(PCF8574AAttached, EnableLCD)
+if EnableLCD == True:
+    LCDPCF8574 = Runtime.createAndStart("LCDPCF8574","PCF8574")
+    LCDPCF8574.setBus(LCDPort)
+    LCDPCF8574.setAddress(LCDAddr)
+    LCDPCF8574.attach(runtime.getService(LCDAttached))
+    LCDHD44780 = Runtime.createAndStart("LCDHD44780","Hd44780")
+    LCDHD44780.attach(LCDPCF8574)
+    LCDHD44780.clear()
+    LCDHD44780.display(LCDStartMessage1, 0)
+    LCDHD44780.display(LCDStartMessage2, 1)
+    LCDHD44780.setBackligth(True)
+
+
+#################################################################
+#                                                               #
 # Ibus Remote Control Service                                   #
 #                                                               #
 #################################################################
