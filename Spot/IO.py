@@ -142,17 +142,17 @@ if EnableMPU6050B == True:
 #################################################################
 EnableLCD = TestI2CControllerExists(LCDAttached, EnableLCD)
 if EnableLCD == True:
-    LCDPCF8574 = Runtime.createAndStart("LCDPCF8574","PCF8574")
-    #LCDPCF8574.setBus(LCDBus)
-    #LCDPCF8574.setAddress(LCDAddr)
-    #LCDPCF8574.attach(runtime.getService(LCDAttached))
-    LCDPCF8574.attach(runtime.getService(LCDAttached), LCDBus, LCDAddr)
-    LCDHD44780 = Runtime.createAndStart("LCDHD44780","Hd44780")
-    LCDHD44780.attach(LCDPCF8574)
-    LCDHD44780.clear()
-    LCDHD44780.display(LCDStartMessage1, 0)
-    LCDHD44780.display(LCDStartMessage2, 1)
-    LCDHD44780.setBackligth(True)
+    LCDPCF8574 = Runtime.createAndStart("LCDPCF8574","Pcf8574")
+    LCDPCF8574.setBus(LCDBus)
+    LCDPCF8574.setAddress(LCDAddr)
+    LCDPCF8574.attach(runtime.getService(LCDAttached))
+    #LCDPCF8574.attach(runtime.getService(LCDAttached), LCDBus, LCDAddr)
+    LCD = Runtime.createAndStart("LCD","Hd44780")
+    LCD.attach(LCDPCF8574)
+    LCD.clear()
+    LCD.display(LCDStartMessage1, 0)
+    LCD.display(LCDStartMessage2, 1)
+    LCD.setBacklight(True)
 
 
 #################################################################
