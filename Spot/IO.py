@@ -49,13 +49,17 @@ execfile(RuningFolder+'/1_Configuration/A_IO_Config.py')
 EnableLeftUltrasonic = TestArduinoControllerExists(LeftUltrasonicAttachment, EnableLeftUltrasonic)
 if EnableLeftUltrasonic:
     LeftUltraSonic = Runtime.start("LeftUltraSonic", "UltrasonicSensor")
-    LeftUltraSonic.attach(runtime.getService(LeftUltrasonicAttachment), LeftUltrasonicPin1, LeftUltrasonicPin2)
+    LeftUltraSonic.setTriggerPin​(LeftUltrasonicPin1)
+    LeftUltraSonic.setEchoPin(LeftUltrasonicPin2)
+    LeftUltraSonic.attach(runtime.getService(LeftUltrasonicAttachment))
     #python.subscribe('LeftUltraSonic', 'onRange', 'python', 'onRangeLeft')
 
 EnableRightUltraSonic = TestArduinoControllerExists(RightUltrasonicAttachment, EnableRightUltraSonic)
 if EnableRightUltraSonic:
     RightUltraSonic = Runtime.start("RightUltraSonic", "UltrasonicSensor")
-    RightUltraSonic.attach(runtime.getService(RightUltrasonicAttachment), RightUltrasonicPin1, RightUltrasonicPin2)
+    RightUltraSonic.setTriggerPin(RightUltrasonicPin1)
+    RightUltraSonic.setEchoPin(RightUltrasonicPin2)
+    RightUltraSonic.attach(runtime.getService(RightUltrasonicAttachment))
     #python.subscribe('RightUltraSonic', 'onRange', 'python', 'onRangeRight')
 
 #################################################################
@@ -105,7 +109,10 @@ if EnableBatteryMonitor > 0 and EnableBatteryMonitor < 5:
 EnableMPU6050A = TestI2CControllerExists(MPU6050AAttached, EnableMPU6050A)
 if EnableMPU6050A == True:
     MPU6050A = Runtime.createAndStart("MPU6050A","Mpu6050")
-    MPU6050A.attach(runtime.getService(MPU6050AAttached), MPU6050ABus, MPU6050AAddr)
+    MPU6050A.setBus(MPU6050ABus)
+    MPU6050A.setAddress(MPU6050AAddr)
+    MPU6050A.attach(runtime.getService(MPU6050AAttached))
+    #MPU6050A.attach(runtime.getService(MPU6050AAttached), MPU6050ABus, MPU6050AAddr)
     #MPU6050A.initialize()
     MPU6050A.dmpInitialize()
     #MPU6050A.refresh()
@@ -118,7 +125,10 @@ if EnableMPU6050A == True:
 EnableMPU6050B = TestI2CControllerExists(MPU6050BAttached, EnableMPU6050B)
 if EnableMPU6050B == True:
     MPU6050B = Runtime.createAndStart("MPU6050B","Mpu6050")
-    MPU6050B.attach(runtime.getService(MPU6050BAttached), MPU6050BBus, MPU6050BAddr)
+    MPU6050B.setBus(MPU6050BBus)
+    MPU6050B.setAddress(MPU6050BAddr)
+    MPU6050B.attach(runtime.getService(MPU6050BAttached))
+    #MPU6050B.attach(runtime.getService(MPU6050BAttached), MPU6050BBus, MPU6050BAddr)
     #MPU6050B.initialize()
     MPU6050B.dmpInitialize()
     #MPU6050B.refresh()
@@ -152,7 +162,7 @@ if EnableLCD == True:
     LCD.clear()
     LCD.display(LCDStartMessage1, 0)
     LCD.display(LCDStartMessage2, 1)
-    LCD.setBacklight(True)
+    LCD.setBackLight(True)
 
 
 #################################################################
