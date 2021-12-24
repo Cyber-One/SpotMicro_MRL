@@ -39,44 +39,46 @@ print "Creating the Controller Config"
 #################################################################
 EnableRaspberryPi = True   # True for on, False for off
 
-# In the Spot build, I'm using an Arduino Nano for the two 
-# Ultrasonic Sensors and the PIR sensor.
-# The Arduino also has an I2C Port 0 if we need to use it.
-EnableArduinoNano = True  # True for on, False for off
-ArduinoNanoComPort = "/dev/ttyAMA0" # Refer to notes above
+# In the Spot build, I'm using an Arduino Nano for the two      #
+# Ultrasonic Sensors and the PIR sensor.                        #
+# The Arduino also has an I2C Port 0 if we need to use it.      #
+EnableArduinoNano = True            # True for on, False for off
+ArduinoNanoComPort = "/dev/ttyAMA0"     # Refer to notes above
 
-##############################################################
-#                                                            #
-# Level 2 Controllers. I2C based devices                     #
-#                                                            #
-##############################################################
-
-# Our servo controllers in Spot are the Adafruit 16 channel 
-# PWM Servo drivers.  With two of these installed we will 
-# need to create two separate service, one for each.
-# Next we need to attach the servo drivers to the Raspi4 or 
-# the Arduino
-# There are three parameters we need to set,
-#
-# The first parameter is the service we want to attach it to, 
-# normally either the RasPi or the "arduinoNano"
-# in our case it will be the Raspi4. "raspi"
-#
-# The second parameter is the bus, This is normally 1 for the
-# RasPi or 0 for an Arduino.
-#
-# Each servo driver has a unique address that is hard coded
-# by means of a set of jumpers on the controller boards, This
-# is our Third parameter, There are seven jumpers that form
-# a binary number that is added to 0x40. Note the 0x 
-# indicates the number is in hexadecimal format that is base
-# 16 and has values in the range:
-# 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F
-# 0x40 is equal to 64 in decimal, the seven jumpers will give
-# up to 128 possible address.
-# Just be aware of any other I2C devices you have on the bus
-# and what their address are, some device can not be changed
-# or have a very limited number of selectable addresses.
+#################################################################
+#                                                               #
+# Level 2 Controllers. I2C based devices                        #
+#                                                               #
+#################################################################
+#                                                               #
+# Our servo controllers in Spot are the Adafruit 16 channel     #
+# PWM Servo drivers.  With two of these installed we will       #
+# need to create two separate service, one for each.            #
+# Next we need to attach the servo drivers to the Raspi4 or     #
+# the Arduino                                                   #
+# There are three parameters we need to set,                    #
+#                                                               #
+# The first parameter is the service we want to attach it to,   #
+# normally either the RasPi or the "arduinoNano"                #
+# in our case it will be the Raspi4. "raspi"                    #
+#                                                               #
+# The second parameter is the bus, This is normally 1 for the   #
+# RasPi or 0 for an Arduino.                                    #
+#                                                               #
+# Each servo driver has a unique address that is hard coded     #
+# by means of a set of jumpers on the controller boards, This   #
+# is our Third parameter, There are seven jumpers that form     #
+# a binary number that is added to 0x40. Note the 0x            #
+# indicates the number is in hexadecimal format that is base    #
+# 16 and has values in the range:                               #
+# 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F                               #
+# 0x40 is equal to 64 in decimal, the seven jumpers will give   #
+# up to 128 possible address.                                   #
+# Just be aware of any other I2C devices you have on the bus    #
+# and what their address are, some device can not be changed    #
+# or have a very limited number of selectable addresses.        #
+#                                                               #
+#################################################################
 
 EnableAdafruit16CServoDriverBack = True     # True or False
 BackServoDriverAddr = "0x40"                # Refer to notes above
