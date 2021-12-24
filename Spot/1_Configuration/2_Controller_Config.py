@@ -78,13 +78,13 @@ ArduinoNanoComPort = "/dev/ttyAMA0" # Refer to notes above
 # and what their address are, some device can not be changed
 # or have a very limited number of selectable addresses.
 
-EnableAdafruit16CServoDriverBack = True # True or False
-BackServoDriverAddr = "0x40"            # Refer to notes above
-BackServoDriverPort = "1"               # Refer to notes above
-BackServoDriverAttached = "raspi"       # Refer to notes above
+EnableAdafruit16CServoDriverBack = True     # True or False
+BackServoDriverAddr = "0x40"                # Refer to notes above
+BackServoDriverBus = "1"                    # Refer to notes above
+BackServoDriverAttached = "raspi"           # Refer to notes above
 
-EnableAdafruit16CServoDriverFront = False # True or False
-FrontArmServoDriverAddr = "0x41"         # Refer to notes above
-FrontArmServoDriverPort = "1"            # Refer to notes above
-FrontArmServoDriverAttached = "raspi"    # Refer to notes above
+EnableAdafruit16CServoDriverFront = False   # True or False
+FrontArmServoDriverAddr = "0x41"            # Refer to notes above
+FrontArmServoDriverBus = "1"                # Refer to notes above
+FrontArmServoDriverAttached = "raspi"       # Refer to notes above
 

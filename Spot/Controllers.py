@@ -82,21 +82,17 @@ def TestArduinoControllerExists(ControllerName, CurrentState):
 # Our servo controller's in Spot are the Adafruit 16 channel    #
 # PWM Servo drivers also known as the PCA9685 PWM driver.       #
 # With one or two of these installed we will need to create     #
-# Two separate service, one for each.                           #
+# The separate service, one for each installed.                 #
 # Next we need to attach the servo drivers to the Raspi4 or the #
 # ArduinoNano.                                                  #
 # There are three parameters we need to set,                    #
 #                                                               #
-# The first parameter is the service we want to attach it to,   #
-# normally either the RasPi or one of the Arduinos              #
-# in our case it will be the Raspi4.                            #
-#                                                               #
-# The second parameter is the bus, This is normally 1 for the   #
+# The first parameter is the bus, This is normally 1 for the    #
 # RasPi or 0 for an Arduino.                                    #
 #                                                               #
 # Each servo driver has a unique address that is hard coded by  #
 # means of a set of jumpers on the controller boards, This is   #
-# our Third parameter, There are seven jumpers that form a      #
+# our second parameter, There are seven jumpers that form a     #
 # binary number that is added to 0x40. Note the 0x indicates    #
 # the number is in hexadecimal format that is base 16 and has   #
 # values in the range 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F           #
@@ -105,6 +101,11 @@ def TestArduinoControllerExists(ControllerName, CurrentState):
 # Just be aware of any other I2C devices you have on the bus    #
 # and what their address are, some device can not be changed    #
 # or have a very limited number of selectable addresses.        #
+#                                                               #
+# The third parameter is the service we want to attach it to,   #
+# normally either the RasPi or the Arduino in our case it will  #
+# be the Raspi4.                                                #
+#                                                               #
 #################################################################
 
 #################################################################
@@ -114,7 +115,9 @@ EnableAdafruit16CServoDriverBack = TestI2CControllerExists(BackServoDriverAttach
 if EnableAdafruit16CServoDriverBack == True:
     print "--Starting the Adafruit16CServoDriver for the Back"
     Back = Runtime.start("Back", "Adafruit16CServoDriver")
-    Back.attach(runtime.getService(BackServoDriverAttached), BackServoDriverPort, BackServoDriverAddr)
+    Back.setDeviceBus​(BackServoDriverBus)
+    Back.setDeviceAddress​(BackServoDriverAddr)
+    Back.attach(runtime.getService(BackServoDriverAttached))
 
 #################################################################
 # PCA9685 controler for the Front.                              #
@@ -123,7 +126,9 @@ EnableAdafruit16CServoDriverFront = TestI2CControllerExists(FrontArmServoDriverA
 if EnableAdafruit16CServoDriverFront == True:
     print "--Starting the Adafruit16CServoDriver for the Right Arm"
     Front = Runtime.start("Front", "Adafruit16CServoDriver")
-    Front.attach(runtime.getService(FrontArmServoDriverAttached), FrontArmServoDriverPort, FrontArmServoDriverAddr)
+    Front.setDeviceBus(FrontArmServoDriverBus)
+    Front.setDeviceAddress(FrontArmServoDriverAddr)
+    Front.attach(runtime.getService(FrontArmServoDriverAttached))
 
 #################################################################
 # To assist in performing a sanity test, the following function #
