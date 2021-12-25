@@ -29,4 +29,54 @@ Each of these files holds a different part of the system configuration.
 ### 1_Sys_Config.py 
 holds all the system based configurations.
 Here you will set the bots name and how the Web based Graphical User Interface works.
+RobotsName = "Spot"
+
+RunWebGUI = True
+RunWebGUIbrowser = False
+
+###2_Controller_Config.py
+There are a number of controllers used in the SpotMicro build, starting with the Raspberry pi
+If however you build your robot using something other than a Raspberry Pi, then you can disable the RasPi service in here.
+EnableRaspberryPi = True
+
+EnableArduinoNano = True
+ArduinoNanoComPort = "/dev/ttyAMA0"
+
+EnableAdafruit16CServoDriverBack = True
+BackServoDriverAddr = "0x40"
+BackServoDriverBus = "1"
+BackServoDriverAttached = "raspi"
+
+EnableAdafruit16CServoDriverFront = False
+FrontArmServoDriverAddr = "0x41"
+FrontArmServoDriverBus = "1"
+FrontArmServoDriverAttached = "raspi"
+
+###3_Servo_Config.py
+There are 4 legs in SpotMicro, below is the configuration data for one of the legs, Front Left Leg.
+The other 4 legs are similar but have a look in the config file as the orientation between the left and right sides will change.
+
+EnableFLShoulder = True # True or False
+FLShoulderAttachment = "Back"
+FLShoulderPin = 12
+FLShoulderMinPos = 0
+FLShoulderMaxPos = 180
+FLShoulderVelocity = 375
+
+EnableFLArm = True
+FLArmAttachment = "Back"
+FLArmPin = 13
+FLArmMinPos = 0
+FLArmMaxPos = 180
+FLArmVelocity = 375
+
+EnableFLWrist = True
+FLWristAttachment = "Back"
+FLWristPin = 14
+FLWristMinPos = 0
+FLWristMaxPos = 180
+FLWristVelocity = 375
+
+
+###A_IO_Config.py
 
