@@ -24,16 +24,26 @@ print "Creating the System Config"
 # The Graphical User Interface (GUI)                            #
 #                                                               #
 #################################################################
-# This is the name the robot will use in some sections of the
-# program such as WebKitSpeechRecognition.
+# This is the name the robot will use in some sections of the   #
+# program such as WebKitSpeechRecognition.                      #
+#################################################################
 RobotsName = "Spot"
 
-# WebGUI is the new boy on the block and is getting better.
-# It will be started in anycase if you decide to use 
-# WebKitSpeechRecognition.
+#################################################################
+# WebGUI is the Web Based Graphical User Interface.  This uses  #
+# a standard web browser as the user interface.  The advantage  #
+# here is the Web browser can be on any computer  :-)           #
+# It will be started in anycase if you decide to use            #
+# WebKitSpeechRecognition.                                      #
+#################################################################
 RunWebGUI = True           # True for on, False for off
-# WebGUI can be run headless, that is the web client interface 
-# can be on another computer.  In this case we don't want to 
-# launch the local web browser.  The local web browser also 
-# uses a lot of computer power.
+
+#################################################################
+# WebGUI can be run headless, that is the web client interface  #
+# can be on another computer. 
+# In this case we don't want to launch the local web browser.   #
+# The local web browser also uses a lot of computer power.      #
+# WebGUI can also provide a way of spanning MRL arocss two or   #
+# more computers.                                               #
+#################################################################
 RunWebGUIbrowser = False    # True for on, False for off
