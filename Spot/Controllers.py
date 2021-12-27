@@ -17,7 +17,6 @@
 # we might need.                                                #
 #                                                               #
 #################################################################
-print "Starting the various Controllers"
 
 #################################################################
 # Load the configuration for the Controllers.                   #
@@ -44,7 +43,6 @@ if EnableRaspberryPi == True:
 # The Arduino also has an I2C Port 0 if we need to use it.      #
 #################################################################
 if EnableArduinoNano == True:
-    print "-Starting the Arduino Nano Service"
     arduinoNano = Runtime.start("arduinoNano","Arduino")
     arduinoNano.setBoardNano()
     arduinoNano.connect(ArduinoNanoComPort)
@@ -113,10 +111,9 @@ def TestArduinoControllerExists(ControllerName, CurrentState):
 #################################################################
 EnableAdafruit16CServoDriverBack = TestI2CControllerExists(BackServoDriverAttached, EnableAdafruit16CServoDriverBack)
 if EnableAdafruit16CServoDriverBack == True:
-    print "--Starting the Adafruit16CServoDriver for the Back"
     Back = Runtime.start("Back", "Adafruit16CServoDriver")
-    Back.setDeviceBus​(BackServoDriverBus)
-    Back.setDeviceAddress​(BackServoDriverAddr)
+    Back.setDeviceBus(BackServoDriverBus)
+    Back.setDeviceAddress(BackServoDriverAddr)
     Back.attach(runtime.getService(BackServoDriverAttached))
 
 #################################################################
@@ -124,7 +121,6 @@ if EnableAdafruit16CServoDriverBack == True:
 #################################################################
 EnableAdafruit16CServoDriverFront = TestI2CControllerExists(FrontArmServoDriverAttached, EnableAdafruit16CServoDriverFront)
 if EnableAdafruit16CServoDriverFront == True:
-    print "--Starting the Adafruit16CServoDriver for the Right Arm"
     Front = Runtime.start("Front", "Adafruit16CServoDriver")
     Front.setDeviceBus(FrontArmServoDriverBus)
     Front.setDeviceAddress(FrontArmServoDriverAddr)
