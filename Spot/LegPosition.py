@@ -17,7 +17,7 @@
 # to a given position.                                          #
 #                                                               #
 #################################################################
-import cmath
+import math
 print "Starting the leg calculation Functions"
 
 #################################################################
@@ -66,10 +66,10 @@ print "Starting the leg calculation Functions"
 # one angle or the third length.                                #
 #################################################################
 def LengthC(AngleC, LengthA, LengthB):
-    return cmath.sqrt(LengthA*LengthA + LengthB*LengthB - 2*LengthA*LengthB*cmath.cos(AngleC))
+    return math.sqrt(LengthA*LengthA + LengthB*LengthB - 2*LengthA*LengthB*math.cos(math.radians(AngleC)))
 
 def AngleC(LengthA, LengthB, LengthC):
-    return cmath.acos((LengthA*LengthA + LengthB*LengthB - LengthC*LengthC)/(2*LengthA*LengthB))
+    return math.degrees(math.acos((LengthA*LengthA + LengthB*LengthB - LengthC*LengthC)/(2*LengthA*LengthB)))
 
 #################################################################
 #                                                               #
@@ -77,9 +77,10 @@ def AngleC(LengthA, LengthB, LengthC):
 #                                                               #
 #################################################################
 # First thing we need to know is the length of the leg between  #
-# the Arm and the foot, let call that LAF, but we have four     #
-# legs to deal with, so we will preface each one with a 2 leter #
-# indentifier to help, FL, FR, BL, BR.                          #
+# the Arm and the foot, let call that LAF (Length Arm Foot),    #
+# but we have four legs to deal with, so we will preface each   #
+# one with a 2 leter indentifier to help, FL (Front Left),      #
+# FR (Front Right), BL (Back Left), BR (Back Right).            #
 #################################################################
 FLLAF = LengthC(FLWrist.currentOutputPos, LAW, LWF)
 FRLAF = LengthC(FRWrist.currentOutputPos, LAW, LWF)
@@ -90,6 +91,7 @@ BRLAF = LengthC(BRWrist.currentOutputPos, LAW, LWF)
 # The direction the foot is from the arm is not always the      #
 # angle set by the Arm servo.  We need to calculate the offset  #
 # then add that to the servo position.  We will call this AAF   #
+# (Angle Arm Foot).  Again we will prefix with the leg code.    #
 #################################################################
 FLAAF = FLArm.currentOutputPos + AngleC(FLLAF, LAW, LWF)
 FRAAF = FRArm.currentOutputPos + AngleC(FRLAF, LAW, LWF)
@@ -102,13 +104,51 @@ BRAAF = BRArm.currentOutputPos + AngleC(BRLAF, LAW, LWF)
 # the last two calculation were based in the shoulders output   #
 # plane, but we need it in the XYZ plane, that make LAF the     #
 # hypotenuse of a right angle triangle.                         #
-# Lets work out the Y axis first since the should can't affect  #
-# that axis.                                                    #
+# Lets work out the Y axis first since the shoulder joint can't #
+# affect that axis.                                             #
 #################################################################
-FLY = FLLAF * cmath.sin(FLAAF) + LYS
-FRY = FLLAF * cmath.sin(FRAAF) + LYS
-BLY = FLLAF * cmath.sin(BLAAF) - LYS
-BRY = FLLAF * cmath.sin(BRAAF) - LYS
+FLY = FLLAF * math.sin(math.radians(FLAAF-90)) + LYS
+FRY = FLLAF * math.sin(math.radians(FRAAF-90)) + LYS
+BLY = FLLAF * math.sin(math.radians(BLAAF-90)) - LYS
+BRY = FLLAF * math.sin(math.radians(BRAAF-90)) - LYS
+
+#################################################################
+# Now we have the Y-Axis, work out the X Axis.                  #
+# What complicates this a bit is the centerline of the leg is   #
+# set out from the pivot point of the shoulder.  This forms a   #
+# right angle triangel with the three points between the        #
+# Shoulder pivot, the top of the leg and the foot.  The right   #
+# angle is at the top of the leg.  The length between the       #
+# Shoulder pivot and the top of the leg is fixed. LSA           #
+# (Length Shoulder Arm) and we know the length from the top of  #
+# the leg to the foot LAF (Length Arm Foot), so we can          #
+# calculate the length between the Shoulder pivot and the Foot  #
+# (LSF - Length Shoulder Foot).                                 #
+#################################################################
+FLLSF = math.sqrt(LSA*LAS + FLLAF*FLLAF)
+FRLSF = math.sqrt(LSA*LAS + FRLAF*FRLAF)
+BLLSF = math.sqrt(LSA*LAS + BLLAF*BLLAF)
+BRLSF = math.sqrt(LSA*LAS + BRLAF*BRLAF)
+
+#################################################################
+# We also need the angle the LSF is at relative the to          #
+# Shoulder-Arm line.  For this we can use either the Sin() or   #
+# the Cos() formula to work it out.  I'll use the Cos() as one  #
+# of the measuerments is pretty much fixed :-)  We are going to #
+# need this angle for both the X and the Z positions.           #
+# Lets call this ASF (Angle Shoulder Foot) and includes the     #
+# shoulder servo position.                                      #
+#################################################################
+FLASF = FLShoulder.currentOutputPos + math.cos(LSA/FLLSF)
+FRASF = FLShoulder.currentOutputPos + math.cos(LSA/FRLSF)
+BLASF = FLShoulder.currentOutputPos + math.cos(LSA/BLLSF)
+BRASF = FLShoulder.currentOutputPos + math.cos(LSA/BRLSF)
+
+#################################################################
+# We should now have everything we need to work out the X-Axis  #
+# foot position.  Just a bit more Tigonometry. :-)              #
+#################################################################
+FLX = FLLAF 
 
 #################################################################
 #                                                               #
