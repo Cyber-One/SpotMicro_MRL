@@ -63,14 +63,6 @@ if EnableFLShoulder == True:
     # service, we will use a feature in the runtime service     #
     # that will return the service object based on it's name.   #
     FLShoulder.attach(runtime.getService(FLShoulderAttachment), FLShoulderPin)
-    # When you install your servo into your robot, you may      #
-    # find that the servo turns to far and has to potential     #
-    # of damaging your robot.  In this case you will want to    #
-    # limit how far the servo turns.   To do this we use the    #
-    # set Min/Max method.  This method while still working is   #
-    # being depreciated, it is suggested to use the map         #
-    # method instead.                                           #
-    FLShoulder.setMinMax(0, 100)
     # A lot of servos will have a 180 degree range of motion.   #
     # however there are some with more range and others with    #
     # less range, the servo service cannot tell these types     #
@@ -130,13 +122,12 @@ EnableFLArm = TestServoControllerExists(FLArmAttachment, EnableFLArm)
 if EnableFLArm == True:
     FLArm = Runtime.createAndStart("FLArm", "Servo")
     FLArm.attach(runtime.getService(FLArmAttachment), FLArmPin)
-    FLArm.setMinMax(0, 100)
     # This next if statement is looking for an inverted servo
     if FLArmMinPos < FLArmMaxPos:
-        FLArm.map(0, 100, FLArmMinPos, FLArmMaxPos)
+        FLArm.map(0, 180, FLArmMinPos, FLArmMaxPos)
         FLArm.setInverted(False)
     else:
-        FLArm.map(0, 100, FLArmMaxPos, FLArmMinPos)
+        FLArm.map(0, 180, FLArmMaxPos, FLArmMinPos)
         FLArm.setInverted(True)
     FLArm.setRest(50)
     FLArm.setSpeed(FLArmVelocity)
@@ -150,13 +141,12 @@ EnableFLWrist = TestServoControllerExists(FLWristAttachment, EnableFLWrist)
 if EnableFLWrist == True:
     FLWrist = Runtime.createAndStart("FLWrist", "Servo")
     FLWrist.attach(runtime.getService(FLWristAttachment), FLWristPin)
-    FLWrist.setMinMax(0, 135)
     # This next if statement is looking for an inverted servo
     if FLWristMinPos < FLWristMaxPos:
-        FLWrist.map(0, 135, FLWristMinPos, FLWristMaxPos)
+        FLWrist.map(25, 180, FLWristMinPos, FLWristMaxPos)
         FLWrist.setInverted(False)
     else:
-        FLWrist.map(0, 135, FLWristMaxPos, FLWristMinPos)
+        FLWrist.map(25, 180, FLWristMaxPos, FLWristMinPos)
         FLWrist.setInverted(True)
     FLWrist.setRest(50)
     FLWrist.setSpeed(FLWristVelocity)
@@ -177,7 +167,6 @@ EnableFRShoulder = TestServoControllerExists(FRShoulderAttachment, EnableFRShoul
 if EnableFRShoulder == True:
     FRShoulder = Runtime.createAndStart("FRShoulder", "Servo")
     FRShoulder.attach(runtime.getService(FRShoulderAttachment), FRShoulderPin)
-    FRShoulder.setMinMax(0, 100)
     # This next if statement is looking for an inverted servo
     if FRShoulderMinPos < FRShoulderMaxPos:
         FRShoulder.map(0, 100, FRShoulderMinPos, FRShoulderMaxPos)
@@ -197,13 +186,12 @@ EnableFRArm = TestServoControllerExists(FRArmAttachment, EnableFRArm)
 if EnableFRArm == True:
     FRArm = Runtime.createAndStart("FRArm", "Servo")
     FRArm.attach(runtime.getService(FRArmAttachment), FRArmPin)
-    FRArm.setMinMax(0, 135)
     # This next if statement is looking for an inverted servo
     if FRArmMinPos < FRArmMaxPos:
-        FRArm.map(0, 135, FRArmMinPos, FRArmMaxPos)
+        FRArm.map(0, 180, FRArmMinPos, FRArmMaxPos)
         FRArm.setInverted(False)
     else:
-        FRArm.map(0, 135, FRArmMaxPos, FRArmMinPos)
+        FRArm.map(0, 180, FRArmMaxPos, FRArmMinPos)
         FRArm.setInverted(True)
     FRArm.setRest(50)
     FRArm.setSpeed(FRArmVelocity)
@@ -217,13 +205,12 @@ EnableFRWrist = TestServoControllerExists(FRWristAttachment, EnableFRWrist)
 if EnableFRWrist == True:
     FRWrist = Runtime.createAndStart("FRWrist", "Servo")
     FRWrist.attach(runtime.getService(FRWristAttachment), FRWristPin)
-    FRWrist.setMinMax(0, 135)
     # This next if statement is looking for an inverted servo
     if FRWristMinPos < FRWristMaxPos:
-        FRWrist.map(0, 135, FRWristMinPos, FRWristMaxPos)
+        FRWrist.map(25, 180, FRWristMinPos, FRWristMaxPos)
         FRWrist.setInverted(False)
     else:
-        FRWrist.map(0, 135, FRWristMaxPos, FRWristMinPos)
+        FRWrist.map(25, 180, FRWristMaxPos, FRWristMinPos)
         FRWrist.setInverted(True)
     FRWrist.setRest(50)
     FRWrist.setSpeed(FRWristVelocity)
@@ -244,7 +231,6 @@ EnableBLShoulder = TestServoControllerExists(BLShoulderAttachment, EnableBLShoul
 if EnableBLShoulder == True:
     BLShoulder = Runtime.createAndStart("BLShoulder", "Servo")
     BLShoulder.attach(runtime.getService(BLShoulderAttachment), BLShoulderPin)
-    BLShoulder.setMinMax(0, 100)
     # This next if statement is looking for an inverted servo
     if BLShoulderMinPos < BLShoulderMaxPos:
         BLShoulder.map(0, 100, BLShoulderMinPos, BLShoulderMaxPos)
@@ -264,13 +250,12 @@ EnableBLArm = TestServoControllerExists(BLArmAttachment, EnableBLArm)
 if EnableBLArm == True:
     BLArm = Runtime.createAndStart("BLArm", "Servo")
     BLArm.attach(runtime.getService(BLArmAttachment), BLArmPin)
-    BLArm.setMinMax(0, 100)
     # This next if statement is looking for an inverted servo
     if BLArmMinPos < BLArmMaxPos:
-        BLArm.map(0, 100, BLArmMinPos, BLArmMaxPos)
+        BLArm.map(0, 180, BLArmMinPos, BLArmMaxPos)
         BLArm.setInverted(False)
     else:
-        BLArm.map(0, 100, BLArmMaxPos, BLArmMinPos)
+        BLArm.map(0, 180, BLArmMaxPos, BLArmMinPos)
         BLArm.setInverted(True)
     BLArm.setRest(50)
     BLArm.setSpeed(BLArmVelocity)
@@ -284,13 +269,12 @@ EnableBLWrist = TestServoControllerExists(BLWristAttachment, EnableBLWrist)
 if EnableBLWrist == True:
     BLWrist = Runtime.createAndStart("BLWrist", "Servo")
     BLWrist.attach(runtime.getService(BLWristAttachment), BLWristPin)
-    BLWrist.setMinMax(0, 135)
     # This next if statement is looking for an inverted servo
     if BLWristMinPos < BLWristMaxPos:
-        BLWrist.map(0, 135, BLWristMinPos, BLWristMaxPos)
+        BLWrist.map(25, 180, BLWristMinPos, BLWristMaxPos)
         BLWrist.setInverted(False)
     else:
-        BLWrist.map(0, 135, BLWristMaxPos, BLWristMinPos)
+        BLWrist.map(25, 180, BLWristMaxPos, BLWristMinPos)
         BLWrist.setInverted(True)
     BLWrist.setRest(50)
     BLWrist.setSpeed(BLWristVelocity)
@@ -311,7 +295,6 @@ EnableBRShoulder = TestServoControllerExists(BRShoulderAttachment, EnableBRShoul
 if EnableBRShoulder == True:
     BRShoulder = Runtime.createAndStart("BRShoulder", "Servo")
     BRShoulder.attach(runtime.getService(BRShoulderAttachment), BRShoulderPin)
-    BRShoulder.setMinMax(0, 100)
     # This next if statement is looking for an inverted servo
     if BRShoulderMinPos < BRShoulderMaxPos:
         BRShoulder.map(0, 100, BRShoulderMinPos, BRShoulderMaxPos)
@@ -331,13 +314,12 @@ EnableBRArm = TestServoControllerExists(BRArmAttachment, EnableBRArm)
 if EnableBRArm == True:
     BRArm = Runtime.createAndStart("BRArm", "Servo")
     BRArm.attach(runtime.getService(BRArmAttachment), BRArmPin)
-    BRArm.setMinMax(0, 100)
     # This next if statement is looking for an inverted servo
     if BRArmMinPos < BRArmMaxPos:
-        BRArm.map(0, 100, BRArmMinPos, BRArmMaxPos)
+        BRArm.map(0, 180, BRArmMinPos, BRArmMaxPos)
         BRArm.setInverted(False)
     else:
-        BRArm.map(0, 100, BRArmMaxPos, BRArmMinPos)
+        BRArm.map(0, 180, BRArmMaxPos, BRArmMinPos)
         BRArm.setInverted(True)
     BRArm.setRest(50)
     BRArm.setSpeed(BRArmVelocity)
@@ -351,13 +333,12 @@ EnableBRWrist = TestServoControllerExists(BRWristAttachment, EnableBRWrist)
 if EnableBRWrist == True:
     BRWrist = Runtime.createAndStart("BRWrist", "Servo")
     BRWrist.attach(runtime.getService(BRWristAttachment), BRWristPin)
-    BRWrist.setMinMax(0, 135)
     # This next if statement is looking for an inverted servo
     if BRWristMinPos < BRWristMaxPos:
-        BRWrist.map(0, 135, BRWristMinPos, BRWristMaxPos)
+        BRWrist.map(25, 180, BRWristMinPos, BRWristMaxPos)
         BRWrist.setInverted(False)
     else:
-        BRWrist.map(0, 135, BRWristMaxPos, BRWristMinPos)
+        BRWrist.map(25, 180, BRWristMaxPos, BRWristMinPos)
         BRWrist.setInverted(True)
     BRWrist.setRest(50)
     BRWrist.setSpeed(BRWristVelocity)
