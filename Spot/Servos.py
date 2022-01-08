@@ -75,13 +75,13 @@ if EnableFLShoulder == True:
     # output by 90 degrees the servo will turn 90 degrees.      #
     # This  if statement is looking for an inverted servo       #
     if FLShoulderMinPos < FLShoulderMaxPos:
-        FLShoulder.map(0, 100, FLShoulderMinPos, FLShoulderMaxPos)
+        FLShoulder.map(30, 150, FLShoulderMinPos, FLShoulderMaxPos)
     else:
-        FLShoulder.map(0, 100, FLShoulderMaxPos, FLShoulderMinPos)
+        FLShoulder.map(30, 150, FLShoulderMaxPos, FLShoulderMinPos)
     # The Rest position is a pre-programmed position for the    #
     # servo to move to when you call the rest method.           #
     # Note it works on the input side of the map function.      #
-    FLShoulder.setRest(50)
+    FLShoulder.setRest(90)
     # On occasion you may need to reverse the direction of a    #
     # servo. You may have an arm on each side of the robot,     #
     # where 90 degree it pointing forward, but 0 degrees has    #
@@ -169,12 +169,12 @@ if EnableFRShoulder == True:
     FRShoulder.attach(runtime.getService(FRShoulderAttachment), FRShoulderPin)
     # This next if statement is looking for an inverted servo
     if FRShoulderMinPos < FRShoulderMaxPos:
-        FRShoulder.map(0, 100, FRShoulderMinPos, FRShoulderMaxPos)
+        FRShoulder.map(30, 150, FRShoulderMinPos, FRShoulderMaxPos)
         FRShoulder.setInverted(False)
     else:
-        FRShoulder.map(0, 100, FRShoulderMaxPos, FRShoulderMinPos)
+        FRShoulder.map(30, 150, FRShoulderMaxPos, FRShoulderMinPos)
         FRShoulder.setInverted(True)
-    FRShoulder.setRest(50)
+    FRShoulder.setRest(90)
     FRShoulder.setSpeed(FRShoulderVelocity)
     FRShoulder.setAutoDisable(True)
     FRShoulder.rest()
@@ -233,12 +233,12 @@ if EnableBLShoulder == True:
     BLShoulder.attach(runtime.getService(BLShoulderAttachment), BLShoulderPin)
     # This next if statement is looking for an inverted servo
     if BLShoulderMinPos < BLShoulderMaxPos:
-        BLShoulder.map(0, 100, BLShoulderMinPos, BLShoulderMaxPos)
+        BLShoulder.map(30, 150, BLShoulderMinPos, BLShoulderMaxPos)
         BLShoulder.setInverted(False)
     else:
-        BLShoulder.map(0, 100, BLShoulderMaxPos, BLShoulderMinPos)
+        BLShoulder.map(30, 150, BLShoulderMaxPos, BLShoulderMinPos)
         BLShoulder.setInverted(True)
-    BLShoulder.setRest(50)
+    BLShoulder.setRest(90)
     BLShoulder.setSpeed(BLShoulderVelocity)
     BLShoulder.setAutoDisable(True)
     BLShoulder.rest()
@@ -297,12 +297,12 @@ if EnableBRShoulder == True:
     BRShoulder.attach(runtime.getService(BRShoulderAttachment), BRShoulderPin)
     # This next if statement is looking for an inverted servo
     if BRShoulderMinPos < BRShoulderMaxPos:
-        BRShoulder.map(0, 100, BRShoulderMinPos, BRShoulderMaxPos)
+        BRShoulder.map(30, 150, BRShoulderMinPos, BRShoulderMaxPos)
         BRShoulder.setInverted(False)
     else:
-        BRShoulder.map(0, 100, BRShoulderMaxPos, BRShoulderMinPos)
+        BRShoulder.map(30, 150, BRShoulderMaxPos, BRShoulderMinPos)
         BRShoulder.setInverted(True)
-    BRShoulder.setRest(50)
+    BRShoulder.setRest(90)
     BRShoulder.setSpeed(BRShoulderVelocity)
     BRShoulder.setAutoDisable(True)
     BRShoulder.rest()
