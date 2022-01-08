@@ -108,4 +108,13 @@ WorkServoA = 90
 WorkServoW = 90
 
 def inverseKinematics(Leg, Xt, Yt, Zt):
-    
+    LSF = math.sqrt((Xt - LXS)*(Xt - LXS) + Zt*Zt)
+    LTFz = math.sqrt(LSF*LSF - LST*LST)
+    Ai = math.asin((Xt-LXS)/LSF)
+    Ao = math.acos(LST/LSF)
+    WorkServoS = math.degrees(Ai + Ao) - 90
+    LTF = math.sqrt(LTFz*LTFz + (Yt - LYS)*(Yt - LYS)))
+    WorkServoW = math.degrees(math.acos((LTW*LTW + LWF*LWF - LTF*LTF)/(2*LTW*LWF)))
+    Afw = math.asin((math.sin(math.radians(WorkServoW))*LWF)/LTF)
+    Af = math.acos(LTFz/LTF)
+    WorkServoA = math.degrees(Afw+Af) - 90
