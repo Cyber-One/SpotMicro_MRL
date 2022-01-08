@@ -97,10 +97,10 @@ def forwardKinematics(Leg, Shoulder, Arm, Wrist):
         workY = LTF * math.sin(math.radians(Arm-90)) - LYS
     LTFa = math.cos(AFW + Arm) * LTF
     LSF = math.sqrt(LST*LST + LTFa*LTFa)
-    if Leg = 0 or Leg = 2:
-        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder)))*LSF - LSX
+    if (Leg = 0) or (Leg = 2):
+        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF - LSX
     else:
-        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder)))*LSF + LSX
+        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF + LSX
     workZ = math.cos(math.acos(LST/LSF) + math.radians(Shoulder))+LSF
 
 WorkServoS = 90
@@ -113,8 +113,11 @@ def inverseKinematics(Leg, Xt, Yt, Zt):
     Ai = math.asin((Xt-LXS)/LSF)
     Ao = math.acos(LST/LSF)
     WorkServoS = math.degrees(Ai + Ao) - 90
-    LTF = math.sqrt(LTFz*LTFz + (Yt - LYS)*(Yt - LYS)))
+    LTF = math.sqrt(LTFz*LTFz + (Yt - LYS)*(Yt - LYS))
     WorkServoW = math.degrees(math.acos((LTW*LTW + LWF*LWF - LTF*LTF)/(2*LTW*LWF)))
     Afw = math.asin((math.sin(math.radians(WorkServoW))*LWF)/LTF)
     Af = math.acos(LTFz/LTF)
     WorkServoA = math.degrees(Afw+Af) - 90
+
+forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos(), FLWrist.getCurrentInputPos())
+print "X = ", workX, ", Y = ", workY, ", Z = ", workZ
