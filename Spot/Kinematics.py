@@ -89,25 +89,28 @@ def forwardKinematics(Leg, Shoulder, Arm, Wrist):
     global workX
     global workY
     global workZ
-    LTF = LengthC(Wrist, LWF, LAW)
+    LTF = LengthC(Wrist, LWF, LTW)
     AFW = JointAngle(LTF, LTW, LWF)
     if Leg < 2:
-        workY = LTF * math.sin(math.radians(Arm-90)) + LYS
+        workY = LTF * math.sin(math.radians(Arm-AFW-90)) + LYS
     else:
-        workY = LTF * math.sin(math.radians(Arm-90)) - LYS
-    LTFa = math.cos(AFW + Arm) * LTF
+        workY = LTF * math.sin(math.radians(Arm-AFW-90)) - LYS
+    LTFa = math.cos(math.radians(AFW + Arm + 90)) * LTF
     LSF = math.sqrt(LST*LST + LTFa*LTFa)
-    if (Leg = 0) or (Leg = 2):
-        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF - LSX
+    if (Leg == 0) or (Leg == 2):
+        workX = -math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF - LXS
     else:
-        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF + LSX
-    workZ = math.cos(math.acos(LST/LSF) + math.radians(Shoulder))+LSF
+        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF + LXS
+    workZ = math.cos(math.acos(LST/LSF) + math.radians(Shoulder))*LSF
 
 WorkServoS = 90
 WorkServoA = 90
 WorkServoW = 90
 
 def inverseKinematics(Leg, Xt, Yt, Zt):
+    global WorkServoS
+    global WorkServoA
+    global WorkServoW
     LSF = math.sqrt((Xt - LXS)*(Xt - LXS) + Zt*Zt)
     LTFz = math.sqrt(LSF*LSF - LST*LST)
     Ai = math.asin((Xt-LXS)/LSF)
@@ -119,5 +122,5 @@ def inverseKinematics(Leg, Xt, Yt, Zt):
     Af = math.acos(LTFz/LTF)
     WorkServoA = math.degrees(Afw+Af) - 90
 
-forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos(), FLWrist.getCurrentInputPos())
+forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
 print "X = ", workX, ", Y = ", workY, ", Z = ", workZ
