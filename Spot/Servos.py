@@ -129,7 +129,7 @@ if EnableFLArm == True:
     else:
         FLArm.map(0, 180, FLArmMaxPos, FLArmMinPos)
         FLArm.setInverted(True)
-    FLArm.setRest(90)
+    FLArm.setRest(120)
     FLArm.setSpeed(FLArmVelocity)
     FLArm.setAutoDisable(True)
     FLArm.rest()
@@ -148,7 +148,7 @@ if EnableFLWrist == True:
     else:
         FLWrist.map(25, 180, FLWristMaxPos, FLWristMinPos)
         FLWrist.setInverted(True)
-    FLWrist.setRest(180)
+    FLWrist.setRest(120)
     FLWrist.setSpeed(FLWristVelocity)
     FLWrist.setAutoDisable(True)
     FLWrist.rest()
@@ -193,7 +193,7 @@ if EnableFRArm == True:
     else:
         FRArm.map(0, 180, FRArmMaxPos, FRArmMinPos)
         FRArm.setInverted(True)
-    FRArm.setRest(90)
+    FRArm.setRest(120)
     FRArm.setSpeed(FRArmVelocity)
     FRArm.setAutoDisable(True)
     FRArm.rest()
@@ -212,7 +212,7 @@ if EnableFRWrist == True:
     else:
         FRWrist.map(25, 180, FRWristMaxPos, FRWristMinPos)
         FRWrist.setInverted(True)
-    FRWrist.setRest(180)
+    FRWrist.setRest(120)
     FRWrist.setSpeed(FRWristVelocity)
     FRWrist.setAutoDisable(True)
     FRWrist.rest()
@@ -257,7 +257,7 @@ if EnableBLArm == True:
     else:
         BLArm.map(0, 180, BLArmMaxPos, BLArmMinPos)
         BLArm.setInverted(True)
-    BLArm.setRest(100)
+    BLArm.setRest(120)
     BLArm.setSpeed(BLArmVelocity)
     BLArm.setAutoDisable(True)
     BLArm.rest()
@@ -276,7 +276,7 @@ if EnableBLWrist == True:
     else:
         BLWrist.map(25, 180, BLWristMaxPos, BLWristMinPos)
         BLWrist.setInverted(True)
-    BLWrist.setRest(180)
+    BLWrist.setRest(120)
     BLWrist.setSpeed(BLWristVelocity)
     BLWrist.setAutoDisable(True)
     BLWrist.rest()
@@ -321,7 +321,7 @@ if EnableBRArm == True:
     else:
         BRArm.map(0, 180, BRArmMaxPos, BRArmMinPos)
         BRArm.setInverted(True)
-    BRArm.setRest(100)
+    BRArm.setRest(120)
     BRArm.setSpeed(BRArmVelocity)
     BRArm.setAutoDisable(True)
     BRArm.rest()
@@ -340,7 +340,7 @@ if EnableBRWrist == True:
     else:
         BRWrist.map(25, 180, BRWristMaxPos, BRWristMinPos)
         BRWrist.setInverted(True)
-    BRWrist.setRest(180)
+    BRWrist.setRest(120)
     BRWrist.setSpeed(BRWristVelocity)
     BRWrist.setAutoDisable(True)
     BRWrist.rest()
