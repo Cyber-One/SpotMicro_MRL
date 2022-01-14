@@ -48,6 +48,8 @@ execfile(RuningFolder+'/1_Configuration/A_IO_Config.py')
 
 EnableLeftUltrasonic = TestArduinoControllerExists(LeftUltrasonicAttachment, EnableLeftUltrasonic)
 if EnableLeftUltrasonic:
+    arduinoNano.pinMode(2, Arduino.OUTPUT)
+    arduinoNano.digitalWrite(2,1)
     LeftUltraSonic = Runtime.start("LeftUltraSonic", "UltrasonicSensor")
     LeftUltraSonic.setTriggerPin(LeftUltrasonicPin1)
     LeftUltraSonic.setEchoPin(LeftUltrasonicPin2)
@@ -56,6 +58,8 @@ if EnableLeftUltrasonic:
 
 EnableRightUltraSonic = TestArduinoControllerExists(RightUltrasonicAttachment, EnableRightUltraSonic)
 if EnableRightUltraSonic:
+    arduinoNano.pinMode(2, Arduino.OUTPUT)
+    arduinoNano.digitalWrite(2,1)
     RightUltraSonic = Runtime.start("RightUltraSonic", "UltrasonicSensor")
     RightUltraSonic.setTriggerPin(RightUltrasonicPin1)
     RightUltraSonic.setEchoPin(RightUltrasonicPin2)
