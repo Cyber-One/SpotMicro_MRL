@@ -148,5 +148,5 @@ cd MRL
 ./myrobotlab.sh
 This will start the installation process of MyRobotlab.
 This will also take a bit of time, about 1.5 hours on a Raspi 4 and about 2 hours on a Raspi 3.
-Whe the install is finished, it willl start the web browser and open the WebGUI interface to MRL
+When the install is finished, it willl start the web browser and open the WebGUI interface to MRL
 
