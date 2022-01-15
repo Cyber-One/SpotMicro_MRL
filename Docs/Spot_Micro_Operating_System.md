@@ -150,18 +150,3 @@ This will start the installation process of MyRobotlab.
 This will also take a bit of time, about 1.5 hours on a Raspi 4 and about 2 hours on a Raspi 3.
 Whe the install is finished, it willl start the web browser and open the WebGUI interface to MRL
 
-## Installing the SpotMicro_MRL program from GitHub
-
-Open a new terminal window.
-enter the following command:
-git clone https://github.com/Cyber-One/SpotMicro_MRL.git
-This will create a new folder named SpotMicro_MRL and download all the files I created for the SpotMicro program. 🙂 
-using the file manager, change into the SpotMicro_MRL folder, select the Spot.sh file and the Spot folder, right click and select copy.
-Change to the MRL folder and pate into that folder.
-Right click on the Spot.sh file and select properties.
-click on the permissions tab then for the execute permission, select everyone.
-
-This will now allow you to change into the MRL folder in the terminal and run the Spot program using
-./Spot.sh
-Note, make sure you have shut down any other instances of MRL running before you do this. 🙂
-
