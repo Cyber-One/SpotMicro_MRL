@@ -148,7 +148,9 @@ BRASF = FLShoulder.currentOutputPos + math.cos(LSA/BRLSF)
 # We should now have everything we need to work out the X-Axis  #
 # foot position.  Just a bit more Tigonometry. :-)              #
 #################################################################
-FLX = FLLAF 
+FLX = FLLAF * math.sin(FLASF)
+
+FLY = FLLAF * math.cos(FLASF)
 
 #################################################################
 #                                                               #

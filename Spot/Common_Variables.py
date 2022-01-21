@@ -54,3 +54,19 @@ LTW = 110   # Length between the Arms joint and the Wrist joint
 LST = 50    # Length between the Shoulder joint and the center line of the Arm
 LYS = 90    # Length between the center Y plane and the shoulder joint
 LXS = 38    # Length between the center X plane and the shoulder joint
+
+# Foot Positions
+FL_X = -88.0
+FR_X = 88.0
+BL_X = -88.0
+BR_X = 88.0
+
+FL_Y = 90.0
+FR_Y = 90.0
+BL_Y = -90.0
+BR_Y = -90.0
+
+FL_Z = -230
+FR_Z = -230
+BL_Z = -230
+BR_Z = -230

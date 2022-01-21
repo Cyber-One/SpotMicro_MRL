@@ -122,5 +122,67 @@ def inverseKinematics(Leg, Xt, Yt, Zt):
     Af = math.acos(LTFz/LTF)
     WorkServoA = math.degrees(Afw+Af) - 90
 
+def FL_Leg(data):
+    global FL_X
+    global FL_Y
+    global FL_Z
+    forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
+    FL_X = workX
+    FL_Y = workY
+    FL_Z = workZ
+    print "Front-Left-Leg"
+    print data
+
+def FR_Leg(data):
+    global FR_X
+    global FR_Y
+    global FR_Z
+    forwardKinematics(1, FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
+    FR_X = workX
+    FR_Y = workY
+    FR_Z = workZ
+    print "Front-Right-Leg"
+    print data
+
+def BL_Leg(data):
+    global BL_X
+    global BL_Y
+    global BL_Z
+    forwardKinematics(2, BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
+    BL_X = workX
+    BL_Y = workY
+    BL_Z = workZ
+    print "Back-Left-Leg"
+    print data
+
+def BR_Leg(data):
+    global BR_X
+    global BR_Y
+    global BR_Z
+    forwardKinematics(3, BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
+    BR_X = workX
+    BR_Y = workY
+    BR_Z = workZ
+    print "Back-Right-Leg"
+    print data
+
+python.subscribe('FLShoulder', 'publishServoMoveTo', 'python', 'FL_Leg')
+python.subscribe('FLArm', 'publishServoMoveTo', 'python', 'FL_Leg')
+python.subscribe('FLWrist', 'publishServoMoveTo', 'python', 'FL_Leg')
+
+python.subscribe('FRShoulder', 'publishServoMoveTo', 'python', 'FR_Leg')
+python.subscribe('FRArm', 'publishServoMoveTo', 'python', 'FR_Leg')
+python.subscribe('FRWrist', 'publishServoMoveTo', 'python', 'FR_Leg')
+
+python.subscribe('BLShoulder', 'publishServoMoveTo', 'python', 'BL_Leg')
+python.subscribe('BLArm', 'publishServoMoveTo', 'python', 'BL_Leg')
+python.subscribe('BLWrist', 'publishServoMoveTo', 'python', 'BL_Leg')
+
+python.subscribe('BRShoulder', 'publishServoMoveTo', 'python', 'BR_Leg')
+python.subscribe('BRArm', 'publishServoMoveTo', 'python', 'BR_Leg')
+python.subscribe('BRWrist', 'publishServoMoveTo', 'python', 'BR_Leg')
+
+
 forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
-print "X = ", workX, ", Y = ", workY, ", Z = ", workZ
+print FLShoulder.getCurrentInputPos(), "FL Shoulder = ", FLArm.getCurrentInputPos(), ", FL Arm = ", FLWrist.getCurrentInputPos(), ", FL Wrist = "
+print workX, "X = ", workY, ", Y = ", workZ, ", Z = "

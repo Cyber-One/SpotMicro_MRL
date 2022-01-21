@@ -37,13 +37,13 @@ print "Creating the Controller Config"
 ## NOTE: the GPIO are 3.3V only, applying 5V to these pins     ##
 ## will destroy your Raspberry Pi SBC, You have been warned    ##
 #################################################################
-EnableRaspberryPi = True   # True for on, False for off
+EnableRaspberryPi = True            # True for on, False for off
 
 # In the Spot build, I'm using an Arduino Nano for the two      #
 # Ultrasonic Sensors and the PIR sensor.                        #
 # The Arduino also has an I2C Port 0 if we need to use it.      #
-EnableArduinoNano = True            # True for on, False for off
-ArduinoNanoComPort = "/dev/ttyAMA0"     # Refer to notes above
+EnableArduinoNano = False           # True for on, False for off
+ArduinoNanoComPort = "/dev/ttyAMA0" # Refer to notes above
 
 #################################################################
 #                                                               #

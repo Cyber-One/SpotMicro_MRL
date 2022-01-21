@@ -89,4 +89,4 @@ myRobotArm.addLink(link2)
 ik3d= Runtime.createAndStart("ik3d", "InverseKinematics3D")
 
 # assign our custom DH robot arm to the IK service.
-ik3d.setCurrentArm(myRobotArm)
+ik3d.setCurrentArm("FrontLeftLeg", myRobotArm)
