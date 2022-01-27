@@ -33,7 +33,7 @@ Next find the three lines
 dtoverlay=vc4-fkms-v3d
 max_framebuffers=2
 
-Now add # in fron of the send two lines
+Now add # in front of the send two lines
 
 #dtoverlay=vc4-fkms-v3d
 #max_framebuffers=2
