@@ -176,7 +176,7 @@ if EnableLCD == True:
 #################################################################
 # Not yet available :-(
 if EnableIBus:
-    IBus = Runtime.createAndStart("IBus","IBus")
+    IBus = Runtime.start("IBus","IBus")
     IBus.attach(IbuSerial)
 #All Methods Static Methods Instance Methods Concrete Methods 
 #Modifier and Type  Method  Description
