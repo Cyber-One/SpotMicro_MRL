@@ -112,7 +112,7 @@ if EnableBatteryMonitor > 0 and EnableBatteryMonitor < 5:
 #################################################################
 EnableMPU6050A = TestI2CControllerExists(MPU6050AAttached, EnableMPU6050A)
 if EnableMPU6050A == True:
-    MPU6050A = Runtime.createAndStart("MPU6050A","Mpu6050")
+    MPU6050A = Runtime.start("MPU6050A","Mpu6050")
     MPU6050A.setBus(MPU6050ABus)
     MPU6050A.setAddress(MPU6050AAddr)
     MPU6050A.attach(runtime.getService(MPU6050AAttached))
@@ -128,7 +128,7 @@ if EnableMPU6050A == True:
 
 EnableMPU6050B = TestI2CControllerExists(MPU6050BAttached, EnableMPU6050B)
 if EnableMPU6050B == True:
-    MPU6050B = Runtime.createAndStart("MPU6050B","Mpu6050")
+    MPU6050B = Runtime.start("MPU6050B","Mpu6050")
     MPU6050B.setBus(MPU6050BBus)
     MPU6050B.setAddress(MPU6050BAddr)
     MPU6050B.attach(runtime.getService(MPU6050BAttached))
