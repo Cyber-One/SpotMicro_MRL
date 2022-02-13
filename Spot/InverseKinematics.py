@@ -59,34 +59,48 @@ myRobotArm = DHRobotArm()
 # Lets create a 3 link robot arm
 # Create the first link in the arm specified by 100,100,0,90
 # additionally specify a name for the link which can be used elsewhere. 
-d1 = 10
-r1 = 39
-theta = 66.8
-alpha = 90
-link0 = DHLink("base", d1, r1, theta, alpha)
+d0 = 10
+r0 = 39
+theta0 = 66.8
+alpha0 = 90
+link0 = DHLink("base", d0, r0, theta0, alpha0)
 
 # Create the second link (same as the first link.)
 d1 = 91
 r1 = -6
-theta = 90
-alpha = 90
-link1 = DHLink("link1", d1, r1, theta, alpha)
+theta1 = 90
+alpha1 = 90
+link1 = DHLink("link1", d1, r1, theta1, alpha1)
 
 # Create the third link (same as the first link.)
-d1 = 0
-r1 = 105
-theta = 9
-alpha = 0
-link2 = DHLink("link1", d1, r1, theta, alpha)
+d2 = 0
+r2 = 105
+theta2 = 9
+alpha2 = 0
+link2 = DHLink("link2", d2, r2, theta2, alpha2)
+
+# Create the third link (same as the first link.)
+d3 = 0
+r3 = 125
+theta3 = 0
+alpha3 = 0
+link3 = DHLink("link3", d3, r3, theta3, alpha3)
 
 # Add the links to the robot arm
-myRobotArm.addLink(link0)
 myRobotArm.addLink(link1)
 myRobotArm.addLink(link2)
+myRobotArm.addLink(link3)
 
 
 # create the  IK3D service.
-ik3d= Runtime.createAndStart("ik3d", "InverseKinematics3D")
+ik3d= Runtime.start("ik3d", "InverseKinematics3D")
 
 # assign our custom DH robot arm to the IK service.
 ik3d.setCurrentArm("FrontLeftLeg", myRobotArm)
+
+# create the method that will take the calculated joint angles
+# and apply them to the required servos.
+def ik3dProcessor(angleData):
+    print angleData.name, " - ", angleData.angle
+
+python.subscribe('ik3d', 'publishJointAngle', 'python', 'ik3dProcessor')
