@@ -85,7 +85,7 @@ BackServoDriverAddr = "0x40"                # Refer to notes above
 BackServoDriverBus = "1"                    # Refer to notes above
 BackServoDriverAttached = "raspi"           # Refer to notes above
 
-EnableAdafruit16CServoDriverFront = False   # True or False
+EnableAdafruit16CServoDriverFront = True    # True or False
 FrontArmServoDriverAddr = "0x41"            # Refer to notes above
 FrontArmServoDriverBus = "1"                # Refer to notes above
 FrontArmServoDriverAttached = "raspi"       # Refer to notes above
