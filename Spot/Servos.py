@@ -109,7 +109,9 @@ if EnableFLShoulder == True:
     # servos, saving power and potentially preventing the       #
     # servo from burning out.  This feature can be disabled     #
     # when disabling the servo would be bad.                    #
-    FLShoulder.setAutoDisable(True)
+    FLShoulder.setAutoDisable(False)
+    # Lets just make sure the servo is enabled, it should be but#
+    FLShoulder.enable()
     # The rest method will send to servo to the pre-programmed  #
     # position as set by the setRest method or if not set, to   #
     # the default position as set using the setRest() function. #
@@ -131,7 +133,8 @@ if EnableFLArm == True:
         FLArm.setInverted(True)
     FLArm.setRest(120)
     FLArm.setSpeed(FLArmVelocity)
-    FLArm.setAutoDisable(True)
+    FLArm.setAutoDisable(False)
+    FLArm.enable()
     FLArm.rest()
 
 #################################################################
@@ -150,7 +153,8 @@ if EnableFLWrist == True:
         FLWrist.setInverted(True)
     FLWrist.setRest(120)
     FLWrist.setSpeed(FLWristVelocity)
-    FLWrist.setAutoDisable(True)
+    FLWrist.setAutoDisable(False)
+    FLWrist.enable()
     FLWrist.rest()
 
 
@@ -176,7 +180,8 @@ if EnableFRShoulder == True:
         FRShoulder.setInverted(True)
     FRShoulder.setRest(90)
     FRShoulder.setSpeed(FRShoulderVelocity)
-    FRShoulder.setAutoDisable(True)
+    FRShoulder.setAutoDisable(False)
+    FRShoulder.enable()
     FRShoulder.rest()
 
 #################################################################
@@ -195,7 +200,8 @@ if EnableFRArm == True:
         FRArm.setInverted(True)
     FRArm.setRest(120)
     FRArm.setSpeed(FRArmVelocity)
-    FRArm.setAutoDisable(True)
+    FRArm.setAutoDisable(False)
+    FRArm.enable()
     FRArm.rest()
 
 #################################################################
@@ -214,7 +220,8 @@ if EnableFRWrist == True:
         FRWrist.setInverted(True)
     FRWrist.setRest(120)
     FRWrist.setSpeed(FRWristVelocity)
-    FRWrist.setAutoDisable(True)
+    FRWrist.setAutoDisable(False)
+    FRWrist.enable()
     FRWrist.rest()
 
 
@@ -240,7 +247,8 @@ if EnableBLShoulder == True:
         BLShoulder.setInverted(True)
     BLShoulder.setRest(90)
     BLShoulder.setSpeed(BLShoulderVelocity)
-    BLShoulder.setAutoDisable(True)
+    BLShoulder.setAutoDisable(False)
+    BLShoulder.enable()
     BLShoulder.rest()
 
 #################################################################
@@ -259,7 +267,8 @@ if EnableBLArm == True:
         BLArm.setInverted(True)
     BLArm.setRest(120)
     BLArm.setSpeed(BLArmVelocity)
-    BLArm.setAutoDisable(True)
+    BLArm.setAutoDisable(False)
+    BLArm.enable()
     BLArm.rest()
 
 #################################################################
@@ -278,7 +287,8 @@ if EnableBLWrist == True:
         BLWrist.setInverted(True)
     BLWrist.setRest(120)
     BLWrist.setSpeed(BLWristVelocity)
-    BLWrist.setAutoDisable(True)
+    BLWrist.setAutoDisable(False)
+    BLWrist.enable()
     BLWrist.rest()
 
 
@@ -304,7 +314,8 @@ if EnableBRShoulder == True:
         BRShoulder.setInverted(True)
     BRShoulder.setRest(90)
     BRShoulder.setSpeed(BRShoulderVelocity)
-    BRShoulder.setAutoDisable(True)
+    BRShoulder.setAutoDisable(False)
+    BRShoulder.enable()
     BRShoulder.rest()
 
 #################################################################
@@ -323,7 +334,8 @@ if EnableBRArm == True:
         BRArm.setInverted(True)
     BRArm.setRest(120)
     BRArm.setSpeed(BRArmVelocity)
-    BRArm.setAutoDisable(True)
+    BRArm.setAutoDisable(False)
+    BRArm.enable()
     BRArm.rest()
 
 #################################################################
@@ -342,6 +354,7 @@ if EnableBRWrist == True:
         BRWrist.setInverted(True)
     BRWrist.setRest(120)
     BRWrist.setSpeed(BRWristVelocity)
-    BRWrist.setAutoDisable(True)
+    BRWrist.setAutoDisable(False)
+    BRWrist.enable()
     BRWrist.rest()
 
