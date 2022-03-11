@@ -105,8 +105,8 @@ FLWristVelocity = 272
 EnableFRShoulder = True
 FRShoulderAttachment = "Back"
 FRShoulderPin = 0
-FRShoulderMinPos = 148
-FRShoulderMaxPos = 46
+FRShoulderMinPos = 164
+FRShoulderMaxPos = 76
 FRShoulderVelocity = 272
 
 #################################################################
