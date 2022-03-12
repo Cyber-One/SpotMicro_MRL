@@ -54,6 +54,7 @@ LTW = 110   # Length between the Arms joint and the Wrist joint
 LST = 50    # Length between the Shoulder joint and the center line of the Arm
 LYS = 90    # Length between the center Y plane and the shoulder joint
 LXS = 38    # Length between the center X plane and the shoulder joint
+MaxLTF = LTW + LWF   # Max length between the arm pivot and the foot.
 
 # Foot Positions
 FL_X = -88.0
@@ -78,5 +79,5 @@ ArmMin = 0.0
 ArmRest = 120.0
 ArmMax = 180.0
 WristMin = 25.0
-WristRest = 150.0
+WristRest = 130.0
 WristMax = 180.0

@@ -134,8 +134,8 @@ FRArmVelocity = 272
 EnableFRWrist = True
 FRWristAttachment = "Back"
 FRWristPin = 2
-FRWristMinPos = 171
-FRWristMaxPos = 56
+FRWristMinPos = 180
+FRWristMaxPos = 61
 FRWristVelocity = 272
 
 #################################################################

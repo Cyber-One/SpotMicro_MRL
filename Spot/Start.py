@@ -118,7 +118,7 @@ execfile(RuningFolder+'/Servos.py')
 # and performing other random like movements, just to make our  #
 # robot appear to be alive.                                     #
 #################################################################
-#execfile(RuningFolder+'/Life.py')
+execfile(RuningFolder+'/Life.py')
 
 #################################################################
 # When not activly executing a command, we don't want the       #

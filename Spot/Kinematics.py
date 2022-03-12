@@ -107,20 +107,27 @@ WorkServoS = 90
 WorkServoA = 90
 WorkServoW = 90
 
-def inverseKinematics(Leg, Xt, Yt, Zt):
+def LeginverseKinematics(LSFx, LAFy, Zt):
+    # all inputs x, y, and z are relative to the shoulder joint.
+    # we will assume the offsets from the center of the bot have already been applied.
     global WorkServoS
     global WorkServoA
     global WorkServoW
-    LSF = math.sqrt((Xt - LXS)*(Xt - LXS) + Zt*Zt)
+    # Lets first work out the length between the shoulder joint and the foot
+    LSF = math.sqrt((LSFx*LSFx) + (Zt*Zt))
+    # Now that we have LSF and we know LST, lets work out the LTFz
+    # we use the z suffix here, because this only relative to the X-Z plane and not the XY plane
     LTFz = math.sqrt(LSF*LSF - LST*LST)
-    Ai = math.asin((Xt-LXS)/LSF)
+    Ai = math.asin(LSFx/LSF)
     Ao = math.acos(LST/LSF)
     WorkServoS = math.degrees(Ai + Ao) - 90
-    LTF = math.sqrt(LTFz*LTFz + (Yt - LYS)*(Yt - LYS))
+    LTF = math.sqrt((LTFz*LTFz) + (LAFy*LAFy))
     WorkServoW = math.degrees(math.acos((LTW*LTW + LWF*LWF - LTF*LTF)/(2*LTW*LWF)))
     Afw = math.asin((math.sin(math.radians(WorkServoW))*LWF)/LTF)
     Af = math.acos(LTFz/LTF)
     WorkServoA = math.degrees(Afw+Af) - 90
+
+def inverseKinematics(Leg, Xt, Yt, Zt):
 
 def FL_Leg(data):
     global FL_X
