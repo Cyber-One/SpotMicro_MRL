@@ -16,6 +16,7 @@
 # This file is a group of commands that perform actions         #
 #                                                               #
 #################################################################
+import time
 print "Starting the various Life Services"
 
 # Display time on the LCD
@@ -26,9 +27,9 @@ print "Starting the various Life Services"
 # is with the network interface.
 def LCD_DisplayTime(data):
     LCD.display(RobotsName, 0)
-    #format = "%I:%M:%S %p"
-    #LCD.display(datetime.strptime(date_string, format), 1)
-    LCD.display(str(data), 1)
+    format = "%I:%M:%S %p"
+    LCD.display(time.strftime(format), 1)
+    #LCD.display(str(data), 1)
     
 
 
@@ -36,3 +37,16 @@ clock = Runtime.start("clock","Clock")
 clock.addListener("publishTime", "python", "LCD_DisplayTime")
 clock.setInterval(1000)
 clock.startClock()
+
+#################################################################
+# Setup the Froward Kinematics routines.                        #
+#################################################################
+execfile(RuningFolder+'/Life/ForwardKinematics.py')
+
+#################################################################
+# Setup the Inverse Kinematics routines.                        #
+#################################################################
+execfile(RuningFolder+'/Life/InverseKinematics.py')
+
+
+

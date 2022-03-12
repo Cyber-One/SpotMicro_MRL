@@ -54,7 +54,7 @@ FLShoulderPin = 12
 FLShoulderMinPos = 54
 # This is the value from testing where the Front Left Shoulder  #
 # is all the way as far from the centerline as is possible      #
-FLShoulderMaxPos = 154
+FLShoulderMaxPos = 139
 # This is the speed that the Front Left Shoulder moves at.      #
 # -1 is no speed limit, the Front Left Shoulder will move as    #
 # fast as possible.                                             #
@@ -71,8 +71,8 @@ FLShoulderVelocity = 272
 EnableFLArm = True
 FLArmAttachment = "Back"
 FLArmPin = 13
-FLArmMinPos = 26
-FLArmMaxPos = 169
+FLArmMinPos = 31
+FLArmMaxPos = 180
 FLArmVelocity = 272
 
 #################################################################
@@ -85,8 +85,8 @@ FLArmVelocity = 272
 EnableFLWrist = True
 FLWristAttachment = "Back"
 FLWristPin = 14
-FLWristMinPos = 37
-FLWristMaxPos = 147
+FLWristMinPos = 38
+FLWristMaxPos = 162
 FLWristVelocity = 272
 
 
@@ -120,8 +120,8 @@ FRShoulderVelocity = 272
 EnableFRArm = True
 FRArmAttachment = "Back"
 FRArmPin = 1
-FRArmMinPos = 168
-FRArmMaxPos = 29
+FRArmMinPos = 180
+FRArmMaxPos = 31
 FRArmVelocity = 272
 
 #################################################################
@@ -153,8 +153,8 @@ FRWristVelocity = 272
 EnableBLShoulder = True
 BLShoulderAttachment = "Back"
 BLShoulderPin = 8
-BLShoulderMinPos = 141
-BLShoulderMaxPos = 37
+BLShoulderMinPos = 162
+BLShoulderMaxPos = 67
 BLShoulderVelocity = 272
 
 #################################################################
@@ -168,8 +168,8 @@ BLShoulderVelocity = 272
 EnableBLArm = True
 BLArmAttachment = "Back"
 BLArmPin = 9
-BLArmMinPos = 28
-BLArmMaxPos = 173
+BLArmMinPos = 36
+BLArmMaxPos = 180
 BLArmVelocity = 272
 
 #################################################################
@@ -217,7 +217,7 @@ EnableBRArm = True
 BRArmAttachment = "Back"
 BRArmPin = 5
 BRArmMinPos = 177
-BRArmMaxPos = 40
+BRArmMaxPos = 31
 BRArmVelocity = 272
 
 #################################################################
@@ -231,5 +231,5 @@ EnableBRWrist = True
 BRWristAttachment = "Back"
 BRWristPin = 6
 BRWristMinPos = 177
-BRWristMaxPos = 58
+BRWristMaxPos = 65
 BRWristVelocity = 272
