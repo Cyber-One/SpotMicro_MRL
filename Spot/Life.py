@@ -26,8 +26,9 @@ print "Starting the various Life Services"
 # is with the network interface.
 def LCD_DisplayTime(data):
     LCD.display(RobotsName, 0)
-    format = "%I:%M:%S %p"
-    LCD.display(datetime.strptime(date_string, format), 1)
+    #format = "%I:%M:%S %p"
+    #LCD.display(datetime.strptime(date_string, format), 1)
+    LCD.display(str(data), 1)
     
 
 
