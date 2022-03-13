@@ -37,6 +37,7 @@ clock = Runtime.start("clock","Clock")
 clock.addListener("publishTime", "python", "LCD_DisplayTime")
 clock.setInterval(1000)
 clock.startClock()
+LCD.clear()
 
 #################################################################
 # Setup the Froward Kinematics routines.                        #

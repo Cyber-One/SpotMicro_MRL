@@ -33,6 +33,8 @@ print "Starting the leg Forward Kinematics Functions"
 # maths so that you can follow along more easily.               #
 # Lets start with the foot and first joint.  For this we will   #
 # be using the two formula know as the Law of Cosines.          #
+# Just a note, when looking at the labels on a triangle, the    #
+# angle is on the opposite side to the same named length.       #
 # The following formula use lower case as the length and upper  #
 # case as the angle.                                            #
 # c = sqrt(a*a + b*b -2*a*b*cos(C))                             #
@@ -50,13 +52,14 @@ print "Starting the leg Forward Kinematics Functions"
 # we can calculate the current position of the foot relative to #
 # the center of the robot.  But just for clarity, lets list the #
 # servo ranges.                                                 #
-# Wrist: 0 - 135 degrees. 0 degrees is straight.                #
+# Wrist: 25 - 180 degrees. 180 degrees is straight.             #
 # Arm: 0 - 180 degrees. 90 is straight down.                    #
 # Shoulder: 45 - 125 degrees. 90 is with the leg straigt down.  #
 # Just for clarity, I will define the Axis we will use here:    #
 # X: is from side to side of the robot. Left is negative.       #
 # Y: is from the back to Front of the robot. Back is negative.  #
 # Z: is from top to bottom of the robot. Down is negative.      #
+# This is all from the robots perspective.                      #
 #                                                               #
 #################################################################
 # Lets first define the functions that we need to do our math.  #
@@ -104,7 +107,7 @@ def FL_Leg(data):
     FL_Y = Position.get("Y")
     FL_Z = Position.get("Z")
     print "Front-Left-Leg"
-    print data
+    print FL_Z, " FL-Z:", FL_Y, " FL-Y:", FL_X, "FL-X:"
 
 def FR_Leg(data):
     global FR_X
@@ -115,7 +118,7 @@ def FR_Leg(data):
     FR_Y = Position.get("Y")
     FR_Z = Position.get("Z")
     print "Front-Right-Leg"
-    print data
+    print FR_Z, " FR-Z:", FR_Y, " FR-Y:", FR_X, "FR-X:"
 
 def BL_Leg(data):
     global BL_X
@@ -126,7 +129,7 @@ def BL_Leg(data):
     BL_Y = Position.get("Y")
     BL_Z = Position.get("Z")
     print "Back-Left-Leg"
-    print data
+    print BL_Z, " BL-Z:", BL_Y, " BL-Y:", BL_X, "BL-X:"
 
 def BR_Leg(data):
     global BR_X
@@ -137,7 +140,7 @@ def BR_Leg(data):
     BR_Y = Position.get("Y")
     BR_Z = Position.get("Z")
     print "Back-Right-Leg"
-    print data
+    print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
 
 python.subscribe('FLShoulder', 'publishServoMoveTo', 'python', 'FL_Leg')
 python.subscribe('FLArm', 'publishServoMoveTo', 'python', 'FL_Leg')
