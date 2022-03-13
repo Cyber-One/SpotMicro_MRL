@@ -52,7 +52,7 @@ print "Starting the leg Forward Kinematics Functions"
 # we can calculate the current position of the foot relative to #
 # the center of the robot.  But just for clarity, lets list the #
 # servo ranges.                                                 #
-# Wrist: 25 - 180 degrees. 180 degrees is straight.             #
+# Wrist: 40 - 180 degrees. 180 degrees is straight.             #
 # Arm: 0 - 180 degrees. 90 is straight down.                    #
 # Shoulder: 45 - 125 degrees. 90 is with the leg straigt down.  #
 # Just for clarity, I will define the Axis we will use here:    #
