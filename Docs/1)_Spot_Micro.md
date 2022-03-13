@@ -11,25 +11,25 @@ Let break the project down to building the hardware and then the software.
 
 # Hardware Build.
 
-[+2) Spot Micro Hardware](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/2)_Spot_Micro_Hardware.md) 
+[+2) Spot Micro Hardware](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/2_Spot_Micro_Hardware.md) 
 
 # Setting up the Software.
 
-[+3) Spot Micro Operating System](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/3-Spot-Micro-Operating-System.md) 
+[+3) Spot Micro Operating System](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/3_Spot_Micro_Operating_System.md) 
 
 # Configuring SpotMicro in MyRobotLab
 
-[+4) Installing SpotMicro in MyRobotLab](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/4-Installing-SpotMicro-in-MyRobotLab.md) 
+[+4) Installing SpotMicro in MyRobotLab](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/4_Installing_SpotMicro_in_MyRobotLab.md) 
 
 # Forward Kinematics
 
-[+5) Spot Micro Forward Kinematics](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/5-Spot-Micro-Forward-Kinematics.md) 
+[+5) Spot Micro Forward Kinematics](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/5_Spot_Micro_Forward_Kinematics.md) 
 
 # Inverse Kinematics
 
-[+6) Spot Micro Inverse Kinematics](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docsc/6-Spot-Micro-Inverse-Kinematics.md) 
+[+6) Spot Micro Inverse Kinematics](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docsc/6_Spot_Micro_Inverse_Kinematics.md) 
 
 # Parts List
 
-[+Spot Micro Parts List](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docsc/Spot-Micro-Parts-List.md) 
+[+Spot Micro Parts List](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docsc/Spot_Micro_Parts_List.md) 
 
