@@ -11,7 +11,7 @@ Let break the project down to building the hardware and then the software.
 
 # Hardware Build.
 
-[+2) Spot Micro Hardware](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/2-Spot-Micro-Hardware.md) 
+[+2) Spot Micro Hardware](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/2)_Spot_Micro_Hardware.md) 
 
 # Setting up the Software.
 
