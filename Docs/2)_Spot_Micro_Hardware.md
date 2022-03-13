@@ -1,4 +1,4 @@
-# Spot Micro Hardware
+# 2) Spot Micro Hardware
 
 # Hardware Build.
 
@@ -63,11 +63,13 @@ I plastic welded the Ultra-Sonic sensor mounts and the Raspi mount into the head
 This is a bit more complicated because we need to mount a SMPS or two here first.
 I sat the SMPS in the top and used a 2.5mm drill bit to mark the two mounting holes, then moved the SMPS out of the way and drilled the two holes all the way though.
 The screws I have on hand are not going to be long enough by a long shot here, and I need the head of the screws to be below the surface, to I counter bored the holes with a 5mm drill bit stopping about 3-4mm from the bottom. This allowed me to used the 2 x M2.5 12mm long stand off with M2.5 male thread one end and female on the other with the threaded end pointing down.
+Later I changed this to a pair of standoffs that were female threaded at each end.
 I also drilled a hole in line with where the voltage adjustment pot is on the SMPS.
 It’s best to attach power to the inputs on the SMPS before you install them and set the output voltage, but sometimes you do need to fine tune then once installed.
 **NOTE: These small SMPS come preset to out put 12.0V from the factory, so set it before connecting it to your Raspi**
-I then after soldering wires to the moduel placed it onto the stand off and capped it with the 2 x M2.5 15mm long stand off with M2.5mm female threads both ends.  Using the 2 more of the 2.5mm screws, I fitted a second SMPS, but upgrading to the HV servos means I don’t need it, yet.
-Now that the SMPS are installed, time to mount the back legs.
+I then after soldering wires to the moduel placed it onto the stand off and capped it with the 2 x M2.5 screws.
+Initially I fitted a second SMPS, but upgrading to the HV servos means I don’t need it, yet.
+Now that the SMPS is installed, time to mount the back legs.
 This process is almost identical to the front legs.
 Install the 6 way horns into the O_shoulder.stl, attach the two shoulder servo to the servo tester and set the servo tester to the midway position, 1500uS, add the two F526ZZ bearings and assembly it togeter with the legs pointing straight down.
 Secure with the 4 x M3 x 10mm long screws and we are done this bit.

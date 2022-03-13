@@ -1,4 +1,4 @@
-# Spot Micro Operating System
+# 3) Spot Micro Operating System
 
 ## Setting up the Raspberry Pi.
 
@@ -33,7 +33,7 @@ Next find the three lines
 dtoverlay=vc4-fkms-v3d
 max_framebuffers=2
 
-Now add # in front of the send two lines
+Now add # in fron of the send two lines
 
 #dtoverlay=vc4-fkms-v3d
 #max_framebuffers=2
@@ -100,8 +100,12 @@ At this point you can tab until <Finish> is highlighted or you can enable the ot
 
 After you have exited, it may give you the option to reboot, answer yes.
 Allow the Raspberry Pi some time to reboot, then you can log in using VNC
-If you don’t have VNC installed on your computer, then check out this tutorial: https://www.softwarert.com/setup-realvnc-server-on-pc/
-When you first connect with VNC, it will guide you through the first use setup, this can take some time, but remember to skip the network setup sectio as you have already done it.
+If you don’t have VNC installed on your computer, then go to:
+https://www.realvnc.com/en/connect/download/viewer/
+Just run the installer on the device you want to control from and follow the instructions, or there's MSIs for remote deployment under Windows. If you don't have permission to install VNC® Viewer on desktop platforms, choose the standalone option.
+VNC® Viewer is always free to use. Just accept the EULA the first time you run.
+
+When you first connect with VNC, it will guide you through the first use setup, this can take some time, but remember to skip the network setup section as you have already done it.
 
 ## Setting up Java 11.
 
@@ -130,7 +134,7 @@ cd ..
 Download the latest MyRobotLab from:
 http://myrobotlab.org/
 using the web browser thats installed with Raspbian.
-Click on the link latest to download MRL, near the top left hand side, at the time this document was created that was 1.1.694.
+Click on the link latest to download MRL, near the top left hand side, at the time this document was created that was 1.1.694.  This project is still under development, so some of what you see here may have been improved in later versions.
 
 ![MyRobotLab web site](https://paper-attachments.dropbox.com/s_3312125F65CA3DC01444C81917CB3E917B429E9A33B5A513DF0D3BDF0783359C_1641116633602_Download_MRL.png)
 
@@ -148,5 +152,7 @@ cd MRL
 ./myrobotlab.sh
 This will start the installation process of MyRobotlab.
 This will also take a bit of time, about 1.5 hours on a Raspi 4 and about 2 hours on a Raspi 3.
-When the install is finished, it willl start the web browser and open the WebGUI interface to MRL
+Whe the install is finished, it willl start the web browser and open the WebGUI interface to MRL
+
+You now have The basic robot OS installed.
 
