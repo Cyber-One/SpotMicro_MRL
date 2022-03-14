@@ -18,7 +18,7 @@
 #                                                               #
 #################################################################
 import math
-print "Starting the Inverse Kinematics Functions"
+print "Starting the I Functions"
 
 def legInverseKinematics(LSFx, LAFy, Zt):
     Error = 0
@@ -59,13 +59,23 @@ def legInverseKinematics(LSFx, LAFy, Zt):
 
 def setServosInverseKinematics(Leg, X, Y, Z):
     if Leg == 0: # Front Left
-        ServoPos = legInverseKinematics(LSFx, LAFy, Zt)
+        ServoPos = legInverseKinematics(X - LXS, Y - LYS, Z)
         FLShoulder.moveTo(ServoPos.get("Shoulder"))
         FLArm.moveTo(ServoPos.get("Arm"))
         FLWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 1: # Front Right
-        ServoPos = legInverseKinematics(LSFx, LAFy, Zt)
+        ServoPos = legInverseKinematics(-(X+LXS), Y - LYS, Z)
         FRShoulder.moveTo(ServoPos.get("Shoulder"))
         FRArm.moveTo(ServoPos.get("Arm"))
         FRWrist.moveTo(ServoPos.get("Wrist"))
+    if Leg == 2: # Back Left
+        ServoPos = legInverseKinematics(X - LXS, Y + LYS, Z)
+        BLShoulder.moveTo(ServoPos.get("Shoulder"))
+        BLArm.moveTo(ServoPos.get("Arm"))
+        BLWrist.moveTo(ServoPos.get("Wrist"))
+    if Leg == 3: # Back Right
+        ServoPos = legInverseKinematics(-(X+LXS), Y = LYS, Z)
+        BRShoulder.moveTo(ServoPos.get("Shoulder"))
+        BRArm.moveTo(ServoPos.get("Arm"))
+        BRWrist.moveTo(ServoPos.get("Wrist"))
         

@@ -62,19 +62,6 @@ print "Starting the leg Forward Kinematics Functions"
 # This is all from the robots perspective.                      #
 #                                                               #
 #################################################################
-# Lets first define the functions that we need to do our math.  #
-# Lets make a couple of assumptions, each angle is opposite the #
-# length in out triangle.  We can also assume we will always    #
-# have two of the lengths in our triangle and either at least   #
-# one angle or the third length.                                #
-#################################################################
-def LengthC(AngleC, LengthA, LengthB):
-    return math.sqrt(LengthA*LengthA + LengthB*LengthB - 2*LengthA*LengthB*math.cos(math.radians(AngleC)))
-
-def JointAngle(LengthA, LengthB, LengthC):
-    return math.degrees(math.acos((LengthA*LengthA + LengthB*LengthB - LengthC*LengthC)/(2*LengthA*LengthB)))
-
-#################################################################
 # The Leg value is between 0 and 3                              #
 # 0 = Front left Leg                                            #
 # 1 = Front Right Leg                                           #
@@ -83,8 +70,8 @@ def JointAngle(LengthA, LengthB, LengthC):
 # Shoulder, Arm and Wrist are the current positions.            #
 #################################################################
 def forwardKinematics(Leg, Shoulder, Arm, Wrist):
-    LTF = LengthC(Wrist, LWF, LTW)
-    AFW = JointAngle(LTF, LTW, LWF)
+    LTF = math.sqrt(LWF*LWF + LTW*LTW - 2*LWF*LTW*math.cos(math.radians(Wrist)))
+    AFW = math.degrees(math.acos((LTF*LTF + LTW*LTW - LWF*LWF)/(2*LTF*LTW)))
     if Leg < 2:
         workY = LTF * math.sin(math.radians(Arm-AFW-90)) + LYS
     else:
