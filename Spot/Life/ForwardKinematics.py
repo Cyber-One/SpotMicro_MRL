@@ -89,7 +89,7 @@ def forwardKinematics(Leg, Shoulder, Arm, Wrist):
         workY = LTF * math.sin(math.radians(Arm-AFW-90)) + LYS
     else:
         workY = LTF * math.sin(math.radians(Arm-AFW-90)) - LYS
-    LTFa = math.cos(math.radians(AFW + Arm + 90)) * LTF
+    LTFa = math.cos(math.radians(AFW - Arm - 90)) * LTF
     LSF = math.sqrt(LST*LST + LTFa*LTFa)
     if (Leg == 0) or (Leg == 2):
         workX = -math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF - LXS
