@@ -57,24 +57,54 @@ def legInverseKinematics(LSFx, LAFy, Zt):
         WorkServoA = ArmMax
     return {"Error":Error, "Shoulder":WorkServoS, "Arm":WorkServoA, "Wrist":WorkServoW}
 
-def setServosInverseKinematics(Leg, X, Y, Z):
+def setServosInverseKinematics(Leg, X, Y, Z, Speed):
     if Leg == 0: # Front Left
+        #FL_Leg(0)
         ServoPos = legInverseKinematics(X - LXS, Y - LYS, Z)
         FLShoulder.moveTo(ServoPos.get("Shoulder"))
         FLArm.moveTo(ServoPos.get("Arm"))
         FLWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 1: # Front Right
+        #FR_Leg(0)
         ServoPos = legInverseKinematics(-(X+LXS), Y - LYS, Z)
         FRShoulder.moveTo(ServoPos.get("Shoulder"))
         FRArm.moveTo(ServoPos.get("Arm"))
         FRWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 2: # Back Left
+        #BL_Leg(0)
         ServoPos = legInverseKinematics(X - LXS, Y + LYS, Z)
         BLShoulder.moveTo(ServoPos.get("Shoulder"))
         BLArm.moveTo(ServoPos.get("Arm"))
         BLWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 3: # Back Right
+        #BR_Leg(0)
         ServoPos = legInverseKinematics(-(X+LXS), Y = LYS, Z)
+        BRShoulder.moveTo(ServoPos.get("Shoulder"))
+        BRArm.moveTo(ServoPos.get("Arm"))
+        BRWrist.moveTo(ServoPos.get("Wrist"))
+        
+def moveFoot(Leg, X, Y, Z, Speed):
+    if Leg == 0: # Front Left
+        FL_Leg(0)
+        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
+        FLShoulder.moveTo(ServoPos.get("Shoulder"))
+        FLArm.moveTo(ServoPos.get("Arm"))
+        FLWrist.moveTo(ServoPos.get("Wrist"))
+    if Leg == 1: # Front Right
+        FR_Leg(0)
+        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
+        FRShoulder.moveTo(ServoPos.get("Shoulder"))
+        FRArm.moveTo(ServoPos.get("Arm"))
+        FRWrist.moveTo(ServoPos.get("Wrist"))
+    if Leg == 2: # Back Left
+        BL_Leg(0)
+        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
+        BLShoulder.moveTo(ServoPos.get("Shoulder"))
+        BLArm.moveTo(ServoPos.get("Arm"))
+        BLWrist.moveTo(ServoPos.get("Wrist"))
+    if Leg == 3: # Back Right
+        BR_Leg(0)
+        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
         BRShoulder.moveTo(ServoPos.get("Shoulder"))
         BRArm.moveTo(ServoPos.get("Arm"))
         BRWrist.moveTo(ServoPos.get("Wrist"))
