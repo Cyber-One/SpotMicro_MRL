@@ -40,6 +40,11 @@ def legInverseKinematics(LSFx, LAFy, Zt):
         Error = 2
         WorkServoS = ShoulderMax
     LTF = math.sqrt((LTFz*LTFz) + (LAFy*LAFy))
+    # Working through a bug.
+    if (LTW+LWF) < LTF:
+        print "Warning, LTF is longer than LTW and LWF combined, this is impossible"
+        print LSFx, ", LSFx:", LAFy, ", LAFy:", Zt, "Zt:"
+        print LTFz, ", LTFz:", LTF, ", LTF:", ((LTW*LTW) + (LWF*LWF) - (LTF*LTF))/(2*LTW*LWF), "C:"
     ServoWR = math.acos(((LTW*LTW) + (LWF*LWF) - (LTF*LTF))/(2*LTW*LWF))
     WorkServoW = math.degrees(ServoWR)
     if WorkServoW < WristMin:
