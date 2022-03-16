@@ -18,7 +18,7 @@
 #                                                               #
 #################################################################
 import math
-print "Starting the I Functions"
+print "Starting the Inverse Kinematics Functions"
 
 def legInverseKinematics(LSFx, LAFy, Zt):
     Error = 0
@@ -28,6 +28,7 @@ def legInverseKinematics(LSFx, LAFy, Zt):
     LSF = math.sqrt((LSFx*LSFx) + (Zt*Zt))
     # Now that we have LSF and we know LST, lets work out the LTFz
     # we use the z suffix here, because this only relative to the X-Z plane and not the XY plane
+    # LST = 50
     LTFz = math.sqrt(LSF*LSF - LST*LST)
     Ai = math.asin(LSFx/LSF)
     Ao = math.acos(LST/LSF)
@@ -39,7 +40,8 @@ def legInverseKinematics(LSFx, LAFy, Zt):
         Error = 2
         WorkServoS = ShoulderMax
     LTF = math.sqrt((LTFz*LTFz) + (LAFy*LAFy))
-    WorkServoW = math.degrees(math.acos((LTW*LTW + LWF*LWF - LTF*LTF)/(2*LTW*LWF)))
+    ServoWR = math.acos(((LTW*LTW) + (LWF*LWF) - (LTF*LTF))/(2*LTW*LWF))
+    WorkServoW = math.degrees(ServoWR)
     if WorkServoW < WristMin:
         Error = 5
         WorkServoW = WristMin
@@ -78,7 +80,7 @@ def setServosInverseKinematics(Leg, X, Y, Z, Speed):
         BLWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 3: # Back Right
         #BR_Leg(0)
-        ServoPos = legInverseKinematics(-(X+LXS), Y = LYS, Z)
+        ServoPos = legInverseKinematics(-(X+LXS), Y + LYS, Z)
         BRShoulder.moveTo(ServoPos.get("Shoulder"))
         BRArm.moveTo(ServoPos.get("Arm"))
         BRWrist.moveTo(ServoPos.get("Wrist"))
@@ -86,25 +88,25 @@ def setServosInverseKinematics(Leg, X, Y, Z, Speed):
 def moveFoot(Leg, X, Y, Z, Speed):
     if Leg == 0: # Front Left
         FL_Leg(0)
-        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
+        ServoPos = legInverseKinematics(FL_X+LXS + X, FL_Y-LYS + Y, FL_Z + Z)
         FLShoulder.moveTo(ServoPos.get("Shoulder"))
         FLArm.moveTo(ServoPos.get("Arm"))
         FLWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 1: # Front Right
         FR_Leg(0)
-        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
+        ServoPos = legInverseKinematics(FL_X-LXS + X, FL_Y-LYS + Y, FL_Z + Z)
         FRShoulder.moveTo(ServoPos.get("Shoulder"))
         FRArm.moveTo(ServoPos.get("Arm"))
         FRWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 2: # Back Left
         BL_Leg(0)
-        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
+        ServoPos = legInverseKinematics(FL_X+LXS + X, FL_Y+LYS + Y, FL_Z + Z)
         BLShoulder.moveTo(ServoPos.get("Shoulder"))
         BLArm.moveTo(ServoPos.get("Arm"))
         BLWrist.moveTo(ServoPos.get("Wrist"))
     if Leg == 3: # Back Right
         BR_Leg(0)
-        ServoPos = legInverseKinematics(FL_X + X, FL_Y + Y, FL_Z + Z)
+        ServoPos = legInverseKinematics(FL_X-LXS + X, FL_Y+LYS + Y, FL_Z + Z)
         BRShoulder.moveTo(ServoPos.get("Shoulder"))
         BRArm.moveTo(ServoPos.get("Arm"))
         BRWrist.moveTo(ServoPos.get("Wrist"))
