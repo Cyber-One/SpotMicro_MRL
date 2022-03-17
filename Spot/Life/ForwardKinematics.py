@@ -133,18 +133,21 @@ def BR_Leg(data):
     print "Back-Right-Leg"
     print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
 
-python.subscribe('FLShoulder', 'publishServoMoveTo', 'python', 'FL_Leg')
-python.subscribe('FLArm', 'publishServoMoveTo', 'python', 'FL_Leg')
-python.subscribe('FLWrist', 'publishServoMoveTo', 'python', 'FL_Leg')
+# These functions will call the Forward kinematics for the leg when ever the leg moves.
+# Truth is, we only need to call them when the data is needed such as moving the 
+# foot using relative locations.
+#python.subscribe('FLShoulder', 'publishServoMoveTo', 'python', 'FL_Leg')
+#python.subscribe('FLArm', 'publishServoMoveTo', 'python', 'FL_Leg')
+#python.subscribe('FLWrist', 'publishServoMoveTo', 'python', 'FL_Leg')
 
-python.subscribe('FRShoulder', 'publishServoMoveTo', 'python', 'FR_Leg')
-python.subscribe('FRArm', 'publishServoMoveTo', 'python', 'FR_Leg')
-python.subscribe('FRWrist', 'publishServoMoveTo', 'python', 'FR_Leg')
+#python.subscribe('FRShoulder', 'publishServoMoveTo', 'python', 'FR_Leg')
+#python.subscribe('FRArm', 'publishServoMoveTo', 'python', 'FR_Leg')
+#python.subscribe('FRWrist', 'publishServoMoveTo', 'python', 'FR_Leg')
 
-python.subscribe('BLShoulder', 'publishServoMoveTo', 'python', 'BL_Leg')
-python.subscribe('BLArm', 'publishServoMoveTo', 'python', 'BL_Leg')
-python.subscribe('BLWrist', 'publishServoMoveTo', 'python', 'BL_Leg')
+#python.subscribe('BLShoulder', 'publishServoMoveTo', 'python', 'BL_Leg')
+#python.subscribe('BLArm', 'publishServoMoveTo', 'python', 'BL_Leg')
+#python.subscribe('BLWrist', 'publishServoMoveTo', 'python', 'BL_Leg')
 
-python.subscribe('BRShoulder', 'publishServoMoveTo', 'python', 'BR_Leg')
-python.subscribe('BRArm', 'publishServoMoveTo', 'python', 'BR_Leg')
-python.subscribe('BRWrist', 'publishServoMoveTo', 'python', 'BR_Leg')
+#python.subscribe('BRShoulder', 'publishServoMoveTo', 'python', 'BR_Leg')
+#python.subscribe('BRArm', 'publishServoMoveTo', 'python', 'BR_Leg')
+#python.subscribe('BRWrist', 'publishServoMoveTo', 'python', 'BR_Leg')
