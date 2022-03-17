@@ -31,9 +31,9 @@ def legInverseKinematics(LSFx, LAFy, Zt):
     # we use the z suffix here, because this only relative to the X-Z plane and not the XY plane
     # LST = 50
     LTFz = math.sqrt(LSF*LSF - LST*LST)
-    Ai = math.asin(LSFx/LSF)
-    Ao = math.acos(LST/LSF)
-    ServoS = math.degrees(Ai + Ao)
+    Ai = math.asin(LSFx/LSF) # Angle inside
+    Ao = math.acos(LST/LSF)  # Angle Outside
+    ServoS = 180 - math.degrees(Ai + Ao)
     print ServoS, ", ServoS:", math.degrees(Ai), ", Ai:", math.degrees(Ao), "Ao:"
     if ServoS < ShoulderMin:
         Error = 1
@@ -46,6 +46,8 @@ def legInverseKinematics(LSFx, LAFy, Zt):
     if (LTW+LWF) < LTF:
         print "Warning, LTF is longer than LTW and LWF combined, this is impossible"
         Error = 7
+        ServoA = 0
+        ServoW = 0
     else:
         print LTFz, ", LTFz:", LTF, ", LTF:", ((LTW*LTW) + (LWF*LWF) - (LTF*LTF))/(2*LTW*LWF), "C:"
         ServoWR = math.acos(((LTW*LTW) + (LWF*LWF) - (LTF*LTF))/(2*LTW*LWF))
