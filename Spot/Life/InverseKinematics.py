@@ -74,7 +74,7 @@ def setServosInverseKinematics(Leg, X, Y, Z, Speed):
         #FL_Leg(0)
         ServoPos = legInverseKinematics(X - LXS, Y - LYS, Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             FLShoulder.moveTo(ServoPos.get("Shoulder"))
             FLArm.moveTo(ServoPos.get("Arm"))
             FLWrist.moveTo(ServoPos.get("Wrist"))
@@ -82,7 +82,7 @@ def setServosInverseKinematics(Leg, X, Y, Z, Speed):
         #FR_Leg(0)
         ServoPos = legInverseKinematics(-(X+LXS), Y - LYS, Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             FRShoulder.moveTo(ServoPos.get("Shoulder"))
             FRArm.moveTo(ServoPos.get("Arm"))
             FRWrist.moveTo(ServoPos.get("Wrist"))
@@ -90,7 +90,7 @@ def setServosInverseKinematics(Leg, X, Y, Z, Speed):
         #BL_Leg(0)
         ServoPos = legInverseKinematics(X - LXS, Y + LYS, Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             BLShoulder.moveTo(ServoPos.get("Shoulder"))
             BLArm.moveTo(ServoPos.get("Arm"))
             BLWrist.moveTo(ServoPos.get("Wrist"))
@@ -98,7 +98,7 @@ def setServosInverseKinematics(Leg, X, Y, Z, Speed):
         #BR_Leg(0)
         ServoPos = legInverseKinematics(-(X+LXS), Y + LYS, Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             BRShoulder.moveTo(ServoPos.get("Shoulder"))
             BRArm.moveTo(ServoPos.get("Arm"))
             BRWrist.moveTo(ServoPos.get("Wrist"))
@@ -108,7 +108,7 @@ def moveFoot(Leg, X, Y, Z, Speed):
         FL_Leg(0)
         ServoPos = legInverseKinematics(FL_X+LXS + X, FL_Y-LYS + Y, FL_Z + Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             FLShoulder.moveTo(ServoPos.get("Shoulder"))
             FLArm.moveTo(ServoPos.get("Arm"))
             FLWrist.moveTo(ServoPos.get("Wrist"))
@@ -116,7 +116,7 @@ def moveFoot(Leg, X, Y, Z, Speed):
         FR_Leg(0)
         ServoPos = legInverseKinematics((FR_X-LXS) + X, (FR_Y-LYS) + Y, FR_Z + Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             FRShoulder.moveTo(ServoPos.get("Shoulder"))
             FRArm.moveTo(ServoPos.get("Arm"))
             FRWrist.moveTo(ServoPos.get("Wrist"))
@@ -124,7 +124,7 @@ def moveFoot(Leg, X, Y, Z, Speed):
         BL_Leg(0)
         ServoPos = legInverseKinematics(BL_X+LXS + X, BL_Y+LYS + Y, BL_Z + Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             BLShoulder.moveTo(ServoPos.get("Shoulder"))
             BLArm.moveTo(ServoPos.get("Arm"))
             BLWrist.moveTo(ServoPos.get("Wrist"))
@@ -132,7 +132,7 @@ def moveFoot(Leg, X, Y, Z, Speed):
         BR_Leg(0)
         ServoPos = legInverseKinematics(BR_X-LXS + X, BR_Y+LYS + Y, BR_Z + Z)
         # Error trapping, only move if no error occured
-        if ServoPos.get("Error") = 0:
+        if ServoPos.get("Error") == 0:
             BRShoulder.moveTo(ServoPos.get("Shoulder"))
             BRArm.moveTo(ServoPos.get("Arm"))
             BRWrist.moveTo(ServoPos.get("Wrist"))
