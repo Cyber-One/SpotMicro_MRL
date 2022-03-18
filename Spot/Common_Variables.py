@@ -49,8 +49,8 @@ LastLeftPing = 0
 LastRightPing = 0
 
 # Describe a leg
-LWF = 135   # Length between the Wrist joint and the foot
-LTW = 110   # Length between the Arms joint and the Wrist joint
+LWF = 125   # Length between the Wrist joint and the foot
+LTW = 106   # Length between the Arms joint and the Wrist joint
 LST = 50    # Length between the Shoulder joint and the center line of the Arm
 LYS = 92    # Length between the center Y plane and the shoulder joint
 LXS = 38    # Length between the center X plane and the shoulder joint
