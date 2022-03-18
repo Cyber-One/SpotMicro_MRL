@@ -60,7 +60,10 @@ def legInverseKinematics(LSFx, LAFy, Zt):
             Error = 6
             ServoW = WristMax
         Afw = math.asin((math.sin(math.radians(ServoW))*LWF)/LTF)
-        Af = math.acos(LTFz/LTF)
+        if LAFy>0:
+            Af = math.acos(LTFz/LTF)
+        else:
+            Af = -math.acos(LTFz/LTF)
         ServoA = math.degrees(Afw - Af) + 90
         print ServoA, ", ServoA:", Afw, ", Afw:", Af, "Af:"
         if ServoA < ArmMin:
