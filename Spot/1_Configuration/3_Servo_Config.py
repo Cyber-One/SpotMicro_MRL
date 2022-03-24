@@ -71,7 +71,7 @@ FLShoulderVelocity = 272
 EnableFLArm = True
 FLArmAttachment = "Back"
 FLArmPin = 13
-FLArmMinPos = 31
+FLArmMinPos = 37
 FLArmMaxPos = 180
 FLArmVelocity = 272
 
@@ -86,7 +86,7 @@ EnableFLWrist = True
 FLWristAttachment = "Back"
 FLWristPin = 14
 FLWristMinPos = 38
-FLWristMaxPos = 162
+FLWristMaxPos = 153
 FLWristVelocity = 272
 
 
