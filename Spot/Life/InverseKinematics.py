@@ -93,61 +93,9 @@ def legInverseKinematics(LSFx, LAFy, Zt):
             ServoA = ArmMax
     return {"Error":Error, "Shoulder":ServoS, "Arm":ServoA, "Wrist":ServoW}
 
-#################################################################
-# kinematicsSetServo(Leg, ServoPos, Speed)                      #
-# This routine sets the speed of each of the servos for a leg   #
-# to produce a straight line movement.                          #
-#################################################################
-def kinematicsSetServo(Leg, ServoPos, Speed):
-    # First we need to know the current position.
-    if Leg == 0:
-        ShoulderCurrentPos = FLShoulder.getCurrentInputPos()
-        ArmCurrentPos = FLArm.getCurrentInputPos()
-        WristCurrentPos = FLWrist.getCurrentInputPos()
-    elif Leg == 1:
-        ShoulderCurrentPos = FRShoulder.getCurrentInputPos()
-        ArmCurrentPos = FRArm.getCurrentInputPos()
-        WristCurrentPos = FRWrist.getCurrentInputPos()
-    elif Leg == 2:
-        ShoulderCurrentPos = BLShoulder.getCurrentInputPos()
-        ArmCurrentPos = BLArm.getCurrentInputPos()
-        WristCurrentPos = BLWrist.getCurrentInputPos()
-    elif Leg == 3:
-        ShoulderCurrentPos = BRShoulder.getCurrentInputPos()
-        ArmCurrentPos = BRArm.getCurrentInputPos()
-        WristCurrentPos = BRWrist.getCurrentInputPos()
-    # Next we need to know the offset from the current pos to
-    # the new pos.
-    ShoulderOffset = ServoPos.get("Shoulder") - ShoulderCurrentPos
-    ArmOffset = ServoPos.get("Arm") - ShoulderCurrentPos
-    WristOffset = ServoPos.get("Wrist") - ShoulderCurrentPos
-    # Next we need to know, how long it will take for the servos
-    # to reach the new position. 
-    # We can get max speed from the Spot config
-    if Leg == 0:
-        ShoulderTime = ShoulderOffset / FLShoulderVelocity
-        ArmTime = ArmOffset / FLArmVelocity
-        WristTime = WristOffset / FLWristVelocity
-    elif Leg == 1:
-        ShoulderTime = ShoulderOffset / FRShoulderVelocity
-        ArmTime = ArmOffset / FRArmVelocity
-        WristTime = WristOffset / FRWristVelocity
-    elif Leg == 2:
-        ShoulderTime = ShoulderOffset / BLShoulderVelocity
-        ArmTime = ArmOffset / BLArmVelocity
-        WristTime = WristOffset / BLWristVelocity
-    elif Leg == 3:
-        ShoulderTime = ShoulderOffset / BRShoulderVelocity
-        ArmTime = ArmOffset / BRArmVelocity
-        WristTime = WristOffset / BRWristVelocity
-    # Now we need to know which has the longest time of movement 
-    if (ShoulderTime > ArmTime) and (ShoulderTime > WristTime):
-    elif (ArmTime > WristTime):
-    else:
-        #
 
 #################################################################
-# moveFoot( Leg, X-Axis, Y-Axis, Z-Axis, Speed)                 #
+# moveFoot( Leg, X-Axis, Y-Axis, Z-Axis)                        #
 # The Leg value is between 0 and 3                              #
 # 0 = Front left Leg                                            #
 # 1 = Front Right Leg                                           #
@@ -156,10 +104,14 @@ def kinematicsSetServo(Leg, ServoPos, Speed):
 # X-Axis, Y-Axis, Z-Axis is the amount in mm to move the foot   #
 #   in that axis. A negative value will move it in the reverse  #
 #   direction.                                                  #
-# Speed is a value between 0.01 and 1.00 and represents the     #
-#   multiplyer time the maximum rotation rate.                  #
+# This function first works out the current foot position,      #
+# then calculate the new position by adding the X, Y and Z      #
+# inputs to work out the new abosulte position using the        #
+# legInverseKinematics function.                                #
+# If an error during calculation occurs, then no movement is    #
+# performed on any servo.                                       #
 #################################################################
-def moveFoot(Leg, X, Y, Z, Speed):
+def moveFoot(Leg, X, Y, Z):
     if Leg == 0: # Front Left
         FL_Leg(0)
         ServoPos = legInverseKinematics(FL_X+LXS + X, FL_Y-LYS + Y, FL_Z + Z)
@@ -193,7 +145,17 @@ def moveFoot(Leg, X, Y, Z, Speed):
             BRArm.moveTo(ServoPos.get("Arm"))
             BRWrist.moveTo(ServoPos.get("Wrist"))
         
-def setServosInverseKinematics(Leg, X, Y, Z, Speed):
+#################################################################
+# setServosInverseKinematics( Leg, X-Axis, Y-Axis, Z-Axis)      #
+# The Leg value is between 0 and 3                              #
+# 0 = Front left Leg                                            #
+# 1 = Front Right Leg                                           #
+# 2 = Back left Leg                                             #
+# 3 = Back Right Leg                                            #
+# X-Axis, Y-Axis, Z-Axis is the coordinate of the foot relative #
+# to the center of the robot that we want to move the foot to.  #
+#################################################################
+def setServosInverseKinematics(Leg, X, Y, Z):
     if Leg == 0: # Front Left
         #FL_Leg(0)
         ServoPos = legInverseKinematics(X - LXS, Y - LYS, Z)
