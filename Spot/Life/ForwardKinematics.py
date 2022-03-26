@@ -76,16 +76,10 @@ def forwardKinematics(Leg, Shoulder, Arm, Wrist):
     # wrist joint is offset forward from the centre line by 15mm
     #OffsetY = math.sin(math.radians(Arm-90))*15.0
     #OffsetX = math.cos(math.radians(Arm-90))*15.0
-    if Leg < 2:
-        workY = LTF * math.sin(math.radians(Arm-AFW-90)) + LYS
-    else:
-        workY = LTF * math.sin(math.radians(Arm-AFW-90)) - LYS
+    workY = LTF * math.sin(math.radians(Arm-AFW-90))
     LTFa = math.cos(math.radians(AFW - Arm - 90)) * LTF
     LSF = math.sqrt(LST*LST + LTFa*LTFa)
-    if (Leg == 0) or (Leg == 2):
-        workX = -math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF - LXS
-    else:
-        workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF + LXS
+    workX = math.sin(math.acos(LST/LSF)+math.radians(Shoulder))*LSF
     workZ = math.cos(math.acos(LST/LSF) + math.radians(Shoulder))*LSF
     return {"X":workX, "Y":workY, "Z":workZ}
 
@@ -94,8 +88,8 @@ def FL_Leg(data):
     global FL_Y
     global FL_Z
     Position = forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
-    FL_X = Position.get("X")
-    FL_Y = Position.get("Y")
+    FL_X = -Position.get("X") - LXS
+    FL_Y = Position.get("Y") + LYS
     FL_Z = Position.get("Z")
     print "Front-Left-Leg"
     print FL_Z, " FL-Z:", FL_Y, " FL-Y:", FL_X, "FL-X:"
@@ -105,8 +99,8 @@ def FR_Leg(data):
     global FR_Y
     global FR_Z
     Position = forwardKinematics(1, FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
-    FR_X = Position.get("X")
-    FR_Y = Position.get("Y")
+    FR_X = Position.get("X") + LXS
+    FR_Y = Position.get("Y") + LYS
     FR_Z = Position.get("Z")
     print "Front-Right-Leg"
     print FR_Z, " FR-Z:", FR_Y, " FR-Y:", FR_X, "FR-X:"
@@ -116,8 +110,8 @@ def BL_Leg(data):
     global BL_Y
     global BL_Z
     Position = forwardKinematics(2, BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
-    BL_X = Position.get("X")
-    BL_Y = Position.get("Y")
+    BL_X = -Position.get("X") - LXS
+    BL_Y = Position.get("Y") - LYS
     BL_Z = Position.get("Z")
     print "Back-Left-Leg"
     print BL_Z, " BL-Z:", BL_Y, " BL-Y:", BL_X, "BL-X:"
@@ -127,8 +121,8 @@ def BR_Leg(data):
     global BR_Y
     global BR_Z
     Position = forwardKinematics(3, BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
-    BR_X = Position.get("X")
-    BR_Y = Position.get("Y")
+    BR_X = Position.get("X") + LXS
+    BR_Y = Position.get("Y") - LYS
     BR_Z = Position.get("Z")
     print "Back-Right-Leg"
     print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
