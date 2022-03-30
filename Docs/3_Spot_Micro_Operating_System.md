@@ -3,8 +3,8 @@
 ## Setting up the Raspberry Pi.
 
 We will need a MicroSD card to hold the Operating System. (OS) I suggest a 32GB class 3, but a class 1 will work.
-The last version releast was Buster, the most recent is Bullseye.
-In either case you will need to use a flash program to copy it to the MicroSD card.
+The last version released was Buster, the most recent is Bullseye in both 32 bit and 64 bit.
+In any case you will need to use a flash program to copy it to the MicroSD card.
 You can use the Raspberry Pi Imager https://www.raspberrypi.com/software/ or another imager, 
 I used BalenaEtcher https://www.balena.io/etcher/
 Using either program flash your chosen OS to the MicroSD Card.
@@ -16,27 +16,28 @@ Using Notpad++ or Notepad, edit the config.txt file.
 
 Scroll down the file until you find the following lines
 
-#hdmi_force_hotplug=1
-#hdmi_group=1
-#hdmi_mode=1
+    #hdmi_force_hotplug=1
+    #hdmi_group=1
+    #hdmi_mode=1
 
-The lines may be seperated by other line, but we need them to be like the following.
+The lines may be separated by other line, but we need them to be like the following.
 
-hdmi_force_hotplug=1
-hdmi_group=2     
-hdmi_mode=82
+    hdmi_force_hotplug=1
+    hdmi_group=2     
+    hdmi_mode=82
 
 Note the # are removed
+
 Next find the three lines
 
-#Enable DRM VC4 V3D driver on top of the dispmanx display stack
-dtoverlay=vc4-fkms-v3d
-max_framebuffers=2
+    #Enable DRM VC4 V3D driver on top of the dispmanx display stack
+    dtoverlay=vc4-fkms-v3d
+    max_framebuffers=2
 
-Now add # in fron of the send two lines
+Now add # in front of the send two lines
 
-#dtoverlay=vc4-fkms-v3d
-#max_framebuffers=2
+    #dtoverlay=vc4-fkms-v3d
+    #max_framebuffers=2
 
 Now save this file.
 This will allow us to connect with VNC later and get a resolution greater than 640x480.
@@ -44,26 +45,26 @@ This will allow us to connect with VNC later and get a resolution greater than 6
 Next we need to add two files.
 
 Create a new file called ssh.
-Make sure the file has no extention like txt or bat, it must have no extention, this file does not need any thing in it, it just has to exist.
+Make sure the file has no extension like txt or bat, it must have no extension, this file does not need any thing in it, it just has to exist.
 When the Raspberry Pi boots for the first time, when it finds this file name present, it will enable SSH so we can connect to  it over the network.
 
 Next we need to create a second file, this time it will have content. :-)
 The file must be named wpa_supplicant.conf
-It will have the folling text in it.
+It will have the following text in it.
 
-country=AU
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-
-network={
-scan_ssid=1
-ssid="your_wifi_ssid"
-psk="your_wifi_password"
-}
+    country=AU
+    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+    update_config=1
+    
+    network={
+    scan_ssid=1
+    ssid="your_wifi_ssid"
+    psk="your_wifi_password"
+    }
 
 You will need to change the your_wifi_ssid and the your_wifi_password to match your own WiFi network.
 Also make sure the country is set for your country, I'm in Australia, so it's AU, in the USA make it US and in the UK, make it UK.
-When editing this file, use notpad or better still Notepad++, do not use word or wordpad.
+When editing this file, use notpad or better still Notepad++, **do not use word or wordpad.**
 
 Save the file and tell windows to eject the drive, when windows tells you to, remove the MicroSD Card.
 
@@ -80,16 +81,21 @@ On a windows machine, I use Putty.
 https://www.putty.org/
 When you start Putty,  it will ask for the address, just type in raspberrypi.local, or the IP address you found, make sure SSH is selected and click on Open.
 If all goes well, you will get the prompt:
-login as:
-enter pi
+
+    login as: pi
+
 when asked for a password, enter
-raspberry
+
+    raspberry
+
 That should log you in.
 Now for the fun stuff :-)
 We need to setup the Raspberry Pi so we can access it from VNC, by default, this is disabled.
 To do this we need to run the config program as the super user.
 Ender the following line
-sudo raspi-config
+
+    sudo raspi-config
+
 This will start the Rasperry pi Config program.  Take care while in this program.
 Using the arrow keys, scroll down to the Interface Options and press enter.
 On the next screen, scroll down to the VNC line and press enter.
@@ -110,25 +116,28 @@ When you first connect with VNC, it will guide you through the first use setup, 
 ## Setting up Java 11.
 
 MyRobotLab (MRL) reqires Java 11 to be installed on the Raspberry Pi before it will run.
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install openjdk-11-jdk
+
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install openjdk-11-jdk
 
 Java 11 tends to use the HDMI port for it’s audio interface regardless of what you set in the main OS desktop,  But this can be fixed. 😄 
-sudo nano /etc/java-11-openjdk/sound.properties
+
+    sudo nano /etc/java-11-openjdk/sound.properties
+
 Add to following to the file
-javax.sound.sampled.Clip=com.sun.media.sound.DirectAudioDeviceProvider
-javax.sound.sampled.Port=com.sun.media.sound.PortMixerProvider
-javax.sound.sampled.SourceDataLine=com.sun.media.sound.DirectAudioDeviceProvider
-javax.sound.sampled.TargetDataLine=com.sun.media.sound.DirectAudioDeviceProvider
+
+    javax.sound.sampled.Clip=com.sun.media.sound.DirectAudioDeviceProvider
+    javax.sound.sampled.Port=com.sun.media.sound.PortMixerProvider
+    javax.sound.sampled.SourceDataLine=com.sun.media.sound.DirectAudioDeviceProvider
+    javax.sound.sampled.TargetDataLine=com.sun.media.sound.DirectAudioDeviceProvider
 
 This next step is only needed if you installed the Bullseye version of the Raspbian OS.
-git clone https://github.com/WiringPi/WiringPi.git
-cd WiringPi
-./build
-cd ..
 
-
+    git clone https://github.com/WiringPi/WiringPi.git
+    cd WiringPi
+    ./build
+    cd ..
 ## Installing MyRobotLab
 
 Download the latest MyRobotLab from:
@@ -149,10 +158,12 @@ Next I cut the MRL folder from download and paste it into the pi folder.
 open a terminal window, black icon in the top left corner of the screen.
 type in the following:
 cd MRL
-./myrobotlab.sh
+
+    ./myrobotlab.sh
+
 This will start the installation process of MyRobotlab.
 This will also take a bit of time, about 1.5 hours on a Raspi 4 and about 2 hours on a Raspi 3.
-Whe the install is finished, it willl start the web browser and open the WebGUI interface to MRL
+When the install is finished, it will start the web browser and open the WebGUI interface to MRL
 
 You now have The basic robot OS installed.
 
