@@ -49,5 +49,10 @@ execfile(RuningFolder+'/Life/ForwardKinematics.py')
 #################################################################
 execfile(RuningFolder+'/Life/InverseKinematics.py')
 
+#################################################################
+# Setup the Leg Movement routines.                        #
+#################################################################
+execfile(RuningFolder+'/Life/LegSpeedControl.py')
+
 
 
