@@ -19,7 +19,7 @@
 #################################################################
 
 #################################################################
-# kinematicsSetServo(Leg, ServoPos, Speed)                      #
+# sMoveFoot(Leg, X-Axis, Y-Axis, Z-Axis, Speed)                 #
 # This routine sets the speed of each of the servos for a leg   #
 # to produce a straight line movement.                          #
 # The Leg value is between 0 and 3                              #
@@ -27,14 +27,21 @@
 # 1 = Front Right Leg                                           #
 # 2 = Back left Leg                                             #
 # 3 = Back Right Leg                                            #
-# ServoPos is the dictionary returned by legInverseKinematics() #
+# X-Axis, Y-Axis, Z-Axis is the amount in mm to move the foot   #
+#   in that axis. A negative value will move it in the reverse  #
+#   direction.                                                  #
+# This function first works out the current foot position,      #
+# then calculate the new position by adding the X, Y and Z      #
+# inputs to work out the new abosulte position using the        #
+# legInverseKinematics function.                                #
 # Speed is a value between 0.01 and 1.0 where 1.0 is full speed #
 #################################################################
-def kinematicsSetServo(Leg, ServoPos, Speed):
+def sMoveFoot(Leg, X, Y, Z, Speed):
     # First of the sanity checks.
     if Speed > 1.0 or Speed < 0.01:
         Speed = 1.0
     # First we need to know the current position.
+    # And the max rat5e for the servos
     if Leg == 0:
         ShoulderCurrentPos = FLShoulder.getCurrentInputPos()
         ArmCurrentPos = FLArm.getCurrentInputPos()
@@ -63,59 +70,65 @@ def kinematicsSetServo(Leg, ServoPos, Speed):
         ShoulderVelocity = BRShoulderVelocity
         ArmVelocity = BRArmVelocity
         WristVelocity = BRWristVelocity
-    # Next we need to know the offset from the current pos to
-    # the new pos.
-    ShoulderOffset = ServoPos.get("Shoulder") - ShoulderCurrentPos
-    ArmOffset = ServoPos.get("Arm") - ShoulderCurrentPos
-    WristOffset = ServoPos.get("Wrist") - ShoulderCurrentPos
-    # Next we need to know, how long it will take for the servos
-    # to reach the new position. 
-    # We can get max speed from the Spot config
-    ShoulderTime = ShoulderOffset / ShoulderVelocity
-    ArmTime = ArmOffset / ArmVelocity
-    WristTime = WristOffset / WristVelocity
-    # Now we need to know which has the longest time of movement 
-    if (ShoulderTime > ArmTime) and (ShoulderTime > WristTime):
-        ShoulderSpeed = ShoulderVelocity * Speed
-        ArmSpeed = ArmVelocity * Speed * (ArmTime / ShoulderTime)
-        WristSpeed = WristVelocity * Speed * (WristTime / ShoulderTime)
-    elif (ArmTime > WristTime):
-        ShoulderSpeed = ShoulderVelocity * Speed * (ShoulderTime / ArmTime)
-        ArmSpeed = ArmVelocity * Speed
-        WristSpeed = WristVelocity * Speed * (WristTime / ArmTime)
-    else:
-        ShoulderSpeed = ShoulderVelocity * Speed * (ShoulderTime / WristTime)
-        ArmSpeed = ArmVelocity * Speed * (ArmTime / WristTime)
-        WristSpeed = WristVelocity * Speed
-    # Now we have our speeds and target servo positions, we can
-    # set this up for each of the servos.
-    if Leg == 0:
-        FLShoulder.setSpeed(ShoulderSpeed)
-        FLArm.setSpeed(ArmSpeed)
-        FLWrist.setSpeed(WristSpeed)
-        FLShoulder.moveTo(ServoPos.get("Shoulder"))
-        FLArm.moveTo(ServoPos.get("Arm"))
-        FLWrist.moveTo(ServoPos.get("Wrist"))
-    elif Leg == 1:
-        FRShoulder.setSpeed(ShoulderSpeed)
-        FRArm.setSpeed(ArmSpeed)
-        FRWrist.setSpeed(WristSpeed)
-        FRShoulder.moveTo(ServoPos.get("Shoulder"))
-        FRArm.moveTo(ServoPos.get("Arm"))
-        FRWrist.moveTo(ServoPos.get("Wrist"))
-    elif Leg == 2:
-        BLShoulder.setSpeed(ShoulderSpeed)
-        BLArm.setSpeed(ArmSpeed)
-        BLWrist.setSpeed(WristSpeed)
-        BLShoulder.moveTo(ServoPos.get("Shoulder"))
-        BLArm.moveTo(ServoPos.get("Arm"))
-        BLWrist.moveTo(ServoPos.get("Wrist"))
-    elif Leg == 3:
-        BRShoulder.setSpeed(ShoulderSpeed)
-        BRArm.setSpeed(ArmSpeed)
-        BRWrist.setSpeed(WristSpeed)
-        BRShoulder.moveTo(ServoPos.get("Shoulder"))
-        BRArm.moveTo(ServoPos.get("Arm"))
-        BRWrist.moveTo(ServoPos.get("Wrist"))
+    # Lets get the current 3D space position of the foot
+    Position = forwardKinematics(Leg, ShoulderCurrentPos, ArmCurrentPos, WristCurrentPos)
+    # Now that we have the current 3D Space position, lets calculate where we want to put it.
+    ServoPos = legInverseKinematics(Position.get("X") + X, Position.get("Y") + Y, Position.get("Z") + Z)
+    if ServoPos.get("Error") == 0:
+    # Assuming no errors occured.
+        # Next we need to know the offset from the current pos to
+        # the new pos.
+        ShoulderOffset = ServoPos.get("Shoulder") - ShoulderCurrentPos
+        ArmOffset = ServoPos.get("Arm") - ShoulderCurrentPos
+        WristOffset = ServoPos.get("Wrist") - ShoulderCurrentPos
+        # Next we need to know, how long it will take for the servos
+        # to reach the new position. 
+        # We can get max speed from the Spot config
+        ShoulderTime = ShoulderOffset / ShoulderVelocity
+        ArmTime = ArmOffset / ArmVelocity
+        WristTime = WristOffset / WristVelocity
+        # Now we need to know which has the longest time of movement 
+        if (ShoulderTime > ArmTime) and (ShoulderTime > WristTime):
+            ShoulderSpeed = ShoulderVelocity * Speed
+            ArmSpeed = ArmVelocity * Speed * (ArmTime / ShoulderTime)
+            WristSpeed = WristVelocity * Speed * (WristTime / ShoulderTime)
+        elif (ArmTime > WristTime):
+            ShoulderSpeed = ShoulderVelocity * Speed * (ShoulderTime / ArmTime)
+            ArmSpeed = ArmVelocity * Speed
+            WristSpeed = WristVelocity * Speed * (WristTime / ArmTime)
+        else:
+            ShoulderSpeed = ShoulderVelocity * Speed * (ShoulderTime / WristTime)
+            ArmSpeed = ArmVelocity * Speed * (ArmTime / WristTime)
+            WristSpeed = WristVelocity * Speed
+        # Now we have our speeds and target servo positions, we can
+        # set this up for each of the servos.
+        if Leg == 0:
+            FLShoulder.setSpeed(ShoulderSpeed)
+            FLArm.setSpeed(ArmSpeed)
+            FLWrist.setSpeed(WristSpeed)
+            FLShoulder.moveTo(ServoPos.get("Shoulder"))
+            FLArm.moveTo(ServoPos.get("Arm"))
+            FLWrist.moveTo(ServoPos.get("Wrist"))
+        elif Leg == 1:
+            FRShoulder.setSpeed(ShoulderSpeed)
+            FRArm.setSpeed(ArmSpeed)
+            FRWrist.setSpeed(WristSpeed)
+            FRShoulder.moveTo(ServoPos.get("Shoulder"))
+            FRArm.moveTo(ServoPos.get("Arm"))
+            FRWrist.moveTo(ServoPos.get("Wrist"))
+        elif Leg == 2:
+            BLShoulder.setSpeed(ShoulderSpeed)
+            BLArm.setSpeed(ArmSpeed)
+            BLWrist.setSpeed(WristSpeed)
+            BLShoulder.moveTo(ServoPos.get("Shoulder"))
+            BLArm.moveTo(ServoPos.get("Arm"))
+            BLWrist.moveTo(ServoPos.get("Wrist"))
+        elif Leg == 3:
+            BRShoulder.setSpeed(ShoulderSpeed)
+            BRArm.setSpeed(ArmSpeed)
+            BRWrist.setSpeed(WristSpeed)
+            BRShoulder.moveTo(ServoPos.get("Shoulder"))
+            BRArm.moveTo(ServoPos.get("Arm"))
+            BRWrist.moveTo(ServoPos.get("Wrist"))
 
 
