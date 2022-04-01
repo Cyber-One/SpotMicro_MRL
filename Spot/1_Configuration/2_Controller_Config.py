@@ -42,7 +42,7 @@ EnableRaspberryPi = True            # True for on, False for off
 # In the Spot build, I'm using an Arduino Nano for the two      #
 # Ultrasonic Sensors and the PIR sensor.                        #
 # The Arduino also has an I2C Port 0 if we need to use it.      #
-EnableArduinoNano = False           # True for on, False for off
+EnableArduinoNano = True            # True for on, False for off
 ArduinoNanoComPort = "/dev/ttyAMA0" # Refer to notes above
 
 #################################################################
