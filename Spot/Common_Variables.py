@@ -72,12 +72,12 @@ FR_Z = -230
 BL_Z = -230
 BR_Z = -230
 
-ShoulderMin = 40.0
+ShoulderMin = 50.0
 ShoulderRest = 90.0
 ShoulderMax = 130.0
-ArmMin = 0.0
+ArmMin = 15.0
 ArmRest = 120.0
-ArmMax = 180.0
+ArmMax = 165.0
 WristMin = 50.0
 WristRest = 125.0
 WristMax = 180.0
