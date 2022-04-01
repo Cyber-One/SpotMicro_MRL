@@ -51,10 +51,10 @@ FLShoulderAttachment = "Back"
 FLShoulderPin = 12
 # The is the value from testing where the Front Left Shoulder   #
 # is all the way towards the center line of the both            #
-FLShoulderMinPos = 68
+FLShoulderMinPos = 74
 # This is the value from testing where the Front Left Shoulder  #
 # is all the way as far from the centerline as is possible      #
-FLShoulderMaxPos = 139
+FLShoulderMaxPos = 142
 # This is the speed that the Front Left Shoulder moves at.      #
 # -1 is no speed limit, the Front Left Shoulder will move as    #
 # fast as possible.                                             #
@@ -71,8 +71,8 @@ FLShoulderVelocity = 272
 EnableFLArm = True
 FLArmAttachment = "Back"
 FLArmPin = 13
-FLArmMinPos = 32
-FLArmMaxPos = 180
+FLArmMinPos = 47
+FLArmMaxPos = 175
 FLArmVelocity = 272
 
 #################################################################
@@ -105,8 +105,8 @@ FLWristVelocity = 272
 EnableFRShoulder = True
 FRShoulderAttachment = "Back"
 FRShoulderPin = 0
-FRShoulderMinPos = 152
-FRShoulderMaxPos = 76
+FRShoulderMinPos = 142
+FRShoulderMaxPos = 74
 FRShoulderVelocity = 272
 
 #################################################################
@@ -120,8 +120,8 @@ FRShoulderVelocity = 272
 EnableFRArm = True
 FRArmAttachment = "Back"
 FRArmPin = 1
-FRArmMinPos = 180
-FRArmMaxPos = 33
+FRArmMinPos = 169
+FRArmMaxPos = 42
 FRArmVelocity = 272
 
 #################################################################
@@ -153,8 +153,8 @@ FRWristVelocity = 272
 EnableBLShoulder = True
 BLShoulderAttachment = "Back"
 BLShoulderPin = 8
-BLShoulderMinPos = 162
-BLShoulderMaxPos = 76
+BLShoulderMinPos = 144
+BLShoulderMaxPos = 79
 BLShoulderVelocity = 272
 
 #################################################################
@@ -168,7 +168,7 @@ BLShoulderVelocity = 272
 EnableBLArm = True
 BLArmAttachment = "Back"
 BLArmPin = 9
-BLArmMinPos = 41
+BLArmMinPos = 52
 BLArmMaxPos = 180
 BLArmVelocity = 272
 
@@ -182,8 +182,8 @@ BLArmVelocity = 272
 EnableBLWrist = True
 BLWristAttachment = "Back"
 BLWristPin = 10
-BLWristMinPos = 50
-BLWristMaxPos = 156
+BLWristMinPos = 47
+BLWristMaxPos = 160
 BLWristVelocity = 272
 
 #################################################################
@@ -201,8 +201,8 @@ BLWristVelocity = 272
 EnableBRShoulder = True
 BRShoulderAttachment = "Back"
 BRShoulderPin = 4
-BRShoulderMinPos = 54
-BRShoulderMaxPos = 158
+BRShoulderMinPos = 79
+BRShoulderMaxPos = 150
 BRShoulderVelocity = 272
 
 #################################################################
@@ -216,8 +216,8 @@ BRShoulderVelocity = 272
 EnableBRArm = True
 BRArmAttachment = "Back"
 BRArmPin = 5
-BRArmMinPos = 177
-BRArmMaxPos = 31
+BRArmMinPos = 171
+BRArmMaxPos = 41
 BRArmVelocity = 272
 
 #################################################################
