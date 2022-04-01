@@ -41,7 +41,7 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
     if Speed > 1.0 or Speed < 0.01:
         Speed = 1.0
     # First we need to know the current position.
-    # And the max rat5e for the servos
+    # And the max rate for the servos
     if Leg == 0:
         ShoulderCurrentPos = FLShoulder.getCurrentInputPos()
         ArmCurrentPos = FLArm.getCurrentInputPos()
@@ -71,9 +71,14 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
         ArmVelocity = BRArmVelocity
         WristVelocity = BRWristVelocity
     # Lets get the current 3D space position of the foot
-    Position = forwardKinematics(Leg, ShoulderCurrentPos, ArmCurrentPos, WristCurrentPos)
+    Position = forwardKinematics(Leg, ShoulderCurrentPos, ArmCurrentPos+180, WristCurrentPos)
     # Now that we have the current 3D Space position, lets calculate where we want to put it.
     ServoPos = legInverseKinematics(Position.get("X") + X, Position.get("Y") + Y, Position.get("Z") + Z)
+    print Position.get("Z"), " Cur-Z:", Position.get("Y"), " Cur-Y:", Position.get("X"), "Cur-X:"
+    print Position.get("Z") + Z, " Tar-Z:", Position.get("Y") + Y, " Tar-Y:", Position.get("X") + X, "Tar-X:"
+    print WristCurrentPos, " Wrist Pos:", ArmCurrentPos, " Arm Pos:", ShoulderCurrentPos, "Shoulder Pos:"
+    print ServoPos.get("Wrist"), " Tar-Wrist:", ServoPos.get("Arm"), " Tar-Arm:", ServoPos.get("Shoulder"), "Tar-Shoulder:"
+    print ServoPos.get("Error"), "Error code returned:"
     if ServoPos.get("Error") == 0:
     # Assuming no errors occured.
         # Next we need to know the offset from the current pos to
@@ -100,9 +105,11 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
             ShoulderSpeed = ShoulderVelocity * Speed * (ShoulderTime / WristTime)
             ArmSpeed = ArmVelocity * Speed * (ArmTime / WristTime)
             WristSpeed = WristVelocity * Speed
+        print WristSpeed, " Wrist Speed:", ArmSpeed, " Arm Speed:", ShoulderSpeed, "Shoulder Speed:"
         # Now we have our speeds and target servo positions, we can
         # set this up for each of the servos.
         if Leg == 0:
+            print "Front Left Leg"
             FLShoulder.setSpeed(ShoulderSpeed)
             FLArm.setSpeed(ArmSpeed)
             FLWrist.setSpeed(WristSpeed)
@@ -110,6 +117,7 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
             FLArm.moveTo(ServoPos.get("Arm"))
             FLWrist.moveTo(ServoPos.get("Wrist"))
         elif Leg == 1:
+            print "Front Right Leg"
             FRShoulder.setSpeed(ShoulderSpeed)
             FRArm.setSpeed(ArmSpeed)
             FRWrist.setSpeed(WristSpeed)
@@ -117,6 +125,7 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
             FRArm.moveTo(ServoPos.get("Arm"))
             FRWrist.moveTo(ServoPos.get("Wrist"))
         elif Leg == 2:
+            print "Back Left Leg"
             BLShoulder.setSpeed(ShoulderSpeed)
             BLArm.setSpeed(ArmSpeed)
             BLWrist.setSpeed(WristSpeed)
@@ -124,6 +133,7 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
             BLArm.moveTo(ServoPos.get("Arm"))
             BLWrist.moveTo(ServoPos.get("Wrist"))
         elif Leg == 3:
+            print "Back Right Leg"
             BRShoulder.setSpeed(ShoulderSpeed)
             BRArm.setSpeed(ArmSpeed)
             BRWrist.setSpeed(WristSpeed)
@@ -131,4 +141,25 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
             BRArm.moveTo(ServoPos.get("Arm"))
             BRWrist.moveTo(ServoPos.get("Wrist"))
 
+#################################################################
+# sMoveFeet(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX,   #
+# BRY, BRZ, Speed)                                              #
+# This routine sets the speed of each of the servos for a leg   #
+# to produce a straight line movement with all four legs        #
+# completing the movement at the same time.                     #
+# X-Axis, Y-Axis, Z-Axis for each of the four feet is the       #
+#   amount in mm to move the foot in that axis.                 #
+#   A negative value will move it in the reverse direction.     #
+# This function first works out the current foot position,      #
+# then calculate the new position by adding the X, Y and Z      #
+# inputs to work out the new abosulte position using the        #
+# legInverseKinematics function.                                #
+# Speed is a value between 0.01 and 1.0 where 1.0 is full speed #
+#################################################################
+def sMoveFeet(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Speed):
+    # First of the sanity checks.
+    if Speed > 1.0 or Speed < 0.01:
+        Speed = 1.0
+    # First we need to know the current position.
+    # And the max rate for the servos
 
