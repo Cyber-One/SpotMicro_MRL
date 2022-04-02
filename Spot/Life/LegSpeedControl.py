@@ -84,9 +84,9 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
     # Assuming no errors occured.
         # Next we need to know the offset from the current pos to
         # the new pos.
-        ShoulderOffset = ServoPos.get("Shoulder") - ShoulderCurrentPos
-        ArmOffset = ServoPos.get("Arm") - ShoulderCurrentPos
-        WristOffset = ServoPos.get("Wrist") - ShoulderCurrentPos
+        ShoulderOffset = abs(ServoPos.get("Shoulder") - ShoulderCurrentPos)
+        ArmOffset = abs(ServoPos.get("Arm") - ArmCurrentPos)
+        WristOffset = abs(ServoPos.get("Wrist") - WristCurrentPos)
         print WristOffset, " Wrist Ofset:", ArmOffset, " Arm Offset:", ShoulderOffset, "Shoulder Offset:"
         # Next we need to know, how long it will take for the servos
         # to reach the new position. 
