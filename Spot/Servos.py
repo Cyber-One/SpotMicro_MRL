@@ -122,7 +122,7 @@ if EnableFLShoulder == True:
 #################################################################
 EnableFLArm = TestServoControllerExists(FLArmAttachment, EnableFLArm)
 if EnableFLArm == True:
-    FLArm = Runtime.createAndStart("FLArm", "Servo")
+    FLArm = Runtime.start("FLArm", "Servo")
     # This next if statement is looking for an inverted servo
     if FLArmMinPos < FLArmMaxPos:
         FLArm.map(ArmMin, ArmMax, FLArmMinPos, FLArmMaxPos)
@@ -142,7 +142,7 @@ if EnableFLArm == True:
 #################################################################
 EnableFLWrist = TestServoControllerExists(FLWristAttachment, EnableFLWrist)
 if EnableFLWrist == True:
-    FLWrist = Runtime.createAndStart("FLWrist", "Servo")
+    FLWrist = Runtime.start("FLWrist", "Servo")
     # This next if statement is looking for an inverted servo
     if FLWristMinPos < FLWristMaxPos:
         FLWrist.map(WristMin, WristMax, FLWristMinPos, FLWristMaxPos)
@@ -169,7 +169,7 @@ if EnableFLWrist == True:
 #################################################################
 EnableFRShoulder = TestServoControllerExists(FRShoulderAttachment, EnableFRShoulder)
 if EnableFRShoulder == True:
-    FRShoulder = Runtime.createAndStart("FRShoulder", "Servo")
+    FRShoulder = Runtime.start("FRShoulder", "Servo")
     # This next if statement is looking for an inverted servo
     if FRShoulderMinPos < FRShoulderMaxPos:
         FRShoulder.map(ShoulderMin, ShoulderMax, FRShoulderMinPos, FRShoulderMaxPos)
@@ -189,7 +189,7 @@ if EnableFRShoulder == True:
 #################################################################
 EnableFRArm = TestServoControllerExists(FRArmAttachment, EnableFRArm)
 if EnableFRArm == True:
-    FRArm = Runtime.createAndStart("FRArm", "Servo")
+    FRArm = Runtime.start("FRArm", "Servo")
     # This next if statement is looking for an inverted servo
     if FRArmMinPos < FRArmMaxPos:
         FRArm.map(ArmMin, ArmMax, FRArmMinPos, FRArmMaxPos)
@@ -209,7 +209,7 @@ if EnableFRArm == True:
 #################################################################
 EnableFRWrist = TestServoControllerExists(FRWristAttachment, EnableFRWrist)
 if EnableFRWrist == True:
-    FRWrist = Runtime.createAndStart("FRWrist", "Servo")
+    FRWrist = Runtime.start("FRWrist", "Servo")
     # This next if statement is looking for an inverted servo
     if FRWristMinPos < FRWristMaxPos:
         FRWrist.map(WristMin, WristMax, FRWristMinPos, FRWristMaxPos)
@@ -236,7 +236,7 @@ if EnableFRWrist == True:
 #################################################################
 EnableBLShoulder = TestServoControllerExists(BLShoulderAttachment, EnableBLShoulder)
 if EnableBLShoulder == True:
-    BLShoulder = Runtime.createAndStart("BLShoulder", "Servo")
+    BLShoulder = Runtime.start("BLShoulder", "Servo")
     # This next if statement is looking for an inverted servo
     if BLShoulderMinPos < BLShoulderMaxPos:
         BLShoulder.map(ShoulderMin, ShoulderMax, BLShoulderMinPos, BLShoulderMaxPos)
@@ -256,7 +256,7 @@ if EnableBLShoulder == True:
 #################################################################
 EnableBLArm = TestServoControllerExists(BLArmAttachment, EnableBLArm)
 if EnableBLArm == True:
-    BLArm = Runtime.createAndStart("BLArm", "Servo")
+    BLArm = Runtime.start("BLArm", "Servo")
     # This next if statement is looking for an inverted servo
     if BLArmMinPos < BLArmMaxPos:
         BLArm.map(ArmMin, ArmMax, BLArmMinPos, BLArmMaxPos)
@@ -276,7 +276,7 @@ if EnableBLArm == True:
 #################################################################
 EnableBLWrist = TestServoControllerExists(BLWristAttachment, EnableBLWrist)
 if EnableBLWrist == True:
-    BLWrist = Runtime.createAndStart("BLWrist", "Servo")
+    BLWrist = Runtime.start("BLWrist", "Servo")
     # This next if statement is looking for an inverted servo
     if BLWristMinPos < BLWristMaxPos:
         BLWrist.map(WristMin, WristMax, BLWristMinPos, BLWristMaxPos)
@@ -303,7 +303,7 @@ if EnableBLWrist == True:
 #################################################################
 EnableBRShoulder = TestServoControllerExists(BRShoulderAttachment, EnableBRShoulder)
 if EnableBRShoulder == True:
-    BRShoulder = Runtime.createAndStart("BRShoulder", "Servo")
+    BRShoulder = Runtime.start("BRShoulder", "Servo")
     # This next if statement is looking for an inverted servo
     if BRShoulderMinPos < BRShoulderMaxPos:
         BRShoulder.map(ShoulderMin, ShoulderMax, BRShoulderMinPos, BRShoulderMaxPos)
@@ -323,7 +323,7 @@ if EnableBRShoulder == True:
 #################################################################
 EnableBRArm = TestServoControllerExists(BRArmAttachment, EnableBRArm)
 if EnableBRArm == True:
-    BRArm = Runtime.createAndStart("BRArm", "Servo")
+    BRArm = Runtime.start("BRArm", "Servo")
     # This next if statement is looking for an inverted servo
     if BRArmMinPos < BRArmMaxPos:
         BRArm.map(ArmMin, ArmMax, BRArmMinPos, BRArmMaxPos)
@@ -343,7 +343,7 @@ if EnableBRArm == True:
 #################################################################
 EnableBRWrist = TestServoControllerExists(BRWristAttachment, EnableBRWrist)
 if EnableBRWrist == True:
-    BRWrist = Runtime.createAndStart("BRWrist", "Servo")
+    BRWrist = Runtime.start("BRWrist", "Servo")
     # This next if statement is looking for an inverted servo
     if BRWristMinPos < BRWristMaxPos:
         BRWrist.map(WristMin, WristMax, BRWristMinPos, BRWristMaxPos)
