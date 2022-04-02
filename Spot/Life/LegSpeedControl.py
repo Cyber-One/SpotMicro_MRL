@@ -17,11 +17,12 @@
 # speed so all servos finish at the same time.                  #
 #                                                               #
 #################################################################
+print "Starting the Leg Speed Control Functions"
 
 #################################################################
 # sMoveFoot(Leg, X-Axis, Y-Axis, Z-Axis, Speed)                 #
 # This routine sets the speed of each of the servos for a leg   #
-# to produce a straight line movement.                          #
+# so that the servos all finish moving at the same time         #
 # The Leg value is between 0 and 3                              #
 # 0 = Front left Leg                                            #
 # 1 = Front Right Leg                                           #
@@ -92,6 +93,7 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
         ShoulderTime = ShoulderOffset / ShoulderVelocity
         ArmTime = ArmOffset / ArmVelocity
         WristTime = WristOffset / WristVelocity
+        print WristTime, " Wrist Time:", ArmTime, " Arm Time:", ShoulderTime, "Shoulder Time:"
         # Now we need to know which has the longest time of movement 
         if (ShoulderTime > ArmTime) and (ShoulderTime > WristTime):
             ShoulderSpeed = ShoulderVelocity * Speed
