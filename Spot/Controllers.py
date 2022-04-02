@@ -42,7 +42,7 @@ if EnableRaspberryPi == True:
 # Ultrasonic Sensors.                                           #
 # The Arduino also has an I2C Port 0 if we need to use it.      #
 #################################################################
-if EnableArduinoNano == False:
+if EnableArduinoNano == True:
     arduinoNano = Runtime.start("arduinoNano","Arduino")
     arduinoNano.setBoardNano()
     arduinoNano.connect(ArduinoNanoComPort)
