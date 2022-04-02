@@ -18,9 +18,41 @@
 #################################################################
 print "Starting the various Gestures Services"
 
-def SpotSit():
+
+#################################################################
+# this command returns all the servos to the starting rest      #
+# position.  Handy when calibrating.                            #
+#################################################################
+def rest(Speed):
+    print "Moving to Rest postition"
+    # First of the sanity checks.
+    if Speed > 1.0 or Speed < 0.01:
+        Speed = 1.0
+    # Set all the base speeds
+    FLShoulder.setSpeed(FLShoulderVelocity * Speed)
+    FRShoulder.setSpeed(FRShoulderVelocity * Speed)
+    BLShoulder.setSpeed(BLShoulderVelocity * Speed)
+    BRShoulder.setSpeed(BRShoulderVelocity * Speed)
+    FLArm.setSpeed(FLArmVelocity * Speed)
+    FRArm.setSpeed(FRArmVelocity * Speed)
+    BLArm.setSpeed(BLArmVelocity * Speed)
+    BRArm.setSpeed(BRArmVelocity * Speed)
+    FLWrist.setSpeed(FLWristVelocity * Speed)
+    FRWrist.setSpeed(FRWristVelocity * Speed)
+    BLWrist.setSpeed(BLWristVelocity * Speed)
+    BRWrist.setSpeed(BRWristVelocity * Speed)
+    # Now send the legs to the rest position
     FLShoulder.rest()
     FRShoulder.rest()
     BLShoulder.rest()
     BRShoulder.rest()
+    FLArm.rest()
+    FRArm.rest()
+    BLArm.rest()
+    BRArm.rest()
+    FLWrist.rest()
+    FRWrist.rest()
+    BLWrist.rest()
+    BRWrist.rest()
+
 
