@@ -87,6 +87,7 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
         ShoulderOffset = ServoPos.get("Shoulder") - ShoulderCurrentPos
         ArmOffset = ServoPos.get("Arm") - ShoulderCurrentPos
         WristOffset = ServoPos.get("Wrist") - ShoulderCurrentPos
+        print WristOffset, " Wrist Ofset:", ArmOffset, " Arm Offset:", ShoulderOffset, "Shoulder Offset:"
         # Next we need to know, how long it will take for the servos
         # to reach the new position. 
         # We can get max speed from the Spot config
