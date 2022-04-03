@@ -48,7 +48,7 @@ LastPingLeft = False
 LastLeftPing = 0
 LastRightPing = 0
 
-# Describe a leg
+# These variables describe a leg
 LWF = 124   # Length between the Wrist joint and the foot
 LTW = 110   # Length between the Arms joint and the Wrist joint
 LST = 55    # Length between the Shoulder joint and the center line of the Arm
@@ -56,22 +56,8 @@ LYS = 90    # Length between the center Y plane and the shoulder joint
 LXS = 38    # Length between the center X plane and the shoulder joint
 MaxLTF = LTW + LWF   # Max length between the arm pivot and the foot.
 
-# Foot Positions
-FL_X = -88.0
-FR_X = 88.0
-BL_X = -88.0
-BR_X = 88.0
-
-FL_Y = 90.0
-FR_Y = 90.0
-BL_Y = -90.0
-BR_Y = -90.0
-
-FL_Z = -230
-FR_Z = -230
-BL_Z = -230
-BR_Z = -230
-
+# These setting are global for the four legs.
+# If you change any of these, you will have to recalibrate all the servos.
 ShoulderMin = 50.0
 ShoulderRest = 90.0
 ShoulderMax = 130.0
@@ -81,3 +67,19 @@ ArmMax = 165.0
 WristMin = 50.0
 WristRest = 125.0
 WristMax = 180.0
+
+# Foot Positions, the numbers here are set by the program at rest based on the setting above
+FL_X = -93.0
+FR_X = 93.0
+BL_X = -93.0
+BR_X = 93.0
+
+FL_Y = 87.405
+FR_Y = 87.405
+BL_Y = -92.595
+BR_Y = -92.595
+
+FL_Z = -207.645
+FR_Z = -207.645
+BL_Z = -207.645
+BR_Z = -207.645
