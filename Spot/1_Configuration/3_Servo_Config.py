@@ -231,5 +231,5 @@ EnableBRWrist = True
 BRWristAttachment = "Back"
 BRWristPin = 6
 BRWristMinPos = 177
-BRWristMaxPos = 65
+BRWristMaxPos = 72
 BRWristVelocity = 272
