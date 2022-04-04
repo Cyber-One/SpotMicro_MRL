@@ -52,18 +52,22 @@ execfile(RuningFolder+'/1_Configuration/1_Sys_Config.py')
 #################################################################
 
 if RunWebGUI == True:
-    WebGui = Runtime.create("WebGui","WebGui")
-    WebGui.hide('cli')
-    sleep(1)
-    WebGui.show('cli')
-    sleep(1)
-    WebGui.set('cli', 400, 400, 999)
+    plan = runtime.load("webgui","WebGui")
+    config = plan.get("webgui")
+    config.autoStartBrowser = False
+    runtime.start("webgui", "WebGui")
+    #WebGui = Runtime.create("WebGui","WebGui")
+    #WebGui.hide('cli')
+    #sleep(1)
+    #WebGui.show('cli')
+    #sleep(1)
+    #WebGui.set('cli', 400, 400, 999)
     #############################################################
     # if you don't want the browser to autostart to homepage    #
     # then set the autoStartBrowser to False                    #
     #############################################################
-    if RunWebGUIbrowser == False:
-        WebGui.autoStartBrowser(False)
+    #if RunWebGUIbrowser == False:
+    #    WebGui.autoStartBrowser(False)
     #############################################################
     # set a different port number to listen to. default is 8888 #
     #    WebGui.setPort(7777)                                   #
@@ -73,7 +77,7 @@ if RunWebGUI == True:
     # through the WebGui service starts the websocket server    #
     # and attempts to autostart browser unless it was disabled  #
     #############################################################
-    WebGui.startService();
+    #WebGui.startService();
 
 #################################################################
 # Load in the Common Variables used to help track and control   #
