@@ -68,22 +68,7 @@ def rest(Speed):
 #################################################################
 def Laydown(Speed):
     print "Laying Down"
-    # First of the sanity checks.
-    if Speed > 1.0 or Speed < 0.01:
-        Speed = 1.0
-    # Set all the base speeds
-    FLShoulder.setSpeed(FLShoulderVelocity * Speed)
-    FRShoulder.setSpeed(FRShoulderVelocity * Speed)
-    BLShoulder.setSpeed(BLShoulderVelocity * Speed)
-    BRShoulder.setSpeed(BRShoulderVelocity * Speed)
-    FLArm.setSpeed(FLArmVelocity * Speed)
-    FRArm.setSpeed(FRArmVelocity * Speed)
-    BLArm.setSpeed(BLArmVelocity * Speed)
-    BRArm.setSpeed(BRArmVelocity * Speed)
-    FLWrist.setSpeed(FLWristVelocity * Speed)
-    FRWrist.setSpeed(FRWristVelocity * Speed)
-    BLWrist.setSpeed(BLWristVelocity * Speed)
-    BRWrist.setSpeed(BRWristVelocity * Speed)
+    setAllServoSpeeds(Speed)
     # Now send the legs to the rest position
     FLShoulder.rest()
     FRShoulder.rest()
@@ -97,3 +82,17 @@ def Laydown(Speed):
     FRWrist.moveTo(WristMin)
     BLWrist.moveTo(WristMin)
     BRWrist.moveTo(WristMin)
+
+
+def Down(Speed):
+    sMoveFeetTo(-93.0, 127.85, -92.24, 93.0, 127.85, 92.24, -93.0, -52.15, -92.24, 93.0, -52.15, -92.24, Speed)
+
+def Up(Speed):
+    # Set all the base speeds
+    setAllServoSpeeds(Speed)
+    # Now send the legs to the rest position
+    FLArm.moveTo(ArmMax)
+    FRArm.moveTo(ArmMax)
+    BLArm.moveTo(ArmMax)
+    BRArm.moveToBlocking(ArmMax)
+    sMoveFeetTo(-93.0, 87.405, -207.645, 93.0, 87.405, -207.645, -93.0, -92.595, -207.645, 93.0, -92.595, -207.645, Speed)
