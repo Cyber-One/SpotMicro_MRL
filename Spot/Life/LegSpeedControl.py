@@ -23,6 +23,8 @@ print "Starting the Leg Speed Control Functions"
 #################################################################
 # List of functions.                                            #
 #################################################################
+# areServosMoving()                                             #
+# blockServosMoving()                                           #
 # setAllServoSpeeds(Speed)                                      #
 # sMoveFoot(Leg, X-Axis, Y-Axis, Z-Axis, Speed)                 #
 # sMoveFootTo(Leg, X-Axis, Y-Axis, Z-Axis, Speed)               #
@@ -33,22 +35,32 @@ print "Starting the Leg Speed Control Functions"
 #   BRY, BRZ, Speed)                                            #
 #################################################################
 
+#################################################################
+# areServosMoving()                                             #
+# This function returns the number of servos still moving.      #
+# a return of 0 means no servos are moving.                     #
+#################################################################
 def areServosMoving():
-    rValue = 0
-    if FLShoulder.isMoving(): rValue = 1
-    if FLArm.isMoving(): rValue = 1
-    if FLWrist.isMoving(): rValue = 1
-    if FRShoulder.isMoving(): rValue = 1
-    if FRArm.isMoving(): rValue = 1
-    if FRWrist.isMoving(): rValue = 1
-    if BLShoulder.isMoving(): rValue = 1
-    if BLArm.isMoving(): rValue = 1
-    if BLWrist.isMoving(): rValue = 1
-    if BRShoulder.isMoving(): rValue = 1
-    if BRArm.isMoving(): rValue = 1
-    if BRWrist.isMoving(): rValue = 1
-    return rValue
+    NumMoving = 0
+    if FLShoulder.getSpeed() > 1.0 and not round(FLShoulder.getCurrentInputPos()) == round(FLShoulder.getTargetPos()): NumMoving = NumMoving + 1
+    if FLArm.getSpeed() > 1.0 and not round(FLArm.getCurrentInputPos()) == round(FLArm.getTargetPos()): NumMoving = NumMoving + 1
+    if FLWrist.getSpeed() > 1.0 and not round(FLWrist.getCurrentInputPos()) == round(FLWrist.getTargetPos()): NumMoving = NumMoving + 1
+    if FRShoulder.getSpeed() > 1.0 and not round(FRShoulder.getCurrentInputPos()) == round(FRShoulder.getTargetPos()): NumMoving = NumMoving + 1
+    if FRArm.getSpeed() > 1.0 and not round(FRArm.getCurrentInputPos()) == round(FRArm.getTargetPos()): NumMoving = NumMoving + 1
+    if FRWrist.getSpeed() > 1.0 and not round(FRWrist.getCurrentInputPos()) == round(FRWrist.getTargetPos()): NumMoving = NumMoving + 1
+    if BLShoulder.getSpeed() > 1.0 and not round(BLShoulder.getCurrentInputPos()) == round(BLShoulder.getTargetPos()): NumMoving = NumMoving + 1
+    if BLArm.getSpeed() > 1.0 and not round(BLArm.getCurrentInputPos()) == round(BLArm.getTargetPos()): NumMoving = NumMoving + 1
+    if BLWrist.getSpeed() > 1.0 and not round(BLWrist.getCurrentInputPos()) == round(BLWrist.getTargetPos()): NumMoving = NumMoving + 1
+    if BRShoulder.getSpeed() > 1.0 and not round(BRShoulder.getCurrentInputPos()) == round(BRShoulder.getTargetPos()): NumMoving = NumMoving + 1
+    if BRArm.getSpeed() > 1.0 and not round(BRArm.getCurrentInputPos()) == round(BRArm.getTargetPos()): NumMoving = NumMoving + 1
+    if BRWrist.getSpeed() > 1.0 and not round(BRWrist.getCurrentInputPos()) == round(BRWrist.getTargetPos()): NumMoving = NumMoving + 1
+    return NumMoving
 
+#################################################################
+# blockServosMoving()                                           #
+# This function stops the program execution until the servos    #
+# are at or very close to the target position.                  #
+#################################################################
 def blockServosMoving():
     a = 0
     while not round(FLShoulder.getCurrentInputPos()) == round(FLShoulder.getTargetPos()): a = a+1
@@ -63,7 +75,7 @@ def blockServosMoving():
     while not round(BRShoulder.getCurrentInputPos()) == round(BRShoulder.getTargetPos()): a = a+1
     while not round(BRArm.getCurrentInputPos()) == round(BRArm.getTargetPos()): a = a+1
     while not round(BRWrist.getCurrentInputPos()) == round(BRWrist.getTargetPos()): a = a+1
-    #print a, "Wait Time:"
+    return a
 
 #################################################################
 # setAllServoSpeeds(Speed)                                      #
@@ -342,11 +354,26 @@ def sMoveFootTo(Leg, Xpos, Ypos, Zpos, Speed):
 
 #################################################################
 # lMoveFoot(Leg, X, Y, Z, Speed, Steps)                         #
+# Linear Move Foot.                                             #
+# it gets closer to a straight line movement by breaking the    #
+# move into smaller chunks and running those moves.             #
 #################################################################
 def lMoveFoot(Leg, X, Y, Z, Speed, Steps):
     # lets do the sanity checks first
     if Speed > 1.0 or Speed < 0.01: Speed = 1.0
     if Steps > 20 or Steps < 1: Steps = 10
+    for i in range(Steps):
+        sMoveFoot(Leg, X/Steps, Y/Steps, Z/Steps, Speed)
+
+def lMoveFootTo(Leg, Xpos, Ypos, Zpos, Speed, Steps):
+    # lets do the sanity checks first
+    if Speed > 1.0 or Speed < 0.01: Speed = 1.0
+    if Steps > 20 or Steps < 1: Steps = 10
+    FLStartPos = forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
+    FRStartPos = forwardKinematics(1, FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
+    BLStartPos = forwardKinematics(2, BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
+    BRStartPos = forwardKinematics(3, BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
+    #legInverseKinematics(LSFx, LAFy, Zt)
     for i in range(Steps):
         sMoveFoot(Leg, X/Steps, Y/Steps, Z/Steps, Speed)
 
@@ -516,11 +543,6 @@ def sMoveFeetTo(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Spee
         if BRShoulderTime > BigTime : BigTime = BRShoulderTime
         if BRArmTime > BigTime : BigTime = BRArmTime
         if BRWristTime > BigTime : BigTime = BRWristTime
-        #print BigTime, "Largest Time calculated for max speed:"
-        #print BRWristTime, " Wrist Time:", BRArmTime, " Arm Time:", BRShoulderTime, "Move Time Back Right Leg Shoulder Time:"
-        #print BLWristTime, " Wrist Time:", BLArmTime, " Arm Time:", BLShoulderTime, "Move Time Back Left Leg Shoulder Time:"
-        #print FRWristTime, " Wrist Time:", FRArmTime, " Arm Time:", FRShoulderTime, "Move Time Front Right Leg Shoulder Time:"
-        #print FLWristTime, " Wrist Time:", FLArmTime, " Arm Time:", FLShoulderTime, "Move Time Front Left Leg Shoulder Time:"
         # Now that we have the longest move time, lets setup all the servo speeds
         FLShoulder.setSpeed(FLShoulderVelocity * Speed * (FLShoulderTime / BigTime))
         FLArm.setSpeed(FLArmVelocity * Speed * (FLArmTime / BigTime))
@@ -534,10 +556,9 @@ def sMoveFeetTo(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Spee
         BRShoulder.setSpeed(BRShoulderVelocity * Speed * (BRShoulderTime / BigTime))
         BRArm.setSpeed(BRArmVelocity * Speed * (BRArmTime / BigTime))
         BRWrist.setSpeed(BRWristVelocity * Speed * (BRWristTime / BigTime))
-        #print BRWrist.getSpeed(), " Wrist:", BRArm.getSpeed(), " Arm:", BRShoulder.getSpeed(), "Set Speed Back Right Shoulder:"
-        #print BLWrist.getSpeed(), " Wrist:", BLArm.getSpeed(), " Arm:", BLShoulder.getSpeed(), "Set Speed Back Left Shoulder:"
-        #print FRWrist.getSpeed(), " Wrist:", FRArm.getSpeed(), " Arm:", FRShoulder.getSpeed(), "Set Speed Front Right Shoulder:"
-        #print FLWrist.getSpeed(), " Wrist:", FLArm.getSpeed(), " Arm:", FLShoulder.getSpeed(), "Set Speed Front Left Shoulder:"
+        # I found the setSpeed was not being applied before the
+        # next moveTo command unless I waited for a short pause.
+        #Need to find a better faster solution.
         sleep(0.1)
         # Now we have our speeds and target servo positions, we can
         # set this up for each of the servos.
@@ -556,3 +577,75 @@ def sMoveFeetTo(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Spee
     else:
         print BRServoPos.get("Error"), " BR Servo Error:", BLServoPos.get("Error"), " BL Servo Error:", FRServoPos.get("Error"), " FR Servo Error:", FLServoPos.get("Error"), "FL Servo Error:"
 
+def lMoveFeetTo(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Speed, Steps):
+    # lets do the sanity checks first
+    if Speed > 1.0 or Speed < 0.01: Speed = 1.0
+    if Steps > 20 or Steps < 1: Steps = 10
+    # Lets get a list of the current servo positions.
+    Servos = [[FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos(), FLWrist.getCurrentInputPos(), 
+             FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos(), FRWrist.getCurrentInputPos(),
+             BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos(), BLWrist.getCurrentInputPos(),
+             BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos(), BRWrist.getCurrentInputPos()]]
+    # Now lets work out where we are starting from.
+    FLStartPos = forwardKinematics(0, Servos[0][0], Servos[0][1]+180, Servos[0][2])
+    FRStartPos = forwardKinematics(1, Servos[0][3], Servos[0][4]+180, Servos[0][5])
+    BLStartPos = forwardKinematics(2, Servos[0][6], Servos[0][7]+180, Servos[0][8])
+    BRStartPos = forwardKinematics(3, Servos[0][9], Servos[0][10]+180, Servos[0][11])
+    # Now we know where we are starting from, 
+    # lets work out how far we are moving
+    FLXoffset = FLX - FLStartPos.get("X")
+    FLYoffset = FLY - FLStartPos.get("Y")
+    FLZoffset = FLZ - FLStartPos.get("Z")
+    FRXoffset = FRX - FRStartPos.get("X")
+    FRYoffset = FRY - FRStartPos.get("Y")
+    FRZoffset = FRZ - FRStartPos.get("Z")
+    BLXoffset = BLX - BLStartPos.get("X")
+    BLYoffset = BLY - BLStartPos.get("Y")
+    BLZoffset = BLZ - BLStartPos.get("Z")
+    BRXoffset = BRX - BRStartPos.get("X")
+    BRYoffset = BRY - BRStartPos.get("Y")
+    BRZoffset = BRZ - BRStartPos.get("Z")
+    # Step Size, I could have done this in one go.
+    FLXstep = FLXoffset/Steps
+    FLYstep = FLYoffset/Steps
+    FLZstep = FLZoffset/Steps
+    FRXstep = FRXoffset/Steps
+    FRYstep = FRYoffset/Steps
+    FRZstep = FRZoffset/Steps
+    BLXstep = BLXoffset/Steps
+    BLYstep = BLYoffset/Steps
+    BLZstep = BLZoffset/Steps
+    BRXstep = BRXoffset/Steps
+    BRYstep = BRYoffset/Steps
+    BRZstep = BRZoffset/Steps
+    # So now we know where we are starting from,
+    # Where we are moving to,
+    # and how far it's moving in each axis,
+    # We can calculate the step locations.
+    # From there we can also calculate the servo
+    # positions at each step.
+    for i in range(Steps):
+        FLnewServoPos = legInverseKinematics(FLStartPos.get("X") + (FLXstep*i), FLStartPos.get("Y") + (FLYstep*i), FLStartPos.get("Z") + (FLZstep*i))
+        FRnewServoPos = legInverseKinematics(FRStartPos.get("X") + (FRXstep*i), FRStartPos.get("Y") + (FRYstep*i), FRStartPos.get("Z") + (FRZstep*i))
+        BLnewServoPos = legInverseKinematics(BLStartPos.get("X") + (BLXstep*i), BLStartPos.get("Y") + (BLYstep*i), BLStartPos.get("Z") + (BLZstep*i))
+        BRnewServoPos = legInverseKinematics(BRStartPos.get("X") + (BRXstep*i), BRStartPos.get("Y") + (BRYstep*i), BRStartPos.get("Z") + (BRZstep*i))
+        Servos.append([FLnewServoPos.get("Shoulder"), FLnewServoPos.get("Arm"), FLnewServoPos.get("Wrist"),
+                FRnewServoPos.get("Shoulder"), FRnewServoPos.get("Arm"), FRnewServoPos.get("Wrist"),
+                BLnewServoPos.get("Shoulder"), BLnewServoPos.get("Arm"), BLnewServoPos.get("Wrist"),
+                BRnewServoPos.get("Shoulder"), BRnewServoPos.get("Arm"), BRnewServoPos.get("Wrist")])
+    # We now have a plan of servo positions
+    # What about speed?
+    for i in range(len(Servos)):
+        blockServosMoving()
+        FLShoulder.moveTo(Servos[i][0])
+        FLArm.moveTo(Servos[i][1])
+        FLWrist.moveTo(Servos[i][2])
+        FRShoulder.moveTo(Servos[i][3])
+        FRArm.moveTo(Servos[i][4])
+        FRWrist.moveTo(Servos[i][5])
+        BLShoulder.moveTo(Servos[i][6])
+        BLArm.moveTo(Servos[i][7])
+        BLWrist.moveTo(Servos[i][8])
+        BRShoulder.moveTo(Servos[i][9])
+        BRArm.moveTo(Servos[i][10])
+        BRWrist.moveTo(Servos[i][11])
