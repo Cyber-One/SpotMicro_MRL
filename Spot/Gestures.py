@@ -74,10 +74,15 @@ def Down(Speed):
 
 def Up(Speed):
     # Set all the base speeds
-    setAllServoSpeeds(Speed)
-    # Now send the legs to the rest position
+    setAllServoSpeeds(Speed*0.5)
+    # I found if I move straight to the rest position
+    # the robot tends to fall over backwards.
+    # To help prevent that, I rotate all the arms back 
+    # as far they will go, moving the center of mass
+    # forward of the center of contact.
     FLArm.moveTo(ArmMax)
     FRArm.moveTo(ArmMax)
     BLArm.moveTo(ArmMax)
     BRArm.moveToBlocking(ArmMax)
+    # Now send the legs to the rest position
     sMoveFeetTo(-93.0, 87.405, -207.645, 93.0, 87.405, -207.645, -93.0, -92.595, -207.645, 93.0, -92.595, -207.645, Speed)
