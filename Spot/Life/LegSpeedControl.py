@@ -24,7 +24,7 @@ print "Starting the Leg Speed Control Functions"
 # List of functions.                                            #
 #################################################################
 # areServosMoving()                                             #
-# blockServosMoving(Range)                                           #
+# blockServosMoving(Range)                                      #
 # setAllServoSpeeds(Speed)                                      #
 # sMoveFoot(Leg, X-Axis, Y-Axis, Z-Axis, Speed)                 #
 # sMoveFootTo(Leg, X-Axis, Y-Axis, Z-Axis, Speed)               #
@@ -33,6 +33,8 @@ print "Starting the Leg Speed Control Functions"
 #   BRY, BRZ, Speed)                                            #
 # sMoveFeetTo(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, #
 #   BRY, BRZ, Speed)                                            #
+# lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, #
+#   BLY, BLZ, BRT, BRX, BRY, BRZ, Speed, Steps)                 #
 #################################################################
 
 #################################################################
@@ -111,21 +113,35 @@ def blockServosMoving(Range):
 #################################################################
 def setAllServoSpeeds(Speed):
     # First of the sanity checks.
-    if Speed > 1.0 or Speed < 0.01:
-        Speed = 1.0
-    # Set all the base speeds
-    FLShoulder.setSpeed(FLShoulderVelocity * Speed)
-    FRShoulder.setSpeed(FRShoulderVelocity * Speed)
-    BLShoulder.setSpeed(BLShoulderVelocity * Speed)
-    BRShoulder.setSpeed(BRShoulderVelocity * Speed)
-    FLArm.setSpeed(FLArmVelocity * Speed)
-    FRArm.setSpeed(FRArmVelocity * Speed)
-    BLArm.setSpeed(BLArmVelocity * Speed)
-    BRArm.setSpeed(BRArmVelocity * Speed)
-    FLWrist.setSpeed(FLWristVelocity * Speed)
-    FRWrist.setSpeed(FRWristVelocity * Speed)
-    BLWrist.setSpeed(BLWristVelocity * Speed)
-    BRWrist.setSpeed(BRWristVelocity * Speed)
+    if Speed == -1:
+        FLShoulder.setSpeed(Speed)
+        FRShoulder.setSpeed(Speed)
+        BLShoulder.setSpeed(Speed)
+        BRShoulder.setSpeed(Speed)
+        FLArm.setSpeed(Speed)
+        FRArm.setSpeed(Speed)
+        BLArm.setSpeed(Speed)
+        BRArm.setSpeed(Speed)
+        FLWrist.setSpeed(Speed)
+        FRWrist.setSpeed(Speed)
+        BLWrist.setSpeed(Speed)
+        BRWrist.setSpeed(Speed)
+    else:
+        if Speed > 1.0 or Speed < 0.01:
+            Speed = 1.0
+        # Set all the base speeds
+        FLShoulder.setSpeed(FLShoulderVelocity * Speed)
+        FRShoulder.setSpeed(FRShoulderVelocity * Speed)
+        BLShoulder.setSpeed(BLShoulderVelocity * Speed)
+        BRShoulder.setSpeed(BRShoulderVelocity * Speed)
+        FLArm.setSpeed(FLArmVelocity * Speed)
+        FRArm.setSpeed(FRArmVelocity * Speed)
+        BLArm.setSpeed(BLArmVelocity * Speed)
+        BRArm.setSpeed(BRArmVelocity * Speed)
+        FLWrist.setSpeed(FLWristVelocity * Speed)
+        FRWrist.setSpeed(FRWristVelocity * Speed)
+        BLWrist.setSpeed(BLWristVelocity * Speed)
+        BRWrist.setSpeed(BRWristVelocity * Speed)
     sleep(0.1)
 
 #################################################################
@@ -406,6 +422,7 @@ def lMoveFootTo(Leg, Xpos, Ypos, Zpos, Speed, Steps):
 #################################################################
 # sMoveFeet(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX,   #
 #   BRY, BRZ, Speed)                                            #
+# 4 Leg Relative Movement all servos arrive about the same time.#
 # This routine sets the speed of each of the servos for a leg   #
 # to produce a movement with all four legs completing the       #
 # movement at the same time.                                    #
@@ -508,6 +525,7 @@ def sMoveFeet(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Speed)
 #################################################################
 # sMoveFeetTo(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, #
 #   BRY, BRZ, Speed)                                            #
+# 4 Leg Absolute Movement all servos arrive about the same time.#
 # This routine sets the speed of each of the servos for a leg   #
 # to produce a straight line movement with all four legs        #
 # completing the movement at the same time.                     #
@@ -603,7 +621,23 @@ def sMoveFeetTo(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Spee
     else:
         print BRServoPos.get("Error"), " BR Servo Error:", BLServoPos.get("Error"), " BL Servo Error:", FRServoPos.get("Error"), " FR Servo Error:", FLServoPos.get("Error"), "FL Servo Error:"
 
-def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT, BRX, BRY, BRZ, Speed, Steps):
+#################################################################
+# lMoveFeet(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX,   #
+#   BLY, BLZ, BRT, BRX, BRY, BRZ, Speed, Steps)                 #
+# 4 Leg Relative Movement all servos arrive about the same time.#
+# This routine sets the speed of each of the servos for a leg   #
+# to produce a straight line movement with all four legs        #
+# completing the movement at the same time.                     #
+# First two leters are the leg designator, third letter is the  #
+# Type or Axis desigantor.                                      #
+# A type of 0.0 is a linear movement. any other value is an arc #
+# type movement where the value is how high the arc will be.    #
+# X-Axis, Y-Axis, Z-Axis for each of the four feet is the       #
+#   X, Y and Z coordinates for each of the legs relative to the #
+#   center of the robot.                                        #
+# Speed is a value between 0.01 and 1.0 where 1.0 is full speed #
+#################################################################
+def lMoveFeet(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT, BRX, BRY, BRZ, Speed, Steps):
     # lets do the sanity checks first
     if Speed > 1.0 or Speed < 0.01: Speed = 1.0
     setAllServoSpeeds(Speed)
@@ -619,19 +653,205 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
     BLStartPos = forwardKinematics(2, Servos[0][6], Servos[0][7]+180, Servos[0][8])
     BRStartPos = forwardKinematics(3, Servos[0][9], Servos[0][10]+180, Servos[0][11])
     # Now we know where we are starting from, 
+    # let work out the Step Size.
+    FLXstep = FLX/Steps
+    FLYstep = FLY/Steps
+    FLZstep = FLZ/Steps
+    FRXstep = FRX/Steps
+    FRYstep = FRY/Steps
+    FRZstep = FRZ/Steps
+    BLXstep = BLX/Steps
+    BLYstep = BLY/Steps
+    BLZstep = BLZ/Steps
+    BRXstep = BRX/Steps
+    BRYstep = BRY/Steps
+    BRZstep = BRZ/Steps
+    ArcStep = math.pi/Steps
+    # So now we know where we are starting from,
+    # Where we are moving to,
+    # and how far it's moving in each axis,
+    # We can calculate the step locations.
+    # From there we can also calculate the servo
+    # positions at each step.
+    Error = 0
+    for i in range(Steps):
+        if FLT == 0.0:
+            FLnewServoPos = legInverseKinematics(FLStartPos.get("X") + (FLXstep*i), FLStartPos.get("Y") + (FLYstep*i), FLStartPos.get("Z") + (FLZstep*i))
+        else:
+            FLnewServoPos = legInverseKinematics((FLStartPos.get("X")+(FLX/2)) - (math.cos(ArcStep*i)*FLX/2), 
+                (FLStartPos.get("Y")+(FLY/2)) - (math.cos(ArcStep*i)*FLY/2), 
+                FLStartPos.get("Z") + (FLZstep*i) + (math.sin(ArcStep*i)*FLT))
+        if FRT == 0.0:
+            FRnewServoPos = legInverseKinematics(FRStartPos.get("X") + (FRXstep*i), FRStartPos.get("Y") + (FRYstep*i), FRStartPos.get("Z") + (FRZstep*i))
+        else:
+            FRnewServoPos = legInverseKinematics((FRStartPos.get("X")+(FRX/2)) - (math.cos(ArcStep*i)*FRX/2), 
+                (FRStartPos.get("Y")+(FRY/2)) - (math.cos(ArcStep*i)*FRY/2), 
+                FRStartPos.get("Z") + (FRZstep*i) + (math.sin(ArcStep*i)*FRT))
+        if BLT == 0.0:
+            BLnewServoPos = legInverseKinematics(BLStartPos.get("X") + (BLXstep*i), BLStartPos.get("Y") + (BLYstep*i), BLStartPos.get("Z") + (BLZstep*i))
+        else:
+            BLnewServoPos = legInverseKinematics((BLStartPos.get("X")+(BLX/2)) - (math.cos(ArcStep*i)*BLX/2), 
+                (BLStartPos.get("Y")+(BLY/2)) - (math.cos(ArcStep*i)*BLY/2), 
+                BLStartPos.get("Z") + (BLZstep*i) + (math.sin(ArcStep*i)*BLT))
+        if BRT == 0.0:
+            BRnewServoPos = legInverseKinematics(BRStartPos.get("X") + (BRXstep*i), BRStartPos.get("Y") + (BRYstep*i), BRStartPos.get("Z") + (BRZstep*i))
+        else:
+            BRnewServoPos = legInverseKinematics((BRStartPos.get("X")+(BRX/2)) - (math.cos(ArcStep*i)*BRX/2), 
+                (BRStartPos.get("Y")+(BRY/2)) - (math.cos(ArcStep*i)*BRY/2), 
+                BRStartPos.get("Z") + (BRZstep*i) + (math.sin(ArcStep*i)*BRT))
+        if FLnewServoPos.get("Error") == 0 and FRnewServoPos.get("Error") == 0 and BLnewServoPos.get("Error") == 0 and BRnewServoPos.get("Error") == 0:
+            Servos.append([FLnewServoPos.get("Shoulder"), FLnewServoPos.get("Arm"), FLnewServoPos.get("Wrist"),
+                FRnewServoPos.get("Shoulder"), FRnewServoPos.get("Arm"), FRnewServoPos.get("Wrist"),
+                BLnewServoPos.get("Shoulder"), BLnewServoPos.get("Arm"), BLnewServoPos.get("Wrist"),
+                BRnewServoPos.get("Shoulder"), BRnewServoPos.get("Arm"), BRnewServoPos.get("Wrist")])
+        else:
+            Error = Error + 1
+            print ("FL:", FLnewServoPos.get("Error"), " FR:", FRnewServoPos.get("Error"), "BL:", BLnewServoPos.get("Error"), " BR:", BRnewServoPos.get("Error"))
+    # We now have a plan of servo positions
+    # What about speed?
+    print("Number of Errors:", Error)
+    for i in range(len(Servos)):
+        #blockServosMoving(2)
+        sleep(0.1)
+        FLShoulder.moveTo(Servos[i][0])
+        FLArm.moveTo(Servos[i][1])
+        FLWrist.moveTo(Servos[i][2])
+        FRShoulder.moveTo(Servos[i][3])
+        FRArm.moveTo(Servos[i][4])
+        FRWrist.moveTo(Servos[i][5])
+        BLShoulder.moveTo(Servos[i][6])
+        BLArm.moveTo(Servos[i][7])
+        BLWrist.moveTo(Servos[i][8])
+        BRShoulder.moveTo(Servos[i][9])
+        BRArm.moveTo(Servos[i][10])
+        BRWrist.moveTo(Servos[i][11])
+
+def updateServoPositions():
+    global FLS_Servo
+    global FLA_Servo
+    global FLW_Servo
+    global FRS_Servo
+    global FRA_Servo
+    global FRW_Servo
+    global BLS_Servo
+    global BLA_Servo
+    global BLW_Servo
+    global BRS_Servo
+    global BRA_Servo
+    global BRW_Servo
+    global FL_X
+    global FR_X
+    global BL_X
+    global BR_X
+    global FL_Y
+    global FR_Y
+    global BL_Y
+    global BR_Y
+    global FL_Z
+    global FR_Z
+    global BL_Z
+    global BR_Z
+    FLS_Servo = FLShoulder.getCurrentInputPos()
+    FLA_Servo = FLArm.getCurrentInputPos()
+    FLW_Servo = FLWrist.getCurrentInputPos()
+    FRS_Servo = FRShoulder.getCurrentInputPos()
+    FRA_Servo = FRArm.getCurrentInputPos()
+    FRW_Servo = FRWrist.getCurrentInputPos()
+    BLS_Servo = BLShoulder.getCurrentInputPos()
+    BLA_Servo = BLArm.getCurrentInputPos()
+    BLW_Servo = BLWrist.getCurrentInputPos()
+    BRS_Servo = BRShoulder.getCurrentInputPos()
+    BRA_Servo = BRArm.getCurrentInputPos()
+    BRW_Servo = BRWrist.getCurrentInputPos()
+    FLPos = forwardKinematics(0, FLS_Servo, FLA_Servo+180, FLW_Servo)
+    FRPos = forwardKinematics(1, FRS_Servo, FRA_Servo+180, FRW_Servo)
+    BLPos = forwardKinematics(2, BLS_Servo, BLA_Servo+180, BLW_Servo)
+    BRPos = forwardKinematics(3, BRS_Servo, BRA_Servo+180, BRW_Servo)
+    FL_X = -FLPos.get("X") - LXS
+    FL_Y = FLPos.get("Y") + LYS
+    FL_Z = FLPos.get("Z")
+    FR_X = FRPos.get("X") + LXS
+    FR_Y = FRPos.get("Y") + LYS
+    FR_Z = FRPos.get("Z")
+    BL_X = -BLPos.get("X") - LXS
+    BL_Y = BLPos.get("Y") - LYS
+    BL_Z = BLPos.get("Z")
+    BR_X = BRPos.get("X") + LXS
+    BR_Y = BRPos.get("Y") - LYS
+    BR_Z = BRPos.get("Z")
+
+#################################################################
+# lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, #
+#   BLY, BLZ, BRT, BRX, BRY, BRZ, Speed, Steps)                 #
+# 4 Leg Absolute Movement all servos arrive about the same time.#
+# This routine sets the speed of each of the servos for a leg   #
+# to produce a straight line movement with all four legs        #
+# completing the movement at the same time.                     #
+# First two leters are the leg designator, third letter is the  #
+# Type or Axis desigantor.                                      #
+# A type of 0.0 is a linear movement. any other value is an arc #
+# type movement where the value is how high the arc will be.    #
+# X-Axis, Y-Axis, Z-Axis for each of the four feet is the       #
+#   X, Y and Z coordinates for each of the legs relative to the #
+#   center of the robot.                                        #
+# Speed is a value between 0.01 and 1.0 where 1.0 is full speed #
+#################################################################
+def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT, BRX, BRY, BRZ, Speed, Steps):
+    global FLS_Servo
+    global FLA_Servo
+    global FLW_Servo
+    global FRS_Servo
+    global FRA_Servo
+    global FRW_Servo
+    global BLS_Servo
+    global BLA_Servo
+    global BLW_Servo
+    global BRS_Servo
+    global BRA_Servo
+    global BRW_Servo
+    global FL_X
+    global FR_X
+    global BL_X
+    global BR_X
+    global FL_Y
+    global FR_Y
+    global BL_Y
+    global BR_Y
+    global FL_Z
+    global FR_Z
+    global BL_Z
+    global BR_Z
+    # lets do the sanity checks first
+    if Speed == -1:
+        setAllServoSpeeds(Speed)
+    else:
+        if Speed > 1.0 or Speed < 0.01: Speed = 1.0
+        setAllServoSpeeds(Speed)
+    if Steps > 20 or Steps < 1: Steps = 10
+    # Lets get a list of the current servo positions.
+    Servos = [[FLS_Servo, FLA_Servo, FLW_Servo, 
+             FRS_Servo, FRA_Servo, FRW_Servo,
+             BLS_Servo, BLA_Servo, BLW_Servo,
+             BRS_Servo, BRA_Servo, BRW_Servo]]
+    # Now lets work out where we are starting from.
+    #FLStartPos = forwardKinematics(0, Servos[0][0], Servos[0][1]+180, Servos[0][2])
+    #FRStartPos = forwardKinematics(1, Servos[0][3], Servos[0][4]+180, Servos[0][5])
+    #BLStartPos = forwardKinematics(2, Servos[0][6], Servos[0][7]+180, Servos[0][8])
+    #BRStartPos = forwardKinematics(3, Servos[0][9], Servos[0][10]+180, Servos[0][11])
+    # Now we know where we are starting from, 
     # lets work out how far we are moving
-    FLXoffset = (-FLX - LXS) - FLStartPos.get("X")
-    FLYoffset = (FLY - LYS) - FLStartPos.get("Y")
-    FLZoffset = FLZ - FLStartPos.get("Z")
-    FRXoffset = (FRX - LXS) - FRStartPos.get("X")
-    FRYoffset = (FRY - LYS) - FRStartPos.get("Y")
-    FRZoffset = FRZ - FRStartPos.get("Z")
-    BLXoffset = (-BLX - LXS) - BLStartPos.get("X")
-    BLYoffset = (BLY + LYS) - BLStartPos.get("Y")
-    BLZoffset = BLZ - BLStartPos.get("Z")
-    BRXoffset = (BRX - LXS) - BRStartPos.get("X")
-    BRYoffset = (BRY + LYS) - BRStartPos.get("Y")
-    BRZoffset = BRZ - BRStartPos.get("Z")
+    FLXoffset = (-FLX - LXS) - FL_X + LXS
+    FLYoffset = (FLY - LYS) - FL_Y - LYS
+    FLZoffset = FLZ - FL_Z
+    FRXoffset = (FRX - LXS) - FR_X - LXS
+    FRYoffset = (FRY - LYS) - FR_Y - LYS
+    FRZoffset = FRZ - FR_Z
+    BLXoffset = (-BLX - LXS) - BL_X + LXS
+    BLYoffset = (BLY + LYS) - BL_Y + LYS
+    BLZoffset = BLZ - BL_Z
+    BRXoffset = (BRX - LXS) - BR_X - LXS
+    BRYoffset = (BRY + LYS) - BR_Y + LYS
+    BRZoffset = BRZ - BR_Z
     # Step Size, I could have done this in one go.
     FLXstep = FLXoffset/Steps
     FLYstep = FLYoffset/Steps
@@ -654,10 +874,30 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
     # positions at each step.
     Error = 0
     for i in range(Steps):
-        FLnewServoPos = legInverseKinematics(FLStartPos.get("X") + (FLXstep*i), FLStartPos.get("Y") + (FLYstep*i), FLStartPos.get("Z") + (FLZstep*i))
-        FRnewServoPos = legInverseKinematics(FRStartPos.get("X") + (FRXstep*i), FRStartPos.get("Y") + (FRYstep*i), FRStartPos.get("Z") + (FRZstep*i))
-        BLnewServoPos = legInverseKinematics(BLStartPos.get("X") + (BLXstep*i), BLStartPos.get("Y") + (BLYstep*i), BLStartPos.get("Z") + (BLZstep*i))
-        BRnewServoPos = legInverseKinematics(BRStartPos.get("X") + (BRXstep*i), BRStartPos.get("Y") + (BRYstep*i), BRStartPos.get("Z") + (BRZstep*i))
+        if FLT == 0.0:
+            FLnewServoPos = legInverseKinematics(FLStartPos.get("X") + (FLXstep*(i+1)), FLStartPos.get("Y") + (FLYstep*(i+1)), FLStartPos.get("Z") + (FLZstep*(i+1)))
+        else:
+            FLnewServoPos = legInverseKinematics((FLStartPos.get("X")+(FLXoffset/2)) - (math.cos(ArcStep*(i+1))*FLXoffset/2), 
+                (FLStartPos.get("Y")+(FLYoffset/2)) - (math.cos(ArcStep*(i+1))*FLYoffset/2), 
+                FLStartPos.get("Z") + (FLZstep*(i+1)) + (math.sin(ArcStep*(i+1))*FLT))
+        if FRT == 0.0:
+            FRnewServoPos = legInverseKinematics(FRStartPos.get("X") + (FRXstep*(i+1)), FRStartPos.get("Y") + (FRYstep*(i+1)), FRStartPos.get("Z") + (FRZstep*(i+1)))
+        else:
+            FRnewServoPos = legInverseKinematics((FRStartPos.get("X")+(FRXoffset/2)) - (math.cos(ArcStep*(i+1))*FRXoffset/2), 
+                (FRStartPos.get("Y")+(FRYoffset/2)) - (math.cos(ArcStep*(i+1))*FRYoffset/2), 
+                FRStartPos.get("Z") + (FRZstep*(i+1)) + (math.sin(ArcStep*(i+1))*FRT))
+        if BLT == 0.0:
+            BLnewServoPos = legInverseKinematics(BLStartPos.get("X") + (BLXstep*(i+1)), BLStartPos.get("Y") + (BLYstep*(i+1)), BLStartPos.get("Z") + (BLZstep*(i+1)))
+        else:
+            BLnewServoPos = legInverseKinematics((BLStartPos.get("X")+(BLXoffset/2)) - (math.cos(ArcStep*(i+1))*BLXoffset/2), 
+                (BLStartPos.get("Y")+(BLYoffset/2)) - (math.cos(ArcStep*(i+1))*BLYoffset/2), 
+                BLStartPos.get("Z") + (BLZstep*(i+1)) + (math.sin(ArcStep*(i+1))*BLT))
+        if BRT == 0.0:
+            BRnewServoPos = legInverseKinematics(BRStartPos.get("X") + (BRXstep*(i+1)), BRStartPos.get("Y") + (BRYstep*(i+1)), BRStartPos.get("Z") + (BRZstep*(i+1)))
+        else:
+            BRnewServoPos = legInverseKinematics((BRStartPos.get("X")+(BRXoffset/2)) - (math.cos(ArcStep*(i+1))*BRXoffset/2), 
+                (BRStartPos.get("Y")+(BRYoffset/2)) - (math.cos(ArcStep*(i+1))*BRYoffset/2), 
+                BRStartPos.get("Z") + (BRZstep*(i+1)) + (math.sin(ArcStep*(i+1))*BRT))
         if FLnewServoPos.get("Error") == 0 and FRnewServoPos.get("Error") == 0 and BLnewServoPos.get("Error") == 0 and BRnewServoPos.get("Error") == 0:
             Servos.append([FLnewServoPos.get("Shoulder"), FLnewServoPos.get("Arm"), FLnewServoPos.get("Wrist"),
                 FRnewServoPos.get("Shoulder"), FRnewServoPos.get("Arm"), FRnewServoPos.get("Wrist"),
@@ -667,19 +907,43 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
             Error = Error + 1
     # We now have a plan of servo positions
     # What about speed?
-    if Error == 0:
-        for i in range(len(Servos)):
-            #blockServosMoving(2)
-            sleep(0.1)
-            FLShoulder.moveTo(Servos[i][0])
-            FLArm.moveTo(Servos[i][1])
-            FLWrist.moveTo(Servos[i][2])
-            FRShoulder.moveTo(Servos[i][3])
-            FRArm.moveTo(Servos[i][4])
-            FRWrist.moveTo(Servos[i][5])
-            BLShoulder.moveTo(Servos[i][6])
-            BLArm.moveTo(Servos[i][7])
-            BLWrist.moveTo(Servos[i][8])
-            BRShoulder.moveTo(Servos[i][9])
-            BRArm.moveTo(Servos[i][10])
-            BRWrist.moveTo(Servos[i][11])
+    for i in range(len(Servos)):
+        #blockServosMoving(2)
+        sleep(0.1)
+        FLShoulder.moveTo(Servos[i][0])
+        FLArm.moveTo(Servos[i][1])
+        FLWrist.moveTo(Servos[i][2])
+        FRShoulder.moveTo(Servos[i][3])
+        FRArm.moveTo(Servos[i][4])
+        FRWrist.moveTo(Servos[i][5])
+        BLShoulder.moveTo(Servos[i][6])
+        BLArm.moveTo(Servos[i][7])
+        BLWrist.moveTo(Servos[i][8])
+        BRShoulder.moveTo(Servos[i][9])
+        BRArm.moveTo(Servos[i][10])
+        BRWrist.moveTo(Servos[i][11])
+    FLS_Servo = Servos[len(Servos)-1][0]
+    FLA_Servo = Servos[len(Servos)-1][1]
+    FLW_Servo = Servos[len(Servos)-1][2]
+    FRS_Servo = Servos[len(Servos)-1][3]
+    FRA_Servo = Servos[len(Servos)-1][4]
+    FRW_Servo = Servos[len(Servos)-1][5]
+    BLS_Servo = Servos[len(Servos)-1][6]
+    BLA_Servo = Servos[len(Servos)-1][7]
+    BLW_Servo = Servos[len(Servos)-1][8]
+    BRS_Servo = Servos[len(Servos)-1][9]
+    BRA_Servo = Servos[len(Servos)-1][10]
+    BRW_Servo = Servos[len(Servos)-1][11]
+    FL_X = FLX
+    FR_X = FRX
+    BL_X = BLX
+    BR_X = BRX
+    FL_Y = FLY
+    FR_Y = FRY
+    BL_Y = BLY
+    BR_Y = BRY
+    FL_Z = FLZ
+    FR_Z = FRZ
+    BL_Z = BLZ
+    BR_Z = BRZ
+
