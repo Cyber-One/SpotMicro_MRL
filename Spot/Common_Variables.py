@@ -68,7 +68,8 @@ WristMin = 50.0
 WristRest = 125.0
 WristMax = 180.0
 
-# Foot Positions, the numbers here are set by the program at rest based on the setting above
+# Foot Positions, the numbers here are set by the program
+# the pre-set numbers based on at rest position
 FL_X = -93.0
 FR_X = 93.0
 BL_X = -93.0
@@ -83,3 +84,19 @@ FL_Z = -207.645
 FR_Z = -207.645
 BL_Z = -207.645
 BR_Z = -207.645
+
+# Last know servo positions
+FLS_Servo = ShoulderRest
+FRS_Servo = ShoulderRest
+BLS_Servo = ShoulderRest
+BRS_Servo = ShoulderRest
+
+FLA_Servo = ArmRest
+FRA_Servo = ArmRest
+BLA_Servo = ArmRest
+BRA_Servo = ArmRest
+
+FLW_Servo = WristRest
+FRW_Servo = WristRest
+BLW_Servo = WristRest
+BRW_Servo = WristRest
