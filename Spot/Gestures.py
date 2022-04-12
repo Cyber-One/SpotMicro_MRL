@@ -121,7 +121,7 @@ def WalkForward(StepSize, StepHeight, Type, Steps):
     # BaseX is +/- the sum of LXS and LST
     # then subtrack an amount off to help with the balance.
     # this doesn't change for forward walking
-    BaseX = LXS + LST - 30
+    BaseX = LXS + LST
     # BaseY is +/- LYS plus any offsets
     BaseY = LYS + 3.0
     Yoffset0 = +(StepSize*0.5)
