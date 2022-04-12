@@ -117,7 +117,6 @@ def LeanForward(Speed):
 
 def WalkForward(StepSize, StepHeight, Type, Steps):
     #Before starting, lets update the systems memory of where it is.
-    updateServoPositions()
     # At rest, the X and Y positions are easy to work out.
     # BaseX is +/- the sum of LXS and LST
     # then subtrack an amount off to help with the balance.
@@ -153,6 +152,7 @@ def WalkForward(StepSize, StepHeight, Type, Steps):
         lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset1,   -BaseZ, StepHeight, BaseX, BaseY+Yoffset1,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
 
 def WalkExample():
+    updateServoPositions()
     StepLength = 50
     StepHeight = 40.0
     Steps = 10
