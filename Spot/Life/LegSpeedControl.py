@@ -779,6 +779,10 @@ def updateServoPositions():
     BR_X = BRPos.get("X") + LXS
     BR_Y = BRPos.get("Y") - LYS
     BR_Z = BRPos.get("Z")
+    print FL_Z, " FL-Z:", FL_Y, " FL-Y:", FL_X, "FL-X:"
+    print FR_Z, " FR-Z:", FR_Y, " FR-Y:", FR_X, "FR-X:"
+    print BL_Z, " BL-Z:", BL_Y, " BL-Y:", BL_X, "BL-X:"
+    print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
 
 #################################################################
 # lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, #
@@ -840,17 +844,17 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
     #BRStartPos = forwardKinematics(3, Servos[0][9], Servos[0][10]+180, Servos[0][11])
     # Now we know where we are starting from, 
     # lets work out how far we are moving
-    FLXoffset = (-FLX - LXS) - (FL_X + LXS)
-    FLYoffset = (FLY - LYS) - (FL_Y - LYS)
+    FLXoffset = (FLX - FL_X)
+    FLYoffset = (FLY - FL_Y)
     FLZoffset = FLZ - FL_Z
-    FRXoffset = (FRX - LXS) - (FR_X - LXS)
-    FRYoffset = (FRY - LYS) - (FR_Y - LYS)
+    FRXoffset = (FRX - FR_X)
+    FRYoffset = (FRY - FR_Y)
     FRZoffset = FRZ - FR_Z
-    BLXoffset = (-BLX - LXS) - (BL_X + LXS)
-    BLYoffset = (BLY + LYS) - (BL_Y + LYS)
+    BLXoffset = (BLX - BL_X)
+    BLYoffset = (BLY - BL_Y)
     BLZoffset = BLZ - BL_Z
-    BRXoffset = (BRX - LXS) - (BR_X - LXS)
-    BRYoffset = (BRY + LYS) - (BR_Y + LYS)
+    BRXoffset = (BRX - BR_X)
+    BRYoffset = (BRY - BR_Y)
     BRZoffset = BRZ - BR_Z
     # Step Size, I could have done this in one go.
     FLXstep = FLXoffset/Steps
@@ -875,9 +879,9 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
     Error = 0
     for i in range(Steps):
         if FLT == 0.0:
-            FLnewServoPos = legInverseKinematics((FL_X + LXS) + (FLXstep*(i+1)), (FL_Y - LYS) + (FLYstep*(i+1)), FL_Z + (FLZstep*(i+1)))
+            FLnewServoPos = legInverseKinematics(-(FL_X + LXS) + (FLXstep*(i+1)), (FL_Y - LYS) + (FLYstep*(i+1)), FL_Z + (FLZstep*(i+1)))
         else:
-            FLnewServoPos = legInverseKinematics(((FL_X + LXS)+(FLXoffset/2)) - (math.cos(ArcStep*(i+1))*FLXoffset/2), 
+            FLnewServoPos = legInverseKinematics((-(FL_X + LXS)+(FLXoffset/2)) - (math.cos(ArcStep*(i+1))*FLXoffset/2), 
                 ((FL_Y - LYS)+(FLYoffset/2)) - (math.cos(ArcStep*(i+1))*FLYoffset/2), 
                 FL_Z + (FLZstep*(i+1)) + (math.sin(ArcStep*(i+1))*FLT))
         if FRT == 0.0:
@@ -887,9 +891,9 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
                 ((FR_Y - LYS)+(FRYoffset/2)) - (math.cos(ArcStep*(i+1))*FRYoffset/2), 
                 FR_Z + (FRZstep*(i+1)) + (math.sin(ArcStep*(i+1))*FRT))
         if BLT == 0.0:
-            BLnewServoPos = legInverseKinematics((BL_X + LXS) + (BLXstep*(i+1)), (BL_Y + LYS) + (BLYstep*(i+1)), BL_Z + (BLZstep*(i+1)))
+            BLnewServoPos = legInverseKinematics(-(BL_X + LXS) + (BLXstep*(i+1)), (BL_Y + LYS) + (BLYstep*(i+1)), BL_Z + (BLZstep*(i+1)))
         else:
-            BLnewServoPos = legInverseKinematics(((BL_X + LXS)+(BLXoffset/2)) - (math.cos(ArcStep*(i+1))*BLXoffset/2), 
+            BLnewServoPos = legInverseKinematics((-(BL_X + LXS)+(BLXoffset/2)) - (math.cos(ArcStep*(i+1))*BLXoffset/2), 
                 ((BL_Y + LYS)+(BLYoffset/2)) - (math.cos(ArcStep*(i+1))*BLYoffset/2), 
                 BL_Z + (BLZstep*(i+1)) + (math.sin(ArcStep*(i+1))*BLT))
         if BRT == 0.0:
