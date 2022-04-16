@@ -72,10 +72,6 @@ print "Starting the leg Forward Kinematics Functions"
 def forwardKinematics(Leg, Shoulder, Arm, Wrist):
     LTF = math.sqrt(LWF*LWF + LTW*LTW - 2*LWF*LTW*math.cos(math.radians(Wrist)))
     AFW = math.degrees(math.acos((LTF*LTF + LTW*LTW - LWF*LWF)/(2*LTF*LTW)))
-    # One thing I haven't taken into account previously, is the
-    # wrist joint is offset forward from the centre line by 15mm
-    #OffsetY = math.sin(math.radians(Arm-90))*15.0
-    #OffsetX = math.cos(math.radians(Arm-90))*15.0
     workY = LTF * math.sin(math.radians(Arm-AFW-90))
     LTFa = math.cos(math.radians(AFW - Arm - 90)) * LTF
     LSF = math.sqrt(LST*LST + LTFa*LTFa)
