@@ -909,6 +909,7 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
                 BRnewServoPos.get("Shoulder"), BRnewServoPos.get("Arm"), BRnewServoPos.get("Wrist")])
         else:
             Error = Error + 1
+            print BRnewServoPos.get("Error"), BLnewServoPos.get("Error"), FRnewServoPos.get("Error"), FLnewServoPos.get("Error")
     # We now have a plan of servo positions
     # What about speed?
     for i in range(len(Servos)):
