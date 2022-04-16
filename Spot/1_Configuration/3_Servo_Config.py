@@ -182,7 +182,7 @@ BLArmVelocity = 272
 EnableBLWrist = True
 BLWristAttachment = "Back"
 BLWristPin = 10
-BLWristMinPos = 47
+BLWristMinPos = 52
 BLWristMaxPos = 160
 BLWristVelocity = 272
 
