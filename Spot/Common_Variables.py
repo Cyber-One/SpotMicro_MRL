@@ -40,6 +40,16 @@ Awake = True
 # On startup, we will start in the State 1 Neutral/Alert state
 EmotionalState = 1
 
+# Physical state control.
+# When moving between different positions, different types of
+# movement are required, or the robot will fall over.
+# State 0 = Laying Down
+# State 1 = Crouch
+# State 2 = Sit
+# State 3 = Standing at rest
+# State 4 = Standing High.
+PhysicalState = 0
+
 # when using a pair of Ultrasonic sensors, we are best to test
 # one side then the other, not the two together.
 LastPingLeft = False
