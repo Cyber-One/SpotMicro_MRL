@@ -54,22 +54,24 @@ def rest(Speed):
 #################################################################
 def Laydown(Speed):
     print "Laying Down"
-    setAllServoSpeeds(Speed)
-    FLShoulder.rest()
-    FRShoulder.rest()
-    BLShoulder.rest()
-    BRShoulder.rest()
-    FLArm.moveTo(WristMin + 90)
-    FRArm.moveTo(WristMin + 90)
-    BLArm.moveTo(WristMin + 90)
-    BRArm.moveTo(WristMin + 90)
-    FLWrist.moveTo(WristMin)
-    FRWrist.moveTo(WristMin)
-    BLWrist.moveTo(WristMin)
-    BRWrist.moveTo(WristMin)
+    lMoveFeetTo(-93.0, 127.85, -92.24, 93.0, 127.85, 92.24, -93.0, -52.15, -92.24, 93.0, -52.15, -92.24, Speed)
+    #setAllServoSpeeds(Speed)
+    #FLShoulder.rest()
+    #FRShoulder.rest()
+    #BLShoulder.rest()
+    #BRShoulder.rest()
+    #FLArm.moveTo(WristMin + 90)
+    #FRArm.moveTo(WristMin + 90)
+    #BLArm.moveTo(WristMin + 90)
+    #BRArm.moveTo(WristMin + 90)
+    #FLWrist.moveTo(WristMin)
+    #FRWrist.moveTo(WristMin)
+    #BLWrist.moveTo(WristMin)
+    #BRWrist.moveTo(WristMin)
 
 
 def Down(Speed):
+    # Laying Down
     sMoveFeetTo(-93.0, 127.85, -92.24, 93.0, 127.85, 92.24, -93.0, -52.15, -92.24, 93.0, -52.15, -92.24, Speed)
 
 def Up(Speed):
@@ -90,7 +92,8 @@ def Up(Speed):
     lMoveFeetTo(0.0, -93.0, 87.405, -207.645, 0.0, 93.0, 87.405, -207.645, 0.0, -93.0, -92.595, -207.645, 0.0, 93.0, -92.595, -207.645, Speed, 5)
 
 def Crouch(Speed):
-    sMoveFeetTo(-93.0, 87.405, -150.0, 93.0, 87.405, -150.0, -93.0, -92.595, -150.0, 93.0, -92.595, -150.0, 0.3)
+    # Crouching position
+    lMoveFeetTo(-93.0, 87.405, -150.0, 93.0, 87.405, -150.0, -93.0, -92.595, -150.0, 93.0, -92.595, -150.0, 0.3)
 
 def Sit(Speed):
     #sMoveFeetTo(-93.0, 29.5, -226.0, 93.0, 29.5, -226.0, -93.0, -94.0, -105.0, 93.0, -94.0, -101.0, 0.3)
