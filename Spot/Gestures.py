@@ -53,8 +53,10 @@ def rest(Speed):
 # Note: WristMin = 50.0                                         #
 #################################################################
 def Laydown(Speed):
+    global PhysicalState
     print "Laying Down"
-    lMoveFeetTo(-93.0, 127.85, -92.24, 93.0, 127.85, 92.24, -93.0, -52.15, -92.24, 93.0, -52.15, -92.24, Speed)
+    lMoveFeetTo(0.0, -93.0, 127.85, -92.24, 0.0, 93.0, 127.85, -92.24, 0.0, -93.0, -52.15, -92.24, 0.0, 93.0, -52.15, -92.24, Speed, 5)
+    PhysicalState = 0
     #setAllServoSpeeds(Speed)
     #FLShoulder.rest()
     #FRShoulder.rest()
@@ -71,11 +73,24 @@ def Laydown(Speed):
 
 
 def Down(Speed):
+    global PhysicalState
     # Laying Down
     sMoveFeetTo(-93.0, 127.85, -92.24, 93.0, 127.85, 92.24, -93.0, -52.15, -92.24, 93.0, -52.15, -92.24, Speed)
+    PhysicalState = 0
+
+def Crouch(Speed):
+    global PhysicalState
+    # Crouching position
+    updateServoPositions()
+    lMoveFeetTo(0.0, -93.0, 87.405, -150.0, 0.0, 93.0, 87.405, -150.0, 0.0, -93.0, -92.595, -150.0, 0.0, 93.0, -92.595, -150.0, 0.3, 5)
+    PhysicalState = 1
 
 def Up(Speed):
+    global PhysicalState
     # Set all the base speeds
+    if PhysicalState == 0 or PhysicalState == 2:
+        Crouch(Speed)
+        sleep(0.5)
     setAllServoSpeeds(Speed*0.5)
     # I found if I move straight to the rest position
     # the robot tends to fall over backwards.
@@ -89,14 +104,14 @@ def Up(Speed):
     setAllServoSpeeds(Speed)
     # Now send the legs to the rest position
     #sMoveFeetTo(-93.0, 87.405, -207.645, 93.0, 87.405, -207.645, -93.0, -92.595, -207.645, 93.0, -92.595, -207.645, Speed)
+    #lMoveFeetTo(0.0, -93.0, 37.405, -207.645, 0.0, 93.0, 37.405, -207.645, 0.0, -93.0, -142.595, -207.645, 0.0, 93.0, -142.595, -207.645, Speed, 5)
+    #sleep(1)
     lMoveFeetTo(0.0, -93.0, 87.405, -207.645, 0.0, 93.0, 87.405, -207.645, 0.0, -93.0, -92.595, -207.645, 0.0, 93.0, -92.595, -207.645, Speed, 5)
-
-def Crouch(Speed):
-    # Crouching position
-    lMoveFeetTo(-93.0, 87.405, -150.0, 93.0, 87.405, -150.0, -93.0, -92.595, -150.0, 93.0, -92.595, -150.0, 0.3)
+    PhysicalState = 3
 
 def Sit(Speed):
-    #sMoveFeetTo(-93.0, 29.5, -226.0, 93.0, 29.5, -226.0, -93.0, -94.0, -105.0, 93.0, -94.0, -101.0, 0.3)
+    global PhysicalState
+    #lMoveFeetTo(0.0, -93.0, 29.5, -226.0, 0.0, 93.0, 29.5, -226.0, 0.0, -93.0, -94.0, -105.0, 0.0, 93.0, -94.0, -101.0, 0.3, 5)
     setAllServoSpeeds(Speed)
     FLShoulder.rest()
     FRShoulder.rest()
@@ -110,8 +125,11 @@ def Sit(Speed):
     FRWrist.moveTo(WristMax)
     BLWrist.moveTo(51)
     BRWrist.moveTo(51)
+    updateServoPositions()
+    PhysicalState = 2
     
 def LeanForward(Speed):
+    global PhysicalState
     setAllServoSpeeds(Speed)
     lMoveFeetTo(0.0, -93.0, 37.405, -207.645, 0.0, 93.0, 37.405, -207.645, 0.0, -93.0, -142.595, -207.645, 0.0, 93.0, -142.595, -207.645, Speed, 5)
     sleep(3.0)
@@ -119,6 +137,7 @@ def LeanForward(Speed):
 
 
 def WalkForward(StepSize, StepHeight, Type, Steps):
+    global PhysicalState
     #Before starting, lets update the systems memory of where it is.
     # At rest, the X and Y positions are easy to work out.
     # BaseX is +/- the sum of LXS and LST
@@ -126,7 +145,7 @@ def WalkForward(StepSize, StepHeight, Type, Steps):
     # this doesn't change for forward walking
     BaseX = LXS + LST
     # BaseY is +/- LYS plus any offsets
-    BaseY = LYS + 3.0
+    BaseY = LYS - 3.0
     Yoffset0 = +(StepSize*0.5)
     Yoffset1 = -(StepSize*0.0)
     Yoffset2 = -(StepSize*0.5)
@@ -155,6 +174,7 @@ def WalkForward(StepSize, StepHeight, Type, Steps):
         lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset1,   -BaseZ, StepHeight, BaseX, BaseY+Yoffset1,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
 
 def WalkExample():
+    global PhysicalState
     updateServoPositions()
     StepLength = 50
     StepHeight = 40.0
