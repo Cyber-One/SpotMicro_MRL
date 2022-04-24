@@ -81,32 +81,39 @@ def Down(Speed):
 def Crouch(Speed):
     global PhysicalState
     # Crouching position
+    if PhysicalState == 2:
+        FLWrist.rest()
+        FRWrist.rest()
+        sleep(0.4)
     updateServoPositions()
-    lMoveFeetTo(0.0, -93.0, 87.405, -150.0, 0.0, 93.0, 87.405, -150.0, 0.0, -93.0, -92.595, -150.0, 0.0, 93.0, -92.595, -150.0, 0.3, 5)
+    lMoveFeetTo(0.0, -93.0, 87.405, -150.0, 0.0, 93.0, 87.405, -150.0, 0.0, -93.0, -135.000, -150.0, 0.0, 93.0, -135.000, -150.0, 0.3, 5)
     PhysicalState = 1
 
 def Up(Speed):
     global PhysicalState
     # Set all the base speeds
+    if PhysicalState == 5:
+        Sit(0.1)
+        sleep(1)
     if PhysicalState == 0 or PhysicalState == 2:
         Crouch(Speed)
         sleep(0.5)
-    setAllServoSpeeds(Speed*0.5)
     # I found if I move straight to the rest position
     # the robot tends to fall over backwards.
     # To help prevent that, I rotate all the arms back 
     # as far they will go, moving the center of mass
     # forward of the center of contact.
-    FLArm.moveTo(ArmMax-1)
-    FRArm.moveTo(ArmMax-1)
-    BLArm.moveTo(ArmMax-1)
-    BRArm.moveToBlocking(ArmMax-1)
+    #setAllServoSpeeds(Speed*0.5)
+    #FLArm.moveTo(ArmMax-1)
+    #FRArm.moveTo(ArmMax-1)
+    #BLArm.moveTo(ArmMax-1)
+    #BRArm.moveToBlocking(ArmMax-1)
     setAllServoSpeeds(Speed)
     # Now send the legs to the rest position
     #sMoveFeetTo(-93.0, 87.405, -207.645, 93.0, 87.405, -207.645, -93.0, -92.595, -207.645, 93.0, -92.595, -207.645, Speed)
     #lMoveFeetTo(0.0, -93.0, 37.405, -207.645, 0.0, 93.0, 37.405, -207.645, 0.0, -93.0, -142.595, -207.645, 0.0, 93.0, -142.595, -207.645, Speed, 5)
     #sleep(1)
-    lMoveFeetTo(0.0, -93.0, 87.405, -207.645, 0.0, 93.0, 87.405, -207.645, 0.0, -93.0, -92.595, -207.645, 0.0, 93.0, -92.595, -207.645, Speed, 5)
+    lMoveFeetTo(0.0, -93.0, 87.405, -207.645, 0.0, 93.0, 87.405, -207.645, 0.0, -93.0, -135.000, -207.645, 0.0, 93.0, -135.000, -207.645, Speed, 5)
     PhysicalState = 3
 
 def Sit(Speed):
@@ -127,6 +134,45 @@ def Sit(Speed):
     BRWrist.moveTo(51)
     updateServoPositions()
     PhysicalState = 2
+
+def SitUp(Speed):
+    global PhysicalState
+    if not PhysicalState == 2:
+        Sit(Speed)
+        sleep(1)
+    setAllServoSpeeds(Speed)
+    BLArm.moveTo(140)
+    BRArm.moveTo(140)
+    sleep(0.2)
+    BLWrist.moveTo(100)
+    BRWrist.moveTo(100)
+    sleep(0.2)
+    BLArm.moveTo(ArmMax-5)
+    BRArm.moveTo(ArmMax-5)
+    PhysicalState = 5
+
+def Wave(Speed):
+    global PhysicalState
+    if not PhysicalState == 5:
+        SitUp(Speed)
+    FLWrist.moveTo(WristMax)
+    FRWrist.moveTo(WristMax)
+    sleep(1)
+    FLWrist.moveTo(90)
+    FRWrist.moveTo(90)
+    sleep(1)
+    FLWrist.moveTo(WristMax)
+    FRWrist.moveTo(WristMax)
+    sleep(1)
+    FLWrist.moveTo(90)
+    FRWrist.moveTo(90)
+    sleep(1)
+    FLWrist.moveTo(WristMax)
+    FRWrist.moveTo(WristMax)
+    sleep(1)
+    FLWrist.moveTo(90)
+    FRWrist.moveTo(90)
+    sleep(1)
     
 def LeanForward(Speed):
     global PhysicalState
@@ -143,9 +189,11 @@ def WalkForward(StepSize, StepHeight, Type, Steps):
     # BaseX is +/- the sum of LXS and LST
     # then subtrack an amount off to help with the balance.
     # this doesn't change for forward walking
-    BaseX = LXS + LST
+    BaseXL = -LXS - LST
+    BaseXR = LXS + LST
     # BaseY is +/- LYS plus any offsets
-    BaseY = LYS - 3.0
+    BaseYF = LYS + 3.0
+    BaseYB = -LYS - 3.0
     Yoffset0 = +(StepSize*0.5)
     Yoffset1 = -(StepSize*0.0)
     Yoffset2 = -(StepSize*0.5)
@@ -158,20 +206,20 @@ def WalkForward(StepSize, StepHeight, Type, Steps):
     # each action moves one foot forward while the rest 
     # move back 1/3 of a step
     if Type == 0: # Starting to walk
-        lMoveFeetTo(StepHeight, -BaseX, BaseY+Yoffset0,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset1,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset1,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset2,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset2, -BaseZ, StepHeight,  BaseX, -BaseY+Yoffset0, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset2,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset3,    -BaseZ, StepHeight, -BaseX, -BaseY+Yoffset0, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset3,   -BaseZ, StepHeight, BaseX, BaseY+Yoffset0,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset2, -BaseZ, Speed, Steps)
+        lMoveFeetTo(StepHeight, BaseXL, BaseYF+Yoffset0,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset1,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset1, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset1, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset1,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset2,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset2, -BaseZ, StepHeight,  BaseXR, BaseYB+Yoffset0, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset2,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset3,    -BaseZ, StepHeight, BaseXL, BaseYB+Yoffset0, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset1, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset3,   -BaseZ, StepHeight, BaseXR, BaseYF+Yoffset0,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset1, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset2, -BaseZ, Speed, Steps)
     elif Type == 1: # Walking
-        lMoveFeetTo(StepHeight, -BaseX, BaseY+Yoffset0,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset1,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset2, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset3, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset1,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset2,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset3, -BaseZ, StepHeight,  BaseX, -BaseY+Yoffset0, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset2,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset3,    -BaseZ, StepHeight, -BaseX, -BaseY+Yoffset0, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset3,   -BaseZ, StepHeight, BaseX, BaseY+Yoffset0,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset2, -BaseZ, Speed, Steps)
+        lMoveFeetTo(StepHeight, BaseXL, BaseYF+Yoffset0,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset1,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset2, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset3, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset1,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset2,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset3, -BaseZ, StepHeight,  BaseXR, BaseYB+Yoffset0, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset2,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset3,    -BaseZ, StepHeight, BaseXL, BaseYB+Yoffset0, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset1, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset3,   -BaseZ, StepHeight, BaseXR, BaseYF+Yoffset0,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset1, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset2, -BaseZ, Speed, Steps)
     elif Type == 2: # Stopping
-        lMoveFeetTo(StepHeight, -BaseX, BaseY+Yoffset1,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset0,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset2, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset1,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset0,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, StepHeight,  BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset1,   -BaseZ, 0.0,        BaseX, BaseY+Yoffset0,    -BaseZ, StepHeight, -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
-        lMoveFeetTo(0.0,        -BaseX, BaseY+Yoffset1,   -BaseZ, StepHeight, BaseX, BaseY+Yoffset1,    -BaseZ, 0.0,        -BaseX, -BaseY+Yoffset1, -BaseZ, 0.0,         BaseX, -BaseY+Yoffset1, -BaseZ, Speed, Steps)
+        lMoveFeetTo(StepHeight, BaseXL, BaseYF+Yoffset1,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset0,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset1, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset2, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset1,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset0,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset1, -BaseZ, StepHeight,  BaseXR, BaseYB+Yoffset1, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset1,   -BaseZ, 0.0,        BaseXR, BaseYF+Yoffset0,    -BaseZ, StepHeight, BaseXL, BaseYB+Yoffset1, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset1, -BaseZ, Speed, Steps)
+        lMoveFeetTo(0.0,        BaseXL, BaseYF+Yoffset1,   -BaseZ, StepHeight, BaseXR, BaseYF+Yoffset1,    -BaseZ, 0.0,        BaseXL, BaseYB+Yoffset1, -BaseZ, 0.0,         BaseXR, BaseYB+Yoffset1, -BaseZ, Speed, Steps)
 
 def WalkExample():
     global PhysicalState
@@ -179,11 +227,14 @@ def WalkExample():
     StepLength = 50
     StepHeight = 40.0
     Steps = 10
+    # Start the walk sequence
     WalkForward(StepLength, StepHeight, 0, Steps)
+    # Walk sequence
     WalkForward(StepLength, StepHeight, 1, Steps)
     WalkForward(StepLength, StepHeight, 1, Steps)
     WalkForward(StepLength, StepHeight, 1, Steps)
     WalkForward(StepLength, StepHeight, 1, Steps)
     WalkForward(StepLength, StepHeight, 1, Steps)
     WalkForward(StepLength, StepHeight, 1, Steps)
+    # Stop walking sequence
     WalkForward(StepLength, StepHeight, 2, Steps)
