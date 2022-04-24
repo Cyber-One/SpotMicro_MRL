@@ -13,8 +13,7 @@
 # the MRL system                                                #
 #                                                               #
 # Common_Variables.py                                           #
-# This is where the configuration settings live for the         #
-# varoius controllers.                                          #
+# This is where Global variables and Classes exist              #
 #                                                               #
 #################################################################
 print "Creating the Common Variables"
@@ -48,6 +47,7 @@ EmotionalState = 1
 # State 2 = Sit
 # State 3 = Standing at rest
 # State 4 = Standing High.
+# State 5 = Sit Up
 PhysicalState = 0
 
 # when using a pair of Ultrasonic sensors, we are best to test
@@ -65,6 +65,9 @@ LST = 55    # Length between the Shoulder joint and the center line of the Arm
 LYS = 90    # Length between the center Y plane and the shoulder joint
 LXS = 38    # Length between the center X plane and the shoulder joint
 MaxLTF = LTW + LWF   # Max length between the arm pivot and the foot.
+CoMoffsetX = 0  # Center of mass offset X axis
+CoMoffsetY = 0  # Center of mass offset Y axis
+CoMoffsetZ = 0  # Center of mass offset Z axis
 
 # These setting are global for the four legs.
 # If you change any of these, you will have to recalibrate all the servos.
