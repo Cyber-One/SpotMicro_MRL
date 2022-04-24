@@ -37,6 +37,21 @@ print "Starting the Leg Speed Control Functions"
 #   BLY, BLZ, BRT, BRX, BRY, BRZ, Speed, Steps)                 #
 #################################################################
 
+
+class Leg():
+    # The basic of each leg.
+    def __init__(self, Shoulder, Arm, Wrist):
+        self.ServiceS = Soulder
+        self.ServiceA = Arm
+        self.ServiceW = Wrist
+        self.x = 0
+        self.y = 0
+        self.z = 0
+    def updateServo():
+        self.S = self.ServiceS.getCurrentInputPos()
+        self.A = self.ServiceA.getCurrentInputPos()
+        self.W = self.ServiceW.getCurrentInputPos()
+
 #################################################################
 # areServosMoving()                                             #
 # This function returns the number of servos still moving.      #
@@ -726,6 +741,12 @@ def lMoveFeet(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT, B
         BRArm.moveTo(Servos[i][10])
         BRWrist.moveTo(Servos[i][11])
 
+#################################################################
+# updateServoPositions()                                        #
+# This function update the global references for all 12 servos  #
+# both the Servo Position and the 3D Space position of all      #
+# 4 feet                                                        #
+#################################################################
 def updateServoPositions():
     global FLS_Servo
     global FLA_Servo
