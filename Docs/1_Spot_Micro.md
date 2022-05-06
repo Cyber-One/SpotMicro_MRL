@@ -27,7 +27,7 @@ Let break the project down to building the hardware and then the software.
 
 # Inverse Kinematics
 
-[+6) Spot Micro Inverse Kinematics](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docsc/6_Spot_Micro_Inverse_Kinematics.md) 
+[+6) Spot Micro Inverse Kinematics](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/6_Spot_Micro_Inverse_Kinematics.md) 
 
 # Parts List
 
