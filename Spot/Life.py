@@ -106,8 +106,11 @@ def updateServoPositions():
 #data.getPitch()
 #data.getRoll()
 #data.getYaw()
-if runtime.isStarted​("MPU6050A"):
+if runtime.isStarted("MPU6050A"):
     def updateOrientation(data):
+        global Pitch
+        global Roll
+        global Yaw
         Pitch = data.pitch
         Roll = data.roll
         Yaw = data.yaw
