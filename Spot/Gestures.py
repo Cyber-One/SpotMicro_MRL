@@ -120,6 +120,10 @@ def Sit(Speed):
     global PhysicalState
     #lMoveFeetTo(0.0, -93.0, 29.5, -226.0, 0.0, 93.0, 29.5, -226.0, 0.0, -93.0, -94.0, -105.0, 0.0, 93.0, -94.0, -101.0, 0.3, 5)
     setAllServoSpeeds(Speed)
+    if PhysicalState == 5:
+        FLArm.moveTo(105)
+        FRArm.moveTo(105)
+        sleep(1)
     FLShoulder.rest()
     FRShoulder.rest()
     BLShoulder.rest()
@@ -149,31 +153,57 @@ def SitUp(Speed):
     sleep(0.2)
     BLArm.moveTo(ArmMax-5)
     BRArm.moveTo(ArmMax-5)
+    FLArm.moveTo(ArmMax-1)
+    FRArm.moveTo(ArmMax-1)
     PhysicalState = 5
 
-def Wave(Speed):
+def WaveUD(Speed):
     global PhysicalState
     if not PhysicalState == 5:
         SitUp(Speed)
-    FLWrist.moveTo(WristMax)
+    FRArm.moveTo(90)
     FRWrist.moveTo(WristMax)
     sleep(1)
-    FLWrist.moveTo(90)
     FRWrist.moveTo(90)
     sleep(1)
-    FLWrist.moveTo(WristMax)
     FRWrist.moveTo(WristMax)
     sleep(1)
-    FLWrist.moveTo(90)
     FRWrist.moveTo(90)
     sleep(1)
-    FLWrist.moveTo(WristMax)
     FRWrist.moveTo(WristMax)
     sleep(1)
-    FLWrist.moveTo(90)
     FRWrist.moveTo(90)
     sleep(1)
+    FRWrist.moveTo(WristMax)
+    FRArm.moveTo(ArmMax-1)
     
+def WaveLR(Speed):
+    global PhysicalState
+    if not PhysicalState == 5:
+        SitUp(Speed)
+    FRArm.moveTo(90)
+    FRWrist.moveTo(120)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMin+1)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMax-1)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMin+1)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMax-1)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMin+1)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMax-1)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMin+1)
+    sleep(1)
+    FRShoulder.moveTo(ShoulderMax-1)
+    sleep(1)
+    FRShoulder.rest()
+    FRWrist.moveTo(WristMax)
+    FRArm.moveTo(ArmMax-1)
+
 def LeanForward(Speed):
     global PhysicalState
     setAllServoSpeeds(Speed)
