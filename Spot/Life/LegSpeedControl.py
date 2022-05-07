@@ -212,7 +212,7 @@ def sMoveFoot(Leg, X, Y, Z, Speed):
         ArmVelocity = BRArmVelocity
         WristVelocity = BRWristVelocity
     # Lets get the current 3D space position of the foot
-    Position = forwardKinematics(Leg, ShoulderCurrentPos, ArmCurrentPos+180, WristCurrentPos)
+    Position = forwardKinematics(ShoulderCurrentPos, ArmCurrentPos+180, WristCurrentPos)
     # Now that we have the current 3D Space position, lets calculate where we want to put it.
     ServoPos = legInverseKinematics(Position.get("X") + X, Position.get("Y") + Y, Position.get("Z") + Z)
     #print Position.get("Z"), " Cur-Z:", Position.get("Y"), " Cur-Y:", Position.get("X"), "Cur-X:"
@@ -426,10 +426,10 @@ def lMoveFootTo(Leg, Xpos, Ypos, Zpos, Speed, Steps):
     # lets do the sanity checks first
     if Speed > 1.0 or Speed < 0.01: Speed = 1.0
     if Steps > 20 or Steps < 1: Steps = 10
-    FLStartPos = forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
-    FRStartPos = forwardKinematics(1, FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
-    BLStartPos = forwardKinematics(2, BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
-    BRStartPos = forwardKinematics(3, BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
+    FLStartPos = forwardKinematics(FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
+    FRStartPos = forwardKinematics(FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
+    BLStartPos = forwardKinematics(BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
+    BRStartPos = forwardKinematics(BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
     #legInverseKinematics(LSFx, LAFy, Zt)
     for i in range(Steps):
         sMoveFoot(Leg, X/Steps, Y/Steps, Z/Steps, Speed)
@@ -455,10 +455,10 @@ def sMoveFeet(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Speed)
     if Speed > 1.0 or Speed < 0.01:
         Speed = 1.0
     # First we need to know the current position.
-    FLPosition = forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
-    FRPosition = forwardKinematics(1, FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
-    BLPosition = forwardKinematics(2, BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
-    BRPosition = forwardKinematics(3, BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
+    FLPosition = forwardKinematics(FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
+    FRPosition = forwardKinematics(FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
+    BLPosition = forwardKinematics(BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
+    BRPosition = forwardKinematics(BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
     # Now that we have the current 3D Space position, lets calculate where we want to put it.
     FLServoPos = legInverseKinematics(FLPosition.get("X") + FLX, FLPosition.get("Y") + FLY, FLPosition.get("Z") + FLZ)
     FRServoPos = legInverseKinematics(FRPosition.get("X") + FRX, FRPosition.get("Y") + FRY, FRPosition.get("Z") + FRZ)
@@ -663,10 +663,10 @@ def lMoveFeet(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT, B
              BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos(), BLWrist.getCurrentInputPos(),
              BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos(), BRWrist.getCurrentInputPos()]]
     # Now lets work out where we are starting from.
-    FLStartPos = forwardKinematics(0, Servos[0][0], Servos[0][1]+180, Servos[0][2])
-    FRStartPos = forwardKinematics(1, Servos[0][3], Servos[0][4]+180, Servos[0][5])
-    BLStartPos = forwardKinematics(2, Servos[0][6], Servos[0][7]+180, Servos[0][8])
-    BRStartPos = forwardKinematics(3, Servos[0][9], Servos[0][10]+180, Servos[0][11])
+    FLStartPos = forwardKinematics(Servos[0][0], Servos[0][1]+180, Servos[0][2])
+    FRStartPos = forwardKinematics(Servos[0][3], Servos[0][4]+180, Servos[0][5])
+    BLStartPos = forwardKinematics(Servos[0][6], Servos[0][7]+180, Servos[0][8])
+    BRStartPos = forwardKinematics(Servos[0][9], Servos[0][10]+180, Servos[0][11])
     # Now we know where we are starting from, 
     # let work out the Step Size.
     FLXstep = FLX/Steps
@@ -741,69 +741,6 @@ def lMoveFeet(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT, B
         BRArm.moveTo(Servos[i][10])
         BRWrist.moveTo(Servos[i][11])
 
-#################################################################
-# updateServoPositions()                                        #
-# This function update the global references for all 12 servos  #
-# both the Servo Position and the 3D Space position of all      #
-# 4 feet                                                        #
-#################################################################
-def updateServoPositions():
-    global FLS_Servo
-    global FLA_Servo
-    global FLW_Servo
-    global FRS_Servo
-    global FRA_Servo
-    global FRW_Servo
-    global BLS_Servo
-    global BLA_Servo
-    global BLW_Servo
-    global BRS_Servo
-    global BRA_Servo
-    global BRW_Servo
-    global FL_X
-    global FR_X
-    global BL_X
-    global BR_X
-    global FL_Y
-    global FR_Y
-    global BL_Y
-    global BR_Y
-    global FL_Z
-    global FR_Z
-    global BL_Z
-    global BR_Z
-    FLS_Servo = FLShoulder.getCurrentInputPos()
-    FLA_Servo = FLArm.getCurrentInputPos()
-    FLW_Servo = FLWrist.getCurrentInputPos()
-    FRS_Servo = FRShoulder.getCurrentInputPos()
-    FRA_Servo = FRArm.getCurrentInputPos()
-    FRW_Servo = FRWrist.getCurrentInputPos()
-    BLS_Servo = BLShoulder.getCurrentInputPos()
-    BLA_Servo = BLArm.getCurrentInputPos()
-    BLW_Servo = BLWrist.getCurrentInputPos()
-    BRS_Servo = BRShoulder.getCurrentInputPos()
-    BRA_Servo = BRArm.getCurrentInputPos()
-    BRW_Servo = BRWrist.getCurrentInputPos()
-    FLPos = forwardKinematics(0, FLS_Servo, FLA_Servo+180, FLW_Servo)
-    FRPos = forwardKinematics(1, FRS_Servo, FRA_Servo+180, FRW_Servo)
-    BLPos = forwardKinematics(2, BLS_Servo, BLA_Servo+180, BLW_Servo)
-    BRPos = forwardKinematics(3, BRS_Servo, BRA_Servo+180, BRW_Servo)
-    FL_X = -FLPos.get("X") - LXS
-    FL_Y = FLPos.get("Y") + LYS
-    FL_Z = FLPos.get("Z")
-    FR_X = FRPos.get("X") + LXS
-    FR_Y = FRPos.get("Y") + LYS
-    FR_Z = FRPos.get("Z")
-    BL_X = -BLPos.get("X") - LXS
-    BL_Y = BLPos.get("Y") - LYS
-    BL_Z = BLPos.get("Z")
-    BR_X = BRPos.get("X") + LXS
-    BR_Y = BRPos.get("Y") - LYS
-    BR_Z = BRPos.get("Z")
-    print FL_Z, " FL-Z:", FL_Y, " FL-Y:", FL_X, "FL-X:"
-    print FR_Z, " FR-Z:", FR_Y, " FR-Y:", FR_X, "FR-X:"
-    print BL_Z, " BL-Z:", BL_Y, " BL-Y:", BL_X, "BL-X:"
-    print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
 
 #################################################################
 # lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, #
@@ -858,12 +795,6 @@ def lMoveFeetTo(FLT, FLX, FLY, FLZ, FRT, FRX, FRY, FRZ, BLT, BLX, BLY, BLZ, BRT,
              FRS_Servo, FRA_Servo, FRW_Servo,
              BLS_Servo, BLA_Servo, BLW_Servo,
              BRS_Servo, BRA_Servo, BRW_Servo]]
-    # Now lets work out where we are starting from.
-    #FLStartPos = forwardKinematics(0, Servos[0][0], Servos[0][1]+180, Servos[0][2])
-    #FRStartPos = forwardKinematics(1, Servos[0][3], Servos[0][4]+180, Servos[0][5])
-    #BLStartPos = forwardKinematics(2, Servos[0][6], Servos[0][7]+180, Servos[0][8])
-    #BRStartPos = forwardKinematics(3, Servos[0][9], Servos[0][10]+180, Servos[0][11])
-    # Now we know where we are starting from, 
     # lets work out how far we are moving
     FLXoffset = (FLX - FL_X)
     FLYoffset = (FLY - FL_Y)
