@@ -65,6 +65,7 @@ LST = 55    # Length between the Shoulder joint and the center line of the Arm
 LYS = 90    # Length between the center Y plane and the shoulder joint
 LXS = 38    # Length between the center X plane and the shoulder joint
 MaxLTF = LTW + LWF   # Max length between the arm pivot and the foot.
+# The following would be required is the robot is front or rear heavy.
 CoMoffsetX = 0  # Center of mass offset X axis
 CoMoffsetY = 0  # Center of mass offset Y axis
 CoMoffsetZ = 0  # Center of mass offset Z axis
@@ -98,6 +99,27 @@ FR_Z = -207.645
 BL_Z = -207.645
 BR_Z = -207.645
 
+# Now for all the IMU Foot position data
+Pitch = 0.0
+Roll = 0.0
+Yaw = 0.0
+RequestedPitch = 0.0
+RequestedRoll = 0.0
+RequestedYaw = 0.0
+imuFL_X = FL_X
+imuFR_X = FR_X
+imuBL_X = BL_X
+imuBR_X = BR_X
+imuFL_Y = FL_Y
+imuFR_Y = FR_Y
+imuBL_Y = BL_Y
+imuBR_Y = BR_Y
+imuFL_Z = FL_Z
+imuFR_Z = FR_Z
+imuBL_Z = BL_Z
+imuBR_Z = BR_Z
+
+
 # Last know servo positions
 FLS_Servo = ShoulderRest
 FRS_Servo = ShoulderRest
@@ -113,3 +135,9 @@ FLW_Servo = WristRest
 FRW_Servo = WristRest
 BLW_Servo = WristRest
 BRW_Servo = WristRest
+
+# Dictionary versions
+Servos = [[FLS_Servo, FLA_Servo, FLW_Servo],
+        [FRS_Servo, FRA_Servo, FRW_Servo],
+        [BLS_Servo, BLA_Servo, BLW_Servo],
+        [BRS_Servo, BRA_Servo, BRW_Servo]]
