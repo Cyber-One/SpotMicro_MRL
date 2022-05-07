@@ -69,7 +69,7 @@ print "Starting the leg Forward Kinematics Functions"
 # 3 = Back Right Leg                                            #
 # Shoulder, Arm and Wrist are the current positions.            #
 #################################################################
-def forwardKinematics(Leg, Shoulder, Arm, Wrist):
+def forwardKinematics(Shoulder, Arm, Wrist):
     LTF = math.sqrt(LWF*LWF + LTW*LTW - 2*LWF*LTW*math.cos(math.radians(Wrist)))
     AFW = math.degrees(math.acos((LTF*LTF + LTW*LTW - LWF*LWF)/(2*LTF*LTW)))
     workY = LTF * math.sin(math.radians(Arm-AFW-90))
@@ -83,7 +83,7 @@ def FL_Leg(data):
     global FL_X
     global FL_Y
     global FL_Z
-    Position = forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
+    Position = forwardKinematics(FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
     FL_X = -Position.get("X") - LXS
     FL_Y = Position.get("Y") + LYS
     FL_Z = Position.get("Z")
@@ -94,7 +94,7 @@ def FR_Leg(data):
     global FR_X
     global FR_Y
     global FR_Z
-    Position = forwardKinematics(1, FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
+    Position = forwardKinematics(FRShoulder.getCurrentInputPos(), FRArm.getCurrentInputPos()+180, FRWrist.getCurrentInputPos())
     FR_X = Position.get("X") + LXS
     FR_Y = Position.get("Y") + LYS
     FR_Z = Position.get("Z")
@@ -105,7 +105,7 @@ def BL_Leg(data):
     global BL_X
     global BL_Y
     global BL_Z
-    Position = forwardKinematics(2, BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
+    Position = forwardKinematics(BLShoulder.getCurrentInputPos(), BLArm.getCurrentInputPos()+180, BLWrist.getCurrentInputPos())
     BL_X = -Position.get("X") - LXS
     BL_Y = Position.get("Y") - LYS
     BL_Z = Position.get("Z")
@@ -116,28 +116,65 @@ def BR_Leg(data):
     global BR_X
     global BR_Y
     global BR_Z
-    Position = forwardKinematics(3, BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
+    Position = forwardKinematics(BRShoulder.getCurrentInputPos(), BRArm.getCurrentInputPos()+180, BRWrist.getCurrentInputPos())
     BR_X = Position.get("X") + LXS
     BR_Y = Position.get("Y") - LYS
     BR_Z = Position.get("Z")
     print "Back-Right-Leg"
     print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
 
-# These functions will call the Forward kinematics for the leg when ever the leg moves.
-# Truth is, we only need to call them when the data is needed such as moving the 
-# foot using relative locations.
-#python.subscribe('FLShoulder', 'publishServoMoveTo', 'python', 'FL_Leg')
-#python.subscribe('FLArm', 'publishServoMoveTo', 'python', 'FL_Leg')
-#python.subscribe('FLWrist', 'publishServoMoveTo', 'python', 'FL_Leg')
-
-#python.subscribe('FRShoulder', 'publishServoMoveTo', 'python', 'FR_Leg')
-#python.subscribe('FRArm', 'publishServoMoveTo', 'python', 'FR_Leg')
-#python.subscribe('FRWrist', 'publishServoMoveTo', 'python', 'FR_Leg')
-
-#python.subscribe('BLShoulder', 'publishServoMoveTo', 'python', 'BL_Leg')
-#python.subscribe('BLArm', 'publishServoMoveTo', 'python', 'BL_Leg')
-#python.subscribe('BLWrist', 'publishServoMoveTo', 'python', 'BL_Leg')
-
-#python.subscribe('BRShoulder', 'publishServoMoveTo', 'python', 'BR_Leg')
-#python.subscribe('BRArm', 'publishServoMoveTo', 'python', 'BR_Leg')
-#python.subscribe('BRWrist', 'publishServoMoveTo', 'python', 'BR_Leg')
+#################################################################
+# The routine assumes all the memory positions for the servos   #
+# and feet position relative to the body are up to date.        #
+# This can be achived by calling updateServoPositions() first.  #
+#################################################################
+def imuForwardKinematics():
+    global Pitch
+    global Roll
+    global Yaw
+    global CoMoffsetX
+    global CoMoffsetY
+    global CoMoffsetZ
+    global FL_X
+    global FR_X
+    global BL_X
+    global BR_X
+    global FL_Y
+    global FR_Y
+    global BL_Y
+    global BR_Y
+    global FL_Z
+    global FR_Z
+    global BL_Z
+    global BR_Z
+    global imuFL_X
+    global imuFR_X
+    global imuBL_X
+    global imuBR_X
+    global imuFL_Y
+    global imuFR_Y
+    global imuBL_Y
+    global imuBR_Y
+    global imuFL_Z
+    global imuFR_Z
+    global imuBL_Z
+    global imuBR_Z
+    # Just to add to the confusion here, we have the center of 
+    # the robot at the origin of 0,0,0. But your robot might 
+    # have extra equipment attached on the top at the front 
+    # such as an Arm, lidar sensor or a camera.  This additional
+    # load will move the point of balance away from the center 
+    # of origin.
+    # When we built our kinematic model, we used the center of 
+    # the robot as the origin, Now we need to work out the feet 
+    # positions based on the center of mass (CoM)
+    comFLX = FL_X - CoMoffsetX
+    comFLY = FL_Y - CoMoffsetY
+    comFLZ = FL_Z - CoMoffsetZ
+    # Next lets work out the distance between the CoM and the feet
+    FLxzL = math.sqrt((comFLX*comFLX)+(comFLZ*comFLZ))
+    FLyzL = math.sqrt((comFLY*comFLY)+(comFLZ*comFLZ))
+    # We also need to know the angle of the line between the CoM 
+    # and the feet
+    FLxA = asin(comFLX/FLxzL)
+    FLyA = asin(comFLY/FLyzL)
