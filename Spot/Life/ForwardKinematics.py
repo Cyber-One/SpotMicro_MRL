@@ -129,24 +129,24 @@ def BR_Leg(data):
 # This can be achived by calling updateServoPositions() first.  #
 #################################################################
 def imuForwardKinematics():
-    global Pitch
-    global Roll
-    global Yaw
-    global CoMoffsetX
-    global CoMoffsetY
-    global CoMoffsetZ
-    global FL_X
-    global FR_X
-    global BL_X
-    global BR_X
-    global FL_Y
-    global FR_Y
-    global BL_Y
-    global BR_Y
-    global FL_Z
-    global FR_Z
-    global BL_Z
-    global BR_Z
+    #global Pitch
+    #global Roll
+    #global Yaw
+    #global CoMoffsetX
+    #global CoMoffsetY
+    #global CoMoffsetZ
+    #global FL_X
+    #global FR_X
+    #global BL_X
+    #global BR_X
+    #global FL_Y
+    #global FR_Y
+    #global BL_Y
+    #global BR_Y
+    #global FL_Z
+    #global FR_Z
+    #global BL_Z
+    #global BR_Z
     global imuFL_X
     global imuFR_X
     global imuBL_X
@@ -171,15 +171,54 @@ def imuForwardKinematics():
     comFLX = FL_X - CoMoffsetX
     comFLY = FL_Y - CoMoffsetY
     comFLZ = FL_Z - CoMoffsetZ
+    comFRX = FR_X - CoMoffsetX
+    comFRY = FR_Y - CoMoffsetY
+    comFRZ = FR_Z - CoMoffsetZ
+    comBLX = BL_X - CoMoffsetX
+    comBLY = BL_Y - CoMoffsetY
+    comBLZ = BL_Z - CoMoffsetZ
+    comBRX = BR_X - CoMoffsetX
+    comBRY = BR_Y - CoMoffsetY
+    comBRZ = BR_Z - CoMoffsetZ
     # Next lets work out the distance between the CoM and the feet
     FLxzL = math.sqrt((comFLX*comFLX)+(comFLZ*comFLZ))
     FLyzL = math.sqrt((comFLY*comFLY)+(comFLZ*comFLZ))
+    FRxzL = math.sqrt((comFRX*comFRX)+(comFRZ*comFRZ))
+    FRyzL = math.sqrt((comFRY*comFRY)+(comFRZ*comFRZ))
+    BLxzL = math.sqrt((comBLX*comBLX)+(comBLZ*comBLZ))
+    BLyzL = math.sqrt((comBLY*comBLY)+(comBLZ*comBLZ))
+    BRxzL = math.sqrt((comBRX*comBRX)+(comBRZ*comBRZ))
+    BRyzL = math.sqrt((comBRY*comBRY)+(comBRZ*comBRZ))
     # We also need to know the angle of the line between the CoM 
     # and the feet
     FLxA = math.asin(comFLX/FLxzL)
     FLyA = math.asin(comFLY/FLyzL)
+    FRxA = math.asin(comFRX/FRxzL)
+    FRyA = math.asin(comFRY/FRyzL)
+    BLxA = math.asin(comBLX/BLxzL)
+    BLyA = math.asin(comBLY/BLyzL)
+    BRxA = math.asin(comBRX/BRxzL)
+    BRyA = math.asin(comBRY/BRyzL)
+    # Now simpley add the Roll and Pitch to the current abgles
     FLimuXA = FLxA + Roll
     FLimuYA = FLyA + Pitch
+    FRimuXA = FRxA + Roll
+    FRimuYA = FRyA + Pitch
+    BLimuXA = BLxA + Roll
+    BLimuYA = BLyA + Pitch
+    BRimuXA = BRxA + Roll
+    BRimuYA = BRyA + Pitch
+    # Now we can calculate the new X, Y, and Z based on the new 
+    # origin and angle.
     imuFL_X = math.sin(FLimuXA)*FLxzL
     imuFL_Y = math.sin(FLimuYA)*FLyzL
     imuFL_Z = math.cos(FLimuYA)*FLyzL
+    imuFR_X = math.sin(FRimuXA)*FRxzL
+    imuFR_Y = math.sin(FRimuYA)*FRyzL
+    imuFR_Z = math.cos(FRimuYA)*FRyzL
+    imuBL_X = math.sin(BLimuXA)*BLxzL
+    imuBL_Y = math.sin(BLimuYA)*BLyzL
+    imuBL_Z = math.cos(BLimuYA)*BLyzL
+    imuBR_X = math.sin(BRimuXA)*BRxzL
+    imuBR_Y = math.sin(BRimuYA)*BRyzL
+    imuBR_Z = math.cos(BRimuYA)*BRyzL
