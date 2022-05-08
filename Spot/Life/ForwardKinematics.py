@@ -178,3 +178,8 @@ def imuForwardKinematics():
     # and the feet
     FLxA = asin(comFLX/FLxzL)
     FLyA = asin(comFLY/FLyzL)
+    FLimuXA = FLxA + Roll
+    FLimuYA = FLyA + Pitch
+    imuFL_X = math.sin(FLimuXA)*FLxzL
+    imuFL_Y = math.sin(FLimuYA)*FLYzL
+    imuFL_Z = math.cos(FLimuYA)*FLYzL
