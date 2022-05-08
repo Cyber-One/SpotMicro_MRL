@@ -129,24 +129,6 @@ def BR_Leg(data):
 # This can be achived by calling updateServoPositions() first.  #
 #################################################################
 def imuForwardKinematics():
-    #global Pitch
-    #global Roll
-    #global Yaw
-    #global CoMoffsetX
-    #global CoMoffsetY
-    #global CoMoffsetZ
-    #global FL_X
-    #global FR_X
-    #global BL_X
-    #global BR_X
-    #global FL_Y
-    #global FR_Y
-    #global BL_Y
-    #global BR_Y
-    #global FL_Z
-    #global FR_Z
-    #global BL_Z
-    #global BR_Z
     global imuFL_X
     global imuFR_X
     global imuBL_X
