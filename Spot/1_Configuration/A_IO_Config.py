@@ -101,7 +101,7 @@ EnableMPU6050A = True                   # True or False
 MPU6050AAttached = "raspi"
 MPU6050ABus = "1"
 MPU6050AAddr = "0x68"
-MPU6050AgyroXOffset = 0
+MPU6050AgyroXOffset = 2
 MPU6050AgyroYOffset = 0
 MPU6050AgyroZOffset = 0
 
