@@ -29,6 +29,9 @@ Let break the project down to building the hardware and then the software.
 
 [+6) Spot Micro Inverse Kinematics](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docsc/6_Spot_Micro_Inverse_Kinematics.md) 
 
+# Planes of Reference
+
+[+7) Spot Micro Planes of Reference](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/7_Spot_Micro_Planes_of_Reference.md)
 # Parts List
 
 [+Spot Micro Parts List](https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docsc/Spot_Micro_Parts_List.md) 
