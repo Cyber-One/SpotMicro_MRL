@@ -24,7 +24,7 @@ class Foot():
     def __init__(self, type=0, x=0, y=0, z=0):
         # Foot type: 0=Front Left, 1=Front Right, 2=Back Left, 3=Back Right
         self.type = type
-        # Foot Positions, X, Y and X
+        # Foot Positions, X, Y and Z
         self.x = x
         self.y = y
         self.z = z
