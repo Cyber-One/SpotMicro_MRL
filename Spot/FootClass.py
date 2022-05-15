@@ -20,27 +20,32 @@ import math
 
 class Foot():
     # The definition of a single foot
-    
-    def __init__(self, type=0, x=0, y=0, z=0):
-        # Foot type: 0=Front Left, 1=Front Right, 2=Back Left, 3=Back Right
+    # When creating pass in the foot type and the 3 servos for 
+    # the leg.
+    # Foot type: 
+    #   0=Front Left, 
+    #   1=Front Right, 
+    #   2=Back Left, 
+    #   3=Back Right
+    def __init__(self, type=0, Shoulder, Arm, Wrist):
         self.type = type
-        # Foot Positions, X, Y and Z
-        self.x = x
-        self.y = y
-        self.z = z
-        self.ShoulderMin = 50.0
-        self.ShoulderRest = 90.0
-        self.ShoulderMax = 130.0
-        self.ArmMin = 15.0
-        self.ArmRest = 120.0
-        self.ArmMax = 165.0
-        self.WristMin = 50.0
-        self.WristRest = 125.0
-        self.WristMax = 180.0
+        self.ServoS = Shoulder
+        self.ServoA = Arm
+        self.ServoW = Wrist
+        # Servo limits
+        self.ShoulderMin = self.ServoS.getMin()
+        self.ShoulderRest = self.ServoS.getRest()
+        self.ShoulderMax = self.ServoS.getMax()
+        self.ArmMin = self.ServoA.getMin()
+        self.ArmRest = self.ServoA.getRest()
+        self.ArmMax = self.ServoA.getMax()
+        self.WristMin = self.ServoW.getMin()
+        self.WristRest = self.ServoW.getRest()
+        self.WristMax = self.ServoW.getMax()
         # Servo current Angles
-        self.Shoulder = self.ShoulderRest
-        self.Arm = self.ArmRest
-        self.Wrist = self.WristRest
+        self.Shoulder = self.ServoS.getCurrentInputPos()
+        self.Arm = self.ServoA.getCurrentInputPos()
+        self.Wrist = self.ServoW.getCurrentInputPos()
         # Servo angle offsets. I'm assuming a servo range of 0 - 180 degrees
         # the rotation of the servo can give us a better range, but will
         # upset the math, so we need to know the offset.
@@ -65,6 +70,11 @@ class Foot():
         self.CoMxOffset = 0
         self.CoMyOffset = 0
         self.CoMzOffset = 0
+        # Foot Positions, X, Y and Z
+        self.x = 0
+        self.y = 0
+        self.z = 0
+        self.updateFK()
         # IMU/COM based foot position.
         self.imuX = self.x
         self.imuY = self.y
@@ -102,7 +112,20 @@ class Foot():
         self.Pitch = pitch
         self.Roll = roll
         self.imuUpdateFK()
-        
+    
+    # From time to time, the current servo position and the 
+    # actual servo positions can get out of sysnc.
+    # This routine updates the calsses data from the actual 
+    # servo pos.
+    def syncServoPosition(self):
+        self.Shoulder = self.ServoS.getCurrentInputPos()
+        self.Arm = self.ServoA.getCurrentInputPos()
+        self.Wrist = self.ServoW.getCurrentInputPos()
+        self.updateFK()
+    
+    # Using the servo positions passed in, this routine will 
+    # calculate where the foot is relative to the Robot Plane 
+    # of Reference.
     def forwardKinematics(self, shoulder, arm, wrist):
         LTF = math.sqrt(self.LWF*self.LWF + self.LTW*self.LTW - 2*self.LWF*self.LTW*math.cos(math.radians(self.wrist+self.WristOffset)))
         AFW = math.degrees(math.acos((LTF*LTF + self.LTW*self.LTW - self.LWF*self.LWF)/(2*LTF*self.LTW)))
@@ -119,12 +142,17 @@ class Foot():
         Z = math.cos(math.acos(self.LST/LSF) + math.radians(shoulder + self.ShoulderOffset))*LSF
         return {"X":X, "Y":Y, "Z":Z}
 
+    # This routine call the Forward Kinimatics routine passing 
+    # the current servo positions then saves the foot coordinates.
     def updateFK(self):
         data = forwardKinematics(self, self.Shoulder, self.Arm, self.Wrist)
         self.x = data.get("X")
         self.y = data.get("Y")
         self.z = data.get("Z")
-        
+    
+    # This is a simple conversion of the foot coordinates from 
+    # the Robot Plane of Reference to the Inertial Center of 
+    # Mass Plane of Reference based on the coordinates passed in.
     def imuForwardKinimatics(self, X, Y, Z):
         # Lets change our reference from the Robot origin to the 
         # Centre of Mass origin
@@ -142,19 +170,25 @@ class Foot():
         # Now simpley add the Roll and Pitch to the current angles
         imuXZA = xZA + self.Roll
         imuYZA = yZA + self.Pitch
-        # Now we can calculate the new X, Y, and Z based on the new 
-        # origin and angle.
+        # Now we can calculate the new X, Y, and Z based on the 
+        # new origin and angle.
         ImuX = math.sin(imuXZA)*xzL
         ImuY = math.sin(imuYZA)*yzL
         ImuZ = math.cos(imuYZA)*yzL
         retrun {"X":ImuX, "Y":ImuY, "Z":ImuZ}
 
+    # This will make sure the current Inertial Centre of Mass 
+    # Frame of Reference is up to date
     def imuUpdateFK(self):
-        data = self.imuForwardKinimatics(self.x, self.y, self.z)
-        self.imuX = data.get("X")
-        self.imuY = data.get("Y")
-        self.imuZ = data.get("Z")
+        updateFK()
+        IComPoR = self.imuForwardKinimatics(self.x, self.y, self.z)
+        self.imuX = IComPoR.get("X")
+        self.imuY = IComPoR.get("Y")
+        self.imuZ = IComPoR.get("Z")
     
+    # This is a request to work out where to set the servos 
+    # in order to place the foot at the requested coordinates.
+    # the preceding R in the coordinates is the Request.
     def inverseKinematics(self, RX, RY, RZ):
         error = 0
         if self.type == 0 or self.type == 2:
@@ -176,16 +210,17 @@ class Foot():
         LTFz = math.sqrt(LSF*LSF - self.LST*self.LST)
         Ai = math.asin(legX/LSF) # Angle inside
         Ao = math.acos(self.LST/LSF)  # Angle Outside
-        soulder = 180 - math.degrees(Ai + Ao)-self.ShoulderOffset
+        shoulder = 180 - math.degrees(Ai + Ao)-self.ShoulderOffset
         # Now that we know what the shoulder servo angle 
         # should be, lets see it's within the servos 
         #range limit
-        if soulder < self.ShoulderMin:
+        if shoulder < self.ShoulderMin:
             error = 1
-            soulder = self.ShoulderMin
-        if soulder > self.ShoulderMax:
+            shoulder = self.ShoulderMin
+        if shoulder > self.ShoulderMax:
             error = 2
-            soulder = self.ShoulderMax
+            shoulder = self.ShoulderMax
+        # Now we need to work out the Length Top of arm to the Foot
         LTF = math.sqrt((LTFz*LTFz) + (legY*legY))
         if (self.LTW + self.LWF) < LTF:
             # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
@@ -193,7 +228,11 @@ class Foot():
             arm = 0
             wrist = 0
         else:
+            # Now we can work out the wrist servo position.
+            # Python work in Radians
             ServoWR = math.acos(((LTW*LTW) + (LWF*LWF) - (LTF*LTF))/(2*LTW*LWF))
+            # Now that we have the servo position in radian we 
+            # convert it to degrees
             wrist = math.degrees(ServoWR)
             if wrist < self.WristMin:
                 error = 5
@@ -201,11 +240,15 @@ class Foot():
             if wrist > self.WristMax:
                 error = 6
                 wrist = self.WristMax
+            # Now we can work out the for the are relative to the line to the foot
             Afw = math.asin((math.sin(math.radians(wrist))*LWF)/LTF)
-            if LAFy>0:
+            if legY>0:
                 Af = math.acos(LTFz/LTF)
             else:
                 Af = -math.acos(LTFz/LTF)
+            # Then combine with the angle we need the foot at 
+            # relative to the top of the arm to get the servo 
+            # position
             arm = math.degrees(Afw - Af) - self.ArmOffset
             if arm < self.ArmMin:
                 error = 3
@@ -213,5 +256,5 @@ class Foot():
             if arm > self.ArmMax:
                 error = 4
                 arm = self.ArmMax
-        return {"Error":error, "Shoulder":soulder, "Arm":arm, "Wrist":wrist}
+        return {"Error":error, "Shoulder":shoulder, "Arm":arm, "Wrist":wrist}
         #LSFx, LAFy, Zt
