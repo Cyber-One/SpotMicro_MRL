@@ -103,6 +103,11 @@ def updateServoPositions():
     print BL_Z, " BL-Z:", BL_Y, " BL-Y:", BL_X, "BL-X:"
     print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
 
+#################################################################
+# Setup the Foot Class routines.                                #
+#################################################################
+execfile(RuningFolder+'/Life/FootClass.py')
+
 #data.getPitch()
 #data.getRoll()
 #data.getYaw()
