@@ -76,10 +76,10 @@ ShoulderMin = 50.0
 ShoulderRest = 90.0
 ShoulderMax = 130.0
 ArmMin = 15.0
-ArmRest = 120.0
+ArmRest = 138.0
 ArmMax = 165.0
 WristMin = 50.0
-WristRest = 125.0
+WristRest = 50.0
 WristMax = 180.0
 
 # Foot Positions, the numbers here are set by the program
