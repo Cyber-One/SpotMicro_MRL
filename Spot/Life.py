@@ -106,7 +106,7 @@ def updateServoPositions():
 #################################################################
 # Setup the Foot Class routines.                                #
 #################################################################
-execfile(RuningFolder+'/Life/FootClass.py')
+execfile(RuningFolder+'/FootClass.py')
 
 #data.getPitch()
 #data.getRoll()
