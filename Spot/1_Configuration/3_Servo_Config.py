@@ -120,7 +120,7 @@ FRShoulderVelocity = 272
 EnableFRArm = True
 FRArmAttachment = "Back"
 FRArmPin = 1
-FRArmMinPos = 163
+FRArmMinPos = 156
 FRArmMaxPos = 37
 FRArmVelocity = 272
 
@@ -153,8 +153,8 @@ FRWristVelocity = 272
 EnableBLShoulder = True
 BLShoulderAttachment = "Back"
 BLShoulderPin = 8
-BLShoulderMinPos = 144
-BLShoulderMaxPos = 79
+BLShoulderMinPos = 140
+BLShoulderMaxPos = 63
 BLShoulderVelocity = 272
 
 #################################################################
@@ -168,7 +168,7 @@ BLShoulderVelocity = 272
 EnableBLArm = True
 BLArmAttachment = "Back"
 BLArmPin = 9
-BLArmMinPos = 52
+BLArmMinPos = 56
 BLArmMaxPos = 180
 BLArmVelocity = 272
 
@@ -183,7 +183,7 @@ EnableBLWrist = True
 BLWristAttachment = "Back"
 BLWristPin = 10
 BLWristMinPos = 52
-BLWristMaxPos = 160
+BLWristMaxPos = 168
 BLWristVelocity = 272
 
 #################################################################
@@ -201,8 +201,8 @@ BLWristVelocity = 272
 EnableBRShoulder = True
 BRShoulderAttachment = "Back"
 BRShoulderPin = 4
-BRShoulderMinPos = 79
-BRShoulderMaxPos = 150
+BRShoulderMinPos = 74
+BRShoulderMaxPos = 161
 BRShoulderVelocity = 272
 
 #################################################################
@@ -216,7 +216,7 @@ BRShoulderVelocity = 272
 EnableBRArm = True
 BRArmAttachment = "Back"
 BRArmPin = 5
-BRArmMinPos = 171
+BRArmMinPos = 169
 BRArmMaxPos = 41
 BRArmVelocity = 272
 
@@ -230,6 +230,6 @@ BRArmVelocity = 272
 EnableBRWrist = True
 BRWristAttachment = "Back"
 BRWristPin = 6
-BRWristMinPos = 177
-BRWristMaxPos = 72
+BRWristMinPos = 149
+BRWristMaxPos = 43
 BRWristVelocity = 272
