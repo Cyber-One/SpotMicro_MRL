@@ -27,25 +27,22 @@ class Foot():
     #   1=Front Right, 
     #   2=Back Left, 
     #   3=Back Right
-    def __init__(self, type=0, Shoulder, Arm, Wrist):
+    def __init__(self, type=0):
         self.type = type
-        self.ServoS = Shoulder
-        self.ServoA = Arm
-        self.ServoW = Wrist
         # Servo limits
-        self.ShoulderMin = self.ServoS.getMin()
-        self.ShoulderRest = self.ServoS.getRest()
-        self.ShoulderMax = self.ServoS.getMax()
-        self.ArmMin = self.ServoA.getMin()
-        self.ArmRest = self.ServoA.getRest()
-        self.ArmMax = self.ServoA.getMax()
-        self.WristMin = self.ServoW.getMin()
-        self.WristRest = self.ServoW.getRest()
-        self.WristMax = self.ServoW.getMax()
+        self.ShoulderMin = 50.0
+        self.ShoulderRest = 90.0
+        self.ShoulderMax = 130.0
+        self.ArmMin = 15.0
+        self.ArmRest = 138.0
+        self.ArmMax = 165.0
+        self.WristMin = 50.0
+        self.WristRest = 50.0
+        self.WristMax = 180.0
         # Servo current Angles
-        self.Shoulder = self.ServoS.getCurrentInputPos()
-        self.Arm = self.ServoA.getCurrentInputPos()
-        self.Wrist = self.ServoW.getCurrentInputPos()
+        self.Shoulder = self.ShoulderRest
+        self.Arm = self.ArmRest
+        self.Wrist = self.WristRest
         # Servo angle offsets. I'm assuming a servo range of 0 - 180 degrees
         # the rotation of the servo can give us a better range, but will
         # upset the math, so we need to know the offset.
@@ -74,27 +71,41 @@ class Foot():
         self.x = 0
         self.y = 0
         self.z = 0
-        self.updateFK()
+        #self.updateFK()
         # IMU/COM based foot position.
         self.imuX = self.x
         self.imuY = self.y
         self.imuZ = self.z
         
-    def setLWF(self, lwf=self.LWF):
+    def setServos(self, Shoulder, Arm, Wrist):        
+        self.ServoS = Shoulder
+        self.ServoA = Arm
+        self.ServoW = Wrist
+        self.ShoulderMin = self.ServoS.getMin()
+        self.ShoulderRest = self.ServoS.getRest()
+        self.ShoulderMax = self.ServoS.getMax()
+        self.ArmMin = self.ServoA.getMin()
+        self.ArmRest = self.ServoA.getRest()
+        self.ArmMax = self.ServoA.getMax()
+        self.WristMin = self.ServoW.getMin()
+        self.WristRest = self.ServoW.getRest()
+        self.WristMax = self.ServoW.getMax()
+
+    def setLWF(self, lwf):
         self.LWF = lwf
         self.MaxLTF = self.LTW + self.LWF
         
-    def setLTW(self, ltw=self.LTW):
+    def setLTW(self, ltw):
         self.LTW = ltw
         self.MaxLTF = self.LTW + self.LWF
         
-    def setLST(self, lst=self.LST):
+    def setLST(self, lst):
         self.LST = lst
         
-    def setLYS(self, lys=self.LYS):
+    def setLYS(self, lys):
         self.LYS = lys
         
-    def setLXS(self, lxs=self.LXS):
+    def setLXS(self, lxs):
         self.LXS = lxs
     
     def setComOffsets(self, x, y, z):
@@ -127,7 +138,7 @@ class Foot():
     # calculate where the foot is relative to the Robot Plane 
     # of Reference.
     def forwardKinematics(self, shoulder, arm, wrist):
-        LTF = math.sqrt(self.LWF*self.LWF + self.LTW*self.LTW - 2*self.LWF*self.LTW*math.cos(math.radians(self.wrist+self.WristOffset)))
+        LTF = math.sqrt(self.LWF*self.LWF + self.LTW*self.LTW - 2*self.LWF*self.LTW*math.cos(math.radians(wrist+self.WristOffset)))
         AFW = math.degrees(math.acos((LTF*LTF + self.LTW*self.LTW - self.LWF*self.LWF)/(2*LTF*self.LTW)))
         LTFa = math.cos(math.radians(AFW - arm + self.ArmOffset)) * LTF
         LSF = math.sqrt(self.LST*self.LST + LTFa*LTFa)
@@ -145,7 +156,7 @@ class Foot():
     # This routine call the Forward Kinimatics routine passing 
     # the current servo positions then saves the foot coordinates.
     def updateFK(self):
-        data = forwardKinematics(self, self.Shoulder, self.Arm, self.Wrist)
+        data = self.forwardKinematics(self.Shoulder, self.Arm, self.Wrist)
         self.x = data.get("X")
         self.y = data.get("Y")
         self.z = data.get("Z")
@@ -168,19 +179,19 @@ class Foot():
         xzA = math.asin(CoMX/xzL)
         yzA = math.asin(CoMY/yzL)
         # Now simpley add the Roll and Pitch to the current angles
-        imuXZA = xZA + self.Roll
-        imuYZA = yZA + self.Pitch
+        imuXZA = xzA + self.Roll
+        imuYZA = yzA + self.Pitch
         # Now we can calculate the new X, Y, and Z based on the 
         # new origin and angle.
         ImuX = math.sin(imuXZA)*xzL
         ImuY = math.sin(imuYZA)*yzL
         ImuZ = math.cos(imuYZA)*yzL
-        retrun {"X":ImuX, "Y":ImuY, "Z":ImuZ}
+        return {"X":ImuX, "Y":ImuY, "Z":ImuZ}
 
     # This will make sure the current Inertial Centre of Mass 
     # Frame of Reference is up to date
     def imuUpdateFK(self):
-        updateFK()
+        self.updateFK()
         IComPoR = self.imuForwardKinimatics(self.x, self.y, self.z)
         self.imuX = IComPoR.get("X")
         self.imuY = IComPoR.get("Y")
