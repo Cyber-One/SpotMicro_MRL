@@ -160,7 +160,7 @@ class Foot():
         self.x = data.get("X")
         self.y = data.get("Y")
         self.z = data.get("Z")
-    
+
     # This is a simple conversion of the foot coordinates from 
     # the Robot Plane of Reference to the Inertial Center of 
     # Mass Plane of Reference based on the coordinates passed in.
@@ -199,7 +199,7 @@ class Foot():
     
     # This is a request to work out where to set the servos 
     # in order to place the foot at the requested coordinates.
-    # the preceding R in the coordinates is the Request.
+    # The preceding R in the coordinates is the Request.
     def inverseKinematics(self, RX, RY, RZ):
         error = 0
         if self.type == 0 or self.type == 2:
@@ -268,4 +268,49 @@ class Foot():
                 error = 4
                 arm = self.ArmMax
         return {"Error":error, "Shoulder":shoulder, "Arm":arm, "Wrist":wrist}
-        #LSFx, LAFy, Zt
+        
+    # The preceding R in the coordinates is the Request.
+    def imuIK(self, RX, RY, RZ):
+        # For this one it is the reverse process to the 
+        # imuForwardKinimatics translation.
+        # Lets first work out the distance from the foot 
+        # to the ICoMPoR
+        xzL = math.sqrt((RX*RX)+(RZ*RZ))
+        yzL = math.sqrt((RY*RY)+(RZ*RZ))
+        # Now that we have the length, lets work out the angles
+        xzA = math.asin(RZ/xzL)
+        yzA = math.asin(RZ/yzL)
+        # using the angle, lets subtract off that the Pitch and Roll
+        CoMxA = xzA - self.Roll
+        CoMyA = yzA - self.Pitch
+        # With the new angle and the line lengths, we can work 
+        # out the XYZ coordinates of the relative to the CoM
+        CoMx = math.sin(CoMxA)*xzL
+        CoMy = math.sin(CoMyA)*yzL
+        CoMz = math.cos(CoMyA)*yzL
+        # So now that it is orientated correctly, lets adjust the offset
+        RPoRx = CoMx + self.CoMxOffset
+        RPoRy = CoMy + self.CoMyOffset
+        RPoRz = CoMz + self.CoMzOffset
+        return {"X":CoMx, "Y":CoMy, "Z":CoMz}
+
+    # The RX, RY and RZ are the requested coordinated relative
+    # to the Robot Plane of Reference.
+    def moveToRPoR(self, RX, RY, RZ):
+        servos = self.inverseKinematics(RX, RY, RZ)
+        if servos.get("Error") == 0:
+            self.ServoS.moveTo(servos.get("Shoulder"))
+            self.ServoA.moveTo(servos.get("Arm"))
+            self.ServoW.moveTo(servos.get("Wrist"))
+    
+    # The RX, RY and RZ are the requested coordinated relative 
+    # to the Inertial Center of Mass Plane of Reference.
+    def moveToICoMPoR(self, RX, RY, RZ):
+        RPoR = imuIK(RX, RY, RZ)
+        servos = inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
+        if servos.get("Error") == 0:
+            self.ServoS.moveTo(servos.get("Shoulder"))
+            self.ServoA.moveTo(servos.get("Arm"))
+            self.ServoW.moveTo(servos.get("Wrist"))
+    
+
