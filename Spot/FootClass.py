@@ -97,6 +97,7 @@ class Foot():
         self.WristMin = self.ServoW.getMin()
         self.WristRest = self.ServoW.getRest()
         self.WristMax = self.ServoW.getMax()
+        self.syncServoPosition()
 
     def setLWF(self, lwf):
         self.LWF = lwf
@@ -225,6 +226,7 @@ class Foot():
         # the Length Top Foot z
         # we use the z suffix here, because this only 
         # relative to the X-Z plane and not the XY plane
+        #print(self.type, LSF, self.LST, legX, legY, legZ)
         LTFz = math.sqrt(LSF*LSF - self.LST*self.LST)
         Ai = math.asin(legX/LSF) # Angle inside
         Ao = math.acos(self.LST/LSF)  # Angle Outside
@@ -392,6 +394,7 @@ class Feet():
     
     # This routine updates the Pitch and Roll of each of the sub classes
     def updateIMU(self, pitch, roll):
+        print("UpdateIMU")
         if self.Pitch <> pitch or self.Roll <> roll:
             self.Pitch = pitch
             self.Roll = roll
@@ -404,6 +407,7 @@ class Feet():
 
 
     def levelRobot(self):
+        print("Level Robot")
         FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
         FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
         BLdata = self.BL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
