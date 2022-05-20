@@ -350,7 +350,7 @@ class Foot():
         else:
             return (0)
     
-    def moveToLevel(self):
+    #def moveToLevel(self):
         
     
 # The Feet class creates 4 Foot objects based on the Foot class.
@@ -378,11 +378,11 @@ class Feet():
         elif state == 1:
             self.autoLevel = 1
     
-    def enableAutoLevel(self)
+    def enableAutoLevel(self):
         self.autoLevel = 1
         self.levelRobot()
     
-    def disableAutoLevel(self)
+    def disableAutoLevel(self):
         self.autoLevel = 0
     
     
