@@ -18,6 +18,13 @@
 #################################################################
 import math
 
+# The Foot class contains a number of routines required to
+# manage the location of a single foot.
+# This include links to the Servos for that foot and calculating
+# the position based on forward kinematics and also working out
+# the required servo positions for a requested set of X, Y, Z
+# coordinates in eaither the Robot Plane of Reference or the
+# Inertial Centre of Mass Plane of Reference.
 class Foot():
     # The definition of a single foot
     # When creating pass in the foot type and the 3 servos for 
@@ -292,25 +299,117 @@ class Foot():
         RPoRx = CoMx + self.CoMxOffset
         RPoRy = CoMy + self.CoMyOffset
         RPoRz = CoMz + self.CoMzOffset
-        return {"X":CoMx, "Y":CoMy, "Z":CoMz}
+        return {"X":RPoRx, "Y":RPoRy, "Z":RPoRz}
 
     # The RX, RY and RZ are the requested coordinated relative
     # to the Robot Plane of Reference.
+    # This also stores in the class the last set of positions 
+    # we requested the servos move to.
     def moveToRPoR(self, RX, RY, RZ):
         servos = self.inverseKinematics(RX, RY, RZ)
         if servos.get("Error") == 0:
-            self.ServoS.moveTo(servos.get("Shoulder"))
-            self.ServoA.moveTo(servos.get("Arm"))
-            self.ServoW.moveTo(servos.get("Wrist"))
+            self.Shoulder = servos.get("Shoulder")
+            self.Arm = servos.get("Arm")
+            self.Wrist = servos.get("Wrist")
+            self.ServoS.moveTo(self.Shoulder)
+            self.ServoA.moveTo(self.Arm)
+            self.ServoW.moveTo(self.Wrist)
+            return (1)
+        else:
+            return (0)
+    
+    def rotateAboutCoM(self, pitch, roll)
+        # self.imuX = self.x
+        # self.imuY = self.y
+        # self.imuZ = self.z
+        xzL = math.sqrt((self.imuX*self.imuX)+(self.imuZ*self.imuZ))
+        yzL = math.sqrt((self.imuY*self.imuY)+(self.imuZ*self.imuZ))
+        xzA = math.asin(self.imuZ/xzL) + pitch
+        yzA = math.asin(self.imuZ/yzL) + roll
+        CoMx = math.sin(CoMxA)*xzL
+        CoMy = math.sin(CoMyA)*yzL
+        CoMz = math.cos(CoMyA)*yzL
+        return {"X":CoMx, "Y":CoMy, "Z":CoMz}
+
     
     # The RX, RY and RZ are the requested coordinated relative 
     # to the Inertial Center of Mass Plane of Reference.
+    # This also stores in the class the last set of positions 
+    # we requested the servos move to.
     def moveToICoMPoR(self, RX, RY, RZ):
         RPoR = imuIK(RX, RY, RZ)
         servos = inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         if servos.get("Error") == 0:
-            self.ServoS.moveTo(servos.get("Shoulder"))
-            self.ServoA.moveTo(servos.get("Arm"))
-            self.ServoW.moveTo(servos.get("Wrist"))
+            self.Shoulder = servos.get("Shoulder")
+            self.Arm = servos.get("Arm")
+            self.Wrist = servos.get("Wrist")
+            self.ServoS.moveTo(self.Shoulder)
+            self.ServoA.moveTo(self.Arm)
+            self.ServoW.moveTo(self.Wrist)
+            return (1)
+        else:
+            return (0)
     
+    def moveToLevel(self):
+        
+    
+# The Feet class creates 4 Foot objects based on the Foot class.
+# It also provide a number of common update interfaces such as
+# update the roll and pitch of the robot.
+# It also has a number of unified movement functions that
+# combine all 4 feet to assist with ballance and other
+# coordinated movements.
+class Feet():
+    def __init__(self):
+        self.FL = Foot(0)
+        self.FR = Foot(1)
+        self.BL = Foot(2)
+        self.BR = Foot(3)
+        self.Pitch = 0
+        self.Roll = 0
+        self.targetPitch = 0
+        self.tergetRoll = 0
+        self.autoLevel = 0
+    
+    # enable or disable the auto level feature.
+    def setAutoLevel(self, state):
+        if state == 0:
+            self.autoLevel = 0
+        elif state == 1:
+            self.autoLevel = 1
+    
+    def enableAutoLevel(self)
+        self.autoLevel = 1
+        self.levelRobot()
+    
+    def disableAutoLevel(self)
+        self.autoLevel = 0
+    
+    
+    def setLevel(self, pitch, roll):
+        self.targetPitch = pitch
+        self.targetRoll = roll
+    
+    # This routine updates the Pitch and Roll of each of the sub classes
+    def updateIMU(self, pitch, roll):
+        if self.Pitch <> pitch or self.Roll <> roll:
+            self.Pitch = pitch
+            self.Roll = roll
+            self.FL.setIMUdata(self.Pitch, self.Roll)
+            self.FR.setIMUdata(self.Pitch, self.Roll)
+            self.BL.setIMUdata(self.Pitch, self.Roll)
+            self.BR.setIMUdata(self.Pitch, self.Roll)
+            if self.autoLevel == 1:
+                self.levelRobot()
 
+
+    def levelRobot(self):
+        FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
+        FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
+        BLdata = self.BL.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
+        BRdata = self.BR.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
+        self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
+        self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
+        self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
+        self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
+        
