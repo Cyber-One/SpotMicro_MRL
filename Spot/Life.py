@@ -108,6 +108,14 @@ def updateServoPositions():
 #################################################################
 execfile(RuningFolder+'/FootClass.py')
 
+legs = Feet()
+legs.FL.setServos(FLShoulder, FLArm, FLWrist)
+legs.FR.setServos(FRShoulder, FRArm, FRWrist)
+legs.BL.setServos(BLShoulder, BLArm, BLWrist)
+legs.BR.setServos(BRShoulder, BRArm, BRWrist)
+legs.enableAutoLevel()
+
+
 #data.getPitch()
 #data.getRoll()
 #data.getYaw()
@@ -119,6 +127,7 @@ if runtime.isStarted("MPU6050A"):
         Pitch = data.pitch
         Roll = data.roll
         Yaw = data.yaw
+        legs.updateIMU(data.pitch, data.roll)
     python.subscribe('MPU6050A', 'publishOrientation', 'python', 'updateOrientation')
 
 #################################################################
