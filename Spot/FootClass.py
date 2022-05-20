@@ -75,9 +75,9 @@ class Foot():
         self.CoMyOffset = 0
         self.CoMzOffset = 0
         # Foot Positions, X, Y and Z
-        self.x = 0
-        self.y = 0
-        self.z = 0
+        self.x = 1
+        self.y = 1
+        self.z = 1
         #self.updateFK()
         # IMU/COM based foot position.
         self.imuX = self.x
@@ -326,9 +326,9 @@ class Foot():
         yzL = math.sqrt((self.imuY*self.imuY)+(self.imuZ*self.imuZ))
         xzA = math.asin(self.imuZ/xzL) + pitch
         yzA = math.asin(self.imuZ/yzL) + roll
-        CoMx = math.sin(CoMxA)*xzL
-        CoMy = math.sin(CoMyA)*yzL
-        CoMz = math.cos(CoMyA)*yzL
+        CoMx = math.sin(xzA)*xzL
+        CoMy = math.sin(yzA)*yzL
+        CoMz = math.cos(yzA)*yzL
         return {"X":CoMx, "Y":CoMy, "Z":CoMz}
 
     
@@ -337,8 +337,8 @@ class Foot():
     # This also stores in the class the last set of positions 
     # we requested the servos move to.
     def moveToICoMPoR(self, RX, RY, RZ):
-        RPoR = imuIK(RX, RY, RZ)
-        servos = inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
+        RPoR = self.imuIK(RX, RY, RZ)
+        servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         if servos.get("Error") == 0:
             self.Shoulder = servos.get("Shoulder")
             self.Arm = servos.get("Arm")
@@ -368,7 +368,7 @@ class Feet():
         self.Pitch = 0
         self.Roll = 0
         self.targetPitch = 0
-        self.tergetRoll = 0
+        self.targetRoll = 0
         self.autoLevel = 0
     
     # enable or disable the auto level feature.
@@ -404,10 +404,10 @@ class Feet():
 
 
     def levelRobot(self):
-        FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
-        FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
-        BLdata = self.BL.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
-        BRdata = self.BR.rotateAboutCoM(self.targetPitch-self.pitch, self.targetRoll-self.roll)
+        FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        BLdata = self.BL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        BRdata = self.BR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
         self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
         self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
         self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
