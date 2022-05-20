@@ -318,7 +318,7 @@ class Foot():
         else:
             return (0)
     
-    def rotateAboutCoM(self, pitch, roll)
+    def rotateAboutCoM(self, pitch, roll):
         # self.imuX = self.x
         # self.imuY = self.y
         # self.imuZ = self.z
