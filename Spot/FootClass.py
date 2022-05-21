@@ -140,7 +140,7 @@ class Foot():
         self.Shoulder = self.ServoS.getCurrentInputPos()
         self.Arm = self.ServoA.getCurrentInputPos()
         self.Wrist = self.ServoW.getCurrentInputPos()
-        self.updateFK()
+        self.imuUpdateFK()
     
     # Using the servo positions passed in, this routine will 
     # calculate where the foot is relative to the Robot Plane 
@@ -246,7 +246,7 @@ class Foot():
             # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
             error = 7
             arm = 0
-            wrist = 0
+            wrist = self.WristMax
         else:
             # Now we can work out the wrist servo position.
             # Python work in Radians
@@ -316,9 +316,9 @@ class Foot():
             self.ServoS.moveTo(self.Shoulder)
             self.ServoA.moveTo(self.Arm)
             self.ServoW.moveTo(self.Wrist)
-            return (1)
+            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
         else:
-            return (0)
+            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
     
     def rotateAboutCoM(self, pitch, roll):
         # self.imuX = self.x
@@ -348,9 +348,9 @@ class Foot():
             self.ServoS.moveTo(self.Shoulder)
             self.ServoA.moveTo(self.Arm)
             self.ServoW.moveTo(self.Wrist)
-            return (1)
+            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
         else:
-            return (0)
+            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
     
     #def moveToLevel(self):
         
@@ -392,9 +392,15 @@ class Feet():
         self.targetPitch = pitch
         self.targetRoll = roll
     
+    def syncServos(self):
+        self.FL.syncServoPosition()
+        self.FR.syncServoPosition()
+        self.BL.syncServoPosition()
+        self.BR.syncServoPosition()
+
     # This routine updates the Pitch and Roll of each of the sub classes
     def updateIMU(self, pitch, roll):
-        print("UpdateIMU")
+        #print("UpdateIMU")
         if self.Pitch <> pitch or self.Roll <> roll:
             self.Pitch = pitch
             self.Roll = roll
@@ -412,8 +418,8 @@ class Feet():
         FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
         BLdata = self.BL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
         BRdata = self.BR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
-        self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
-        self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
-        self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
-        self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
+        print("FL", FLdata, self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z")))
+        print("FR", FRdata, self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z")))
+        print("BL", BLdata, self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z")))
+        print("BR", BRdata, self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z")))
         
