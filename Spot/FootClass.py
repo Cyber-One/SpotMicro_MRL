@@ -17,6 +17,7 @@
 #                                                               #
 #################################################################
 import math
+print("creating the Foot and Feet classes")
 
 # The Foot class contains a number of routines required to
 # manage the location of a single foot.
@@ -54,14 +55,18 @@ class Foot():
         # the rotation of the servo can give us a better range, but will
         # upset the math, so we need to know the offset.
         self.ShoulderOffset = 0
-        self.ArmOffset = -90
+        self.ArmOffset = 90
         self.WristOffset = 0
         # Length between the Wrist joint and the foot
-        self.LWF = 124   
+        self.LWF = 124
+        self.LWF2 = self.LWF * self.LWF
         # Length between the Arms joint and the Wrist joint
-        self.LTW = 110   
+        self.LTW = 110
+        self.LTW2 = self.LTW * self.LTW
+        self.LTWxLWFx2 = 2 * self.LTW * self.LWF
         # Length between the Shoulder joint and the center line of the Arm
-        self.LST = 55    
+        self.LST = 55 
+        self.LST2 = self.LST * self.LST
         # Length between the center Y plane and the shoulder joint
         self.LYS = 90    
         # Length between the center X plane and the shoulder joint
@@ -101,14 +106,19 @@ class Foot():
 
     def setLWF(self, lwf):
         self.LWF = lwf
+        self.LWF2 = self.LWF * self.LWF
+        self.LTWxLWFx2 = 2 * self.LTW * self.LWF
         self.MaxLTF = self.LTW + self.LWF
         
     def setLTW(self, ltw):
         self.LTW = ltw
+        self.LTW2 = self.LTW * self.LTW
+        self.LTWxLWFx2 = 2 * self.LTW * self.LWF
         self.MaxLTF = self.LTW + self.LWF
         
     def setLST(self, lst):
         self.LST = lst
+        self.LST2 = self.LST * self.LST
         
     def setLYS(self, lys):
         self.LYS = lys
@@ -150,19 +160,23 @@ class Foot():
         AFW = math.degrees(math.acos((LTF*LTF + self.LTW*self.LTW - self.LWF*self.LWF)/(2*LTF*self.LTW)))
         LTFa = math.cos(math.radians(AFW - arm + self.ArmOffset)) * LTF
         LSF = math.sqrt(self.LST*self.LST + LTFa*LTFa)
+        workX = (math.sin(math.acos(self.LST/LSF)+math.radians(shoulder + self.ShoulderOffset))*LSF)
         if self.type == 0 or self.type == 2:
-            X = (math.sin(math.acos(self.LST/LSF)+math.radians(shoulder + self.ShoulderOffset))*LSF)-self.LXS
+            X = -workX - self.LXS
         else:
-            X = (math.sin(math.acos(self.LST/LSF)+math.radians(shoulder + self.ShoulderOffset))*LSF)+self.LXS
+            X = workX + self.LXS
+        workY = (LTF * math.sin(math.radians(arm - AFW + self.ArmOffset)))
         if self.type == 0 or self.type == 1:
-            Y = (LTF * math.sin(math.radians(arm - AFW + self.ArmOffset)))+self.LYS
+            Y = workY + self.LYS
         else:
-            Y = (LTF * math.sin(math.radians(arm - AFW + self.ArmOffset)))-self.LYS
+            Y = workY - self.LYS
         Z = math.cos(math.acos(self.LST/LSF) + math.radians(shoulder + self.ShoulderOffset))*LSF
-        return {"X":X, "Y":Y, "Z":Z}
+        # Only need the X, Y and Z, there rest is for debugging :-)
+        return {"X":X, "Y":Y, "Z":Z, "Shoulder":shoulder, "Arm":arm, "Wrist":wrist, "LTF":LTF, "AFW":AFW, "LTFa":LTFa, "LSF":LSF, "WorkY":workY, "WorkX":workX}
 
     # This routine call the Forward Kinimatics routine passing 
-    # the current servo positions then saves the foot coordinates.
+    # the current remembered servo positions then saves the 
+    # foot coordinates.
     def updateFK(self):
         data = self.forwardKinematics(self.Shoulder, self.Arm, self.Wrist)
         self.x = data.get("X")
@@ -193,7 +207,8 @@ class Foot():
         # new origin and angle.
         ImuX = math.sin(imuXZA)*xzL
         ImuY = math.sin(imuYZA)*yzL
-        ImuZ = math.cos(imuYZA)*yzL
+        ImuZ = -math.cos(imuYZA)*yzL
+        #print("ImuX:", ImuX, "ImuY:", ImuY, "ImuZ:", ImuZ, "imuXZA:", imuXZA, "imuYZA:", imuYZA, "xzA:", xzA, "yzA:", yzA, "xzL:", xzL, "yzL:", yzL)
         return {"X":ImuX, "Y":ImuY, "Z":ImuZ}
 
     # This will make sure the current Inertial Centre of Mass 
@@ -220,14 +235,15 @@ class Foot():
             legY = RY + self.LYS
         legZ = RZ
         # Lets work out the Length Shoulder Foot (LSF)
-        LSF = math.sqrt((legX*legX) + (legZ*legZ))
+        LSF = math.sqrt((legX * legX) + (legZ * legZ))
         # Now that we have Length Shoulder Foot and 
         # we know Length Shoulder Top, lets work out 
         # the Length Top Foot z
         # we use the z suffix here, because this only 
         # relative to the X-Z plane and not the XY plane
-        #print(self.type, LSF, self.LST, legX, legY, legZ)
-        LTFz = math.sqrt(LSF*LSF - self.LST*self.LST)
+        print(self.type, LSF, self.LST, self.LST2, legX, legY, legZ)
+        sleep(0.1)
+        LTFz = math.sqrt((LSF * LSF) - self.LST2)
         Ai = math.asin(legX/LSF) # Angle inside
         Ao = math.acos(self.LST/LSF)  # Angle Outside
         shoulder = 180 - math.degrees(Ai + Ao)-self.ShoulderOffset
@@ -250,7 +266,11 @@ class Foot():
         else:
             # Now we can work out the wrist servo position.
             # Python work in Radians
-            ServoWR = math.acos(((LTW*LTW) + (LWF*LWF) - (LTF*LTF))/(2*LTW*LWF))
+            WristCosC = (self.LTW2 + self.LWF2 - (LTF * LTF)) / self.LTWxLWFx2
+            print("IK ServoWrist cosC:", WristCosC)
+            if WristCosC > 1.0:
+                WristCosC = 1.0
+            ServoWR = math.acos(WristCosC)
             # Now that we have the servo position in radian we 
             # convert it to degrees
             wrist = math.degrees(ServoWR)
@@ -261,7 +281,7 @@ class Foot():
                 error = 6
                 wrist = self.WristMax
             # Now we can work out the for the are relative to the line to the foot
-            Afw = math.asin((math.sin(math.radians(wrist))*LWF)/LTF)
+            Afw = math.asin((math.sin(math.radians(wrist))*self.LWF)/LTF)
             if legY>0:
                 Af = math.acos(LTFz/LTF)
             else:
@@ -300,7 +320,7 @@ class Foot():
         # So now that it is orientated correctly, lets adjust the offset
         RPoRx = CoMx + self.CoMxOffset
         RPoRy = CoMy + self.CoMyOffset
-        RPoRz = CoMz + self.CoMzOffset
+        RPoRz = -CoMz + self.CoMzOffset
         return {"X":RPoRx, "Y":RPoRy, "Z":RPoRz}
 
     # The RX, RY and RZ are the requested coordinated relative
@@ -326,11 +346,11 @@ class Foot():
         # self.imuZ = self.z
         xzL = math.sqrt((self.imuX*self.imuX)+(self.imuZ*self.imuZ))
         yzL = math.sqrt((self.imuY*self.imuY)+(self.imuZ*self.imuZ))
-        xzA = math.asin(self.imuZ/xzL) + pitch
-        yzA = math.asin(self.imuZ/yzL) + roll
+        xzA = math.asin(self.imuX/xzL) + pitch
+        yzA = math.asin(self.imuY/yzL) + roll
         CoMx = math.sin(xzA)*xzL
         CoMy = math.sin(yzA)*yzL
-        CoMz = math.cos(yzA)*yzL
+        CoMz = -math.cos(yzA)*yzL
         return {"X":CoMx, "Y":CoMy, "Z":CoMz}
 
     
@@ -340,6 +360,7 @@ class Foot():
     # we requested the servos move to.
     def moveToICoMPoR(self, RX, RY, RZ):
         RPoR = self.imuIK(RX, RY, RZ)
+        #print("moveToICoMPoR:", RPoR)
         servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         if servos.get("Error") == 0:
             self.Shoulder = servos.get("Shoulder")
@@ -413,13 +434,17 @@ class Feet():
 
 
     def levelRobot(self):
-        print("Level Robot")
+        print("Level Robot - Pitch:", self.Pitch, "Roll:", self.Roll)
         FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        print("FL", FLdata)
         FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        print("FR", FRdata)
         BLdata = self.BL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        print("BL", BLdata)
         BRdata = self.BR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
-        print("FL", FLdata, self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z")))
-        print("FR", FRdata, self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z")))
-        print("BL", BLdata, self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z")))
-        print("BR", BRdata, self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z")))
+        print("BR", BRdata)
+        print("FL", self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z")))
+        print("FR", self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z")))
+        print("BL", self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z")))
+        print("BR", self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z")))
         

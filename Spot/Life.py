@@ -113,7 +113,7 @@ legs.FL.setServos(FLShoulder, FLArm, FLWrist)
 legs.FR.setServos(FRShoulder, FRArm, FRWrist)
 legs.BL.setServos(BLShoulder, BLArm, BLWrist)
 legs.BR.setServos(BRShoulder, BRArm, BRWrist)
-legs.enableAutoLevel()
+legs.disableAutoLevel()
 
 
 #data.getPitch()
