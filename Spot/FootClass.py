@@ -37,7 +37,7 @@ class Foot():
     #   3=Back Right
     def __init__(self, type=0):
         self.type = type
-        # Servo limits
+        # Servo limits, this is guess work
         self.ShoulderMin = 50.0
         self.ShoulderRest = 90.0
         self.ShoulderMax = 130.0
@@ -47,31 +47,30 @@ class Foot():
         self.WristMin = 50.0
         self.WristRest = 50.0
         self.WristMax = 180.0
-        # Servo current Angles
+        # Servo current Angles, guess work based on the rest position
         self.Shoulder = self.ShoulderRest
         self.Arm = self.ArmRest
         self.Wrist = self.WristRest
-        # Servo angle offsets. I'm assuming a servo range of 0 - 180 degrees
-        # the rotation of the servo can give us a better range, but will
-        # upset the math, so we need to know the offset.
+        # Servo angle offsets. I'm assuming a servo range of 
+        # 0 - 180 degrees the rotation of the servo body can 
+        # give us a better usable range, but will upset the math, 
+        # so we need to know the offset.
         self.ShoulderOffset = 0
         self.ArmOffset = 90
         self.WristOffset = 0
         # Length between the Wrist joint and the foot
         self.LWF = 124
-        self.LWF2 = self.LWF * self.LWF
         # Length between the Arms joint and the Wrist joint
         self.LTW = 110
-        self.LTW2 = self.LTW * self.LTW
-        self.LTWxLWFx2 = 2 * self.LTW * self.LWF
         # Length between the Shoulder joint and the center line of the Arm
         self.LST = 55 
-        self.LST2 = self.LST * self.LST
         # Length between the center Y plane and the shoulder joint
         self.LYS = 90    
         # Length between the center X plane and the shoulder joint
         self.LXS = 38
-        self.MaxLTF = self.LTW + self.LWF
+        # to help speed up the class, we will use some 
+        # pre-calculated values
+        self.calulateStaticValues()
         # IMU data
         self.Pitch = 0
         self.Roll = 0
@@ -89,6 +88,74 @@ class Foot():
         self.imuY = self.y
         self.imuZ = self.z
         
+    def __repr__(self):
+        return "Foot Class"
+        
+    def __str__(self):
+        if self.type == 0:
+            print_str = "Front Left Foot Class Status"
+        elif self.type == 1:
+            print_str = "Front Right Foot Class Status"
+        elif self.type == 2:
+            print_str = "Back Left Foot Class Status"
+        else:
+            print_str = "Back Right Foot Class Status"
+        print ("  Servos - Shoulder: %.2f Arm: %.2f Wrist: %.2f" % (self.Shoulder, self.Arm, self.Wrist))
+        print ("  RFoR - X:%.2f, Y:%.2f, Z:%.2f" % (self.x, self.y, self.z))
+        print ("  IComFoR - X:%.2f, Y:%.2f, Z:%.2f" % (self.imuX, self.imuY, self.imuZ))
+        return print_str
+
+    # Some maths operation can be slow, so if we don't need to 
+    # use math operations, we can speed up the program speed.
+    # While we need math to work out these values, the values
+    # rearly change, so we only need to calculate them when 
+    # they do change.
+    def calulateStaticValues(self):
+        self.MaxLTF = self.LTW + self.LWF
+        self.LWF2 = self.LWF * self.LWF
+        self.LTW2 = self.LTW * self.LTW
+        self.LTWxLWFx2 = 2 * self.LTW * self.LWF
+        self.LST2 = self.LST * self.LST
+    
+    def setLWF(self, lwf):
+        self.LWF = lwf
+        self.calulateStaticValues()
+        
+    def setLTW(self, ltw):
+        self.LTW = ltw
+        self.calulateStaticValues()
+        
+    def setLST(self, lst):
+        self.LST = lst
+        self.calulateStaticValues()
+        
+    def setLYS(self, lys):
+        self.LYS = lys
+        
+    def setLXS(self, lxs):
+        self.LXS = lxs
+    
+    def setComOffsets(self, x, y, z):
+        self.CoMxOffset = x
+        self.CoMyOffset = y
+        self.CoMzOffset = z
+        
+    # The data coming back from the Inertial Measurement Unit
+    # should be used to update this function.
+    #This will trigger the current feet position in the Inertial 
+    # Centre of Mass Plane of Reference to be updated as well.
+    def setIMUdata(self, pitch, roll):
+        self.Pitch = pitch
+        self.Roll = roll
+        self.imuUpdateFK()
+
+    # This class needs to know how to find your servos.
+    # After creating the class object, the next thing you need 
+    # to do is give a link to the servos in question.
+    # Setting the servo links will then trigger the reading of 
+    # the servos current min, max and rest positions as well as 
+    # triggereing a position sync so the class knows where the 
+    # servo is set to be.
     def setServos(self, Shoulder, Arm, Wrist):        
         self.ServoS = Shoulder
         self.ServoA = Arm
@@ -104,57 +171,48 @@ class Foot():
         self.WristMax = self.ServoW.getMax()
         self.syncServoPosition()
 
-    def setLWF(self, lwf):
-        self.LWF = lwf
-        self.LWF2 = self.LWF * self.LWF
-        self.LTWxLWFx2 = 2 * self.LTW * self.LWF
-        self.MaxLTF = self.LTW + self.LWF
-        
-    def setLTW(self, ltw):
-        self.LTW = ltw
-        self.LTW2 = self.LTW * self.LTW
-        self.LTWxLWFx2 = 2 * self.LTW * self.LWF
-        self.MaxLTF = self.LTW + self.LWF
-        
-    def setLST(self, lst):
-        self.LST = lst
-        self.LST2 = self.LST * self.LST
-        
-    def setLYS(self, lys):
-        self.LYS = lys
-        
-    def setLXS(self, lxs):
-        self.LXS = lxs
+    # From time to time, the current servo position and the 
+    # actual servo positions can get out of sysnc, if something 
+    # from outside this class commands the servo to move.
+    # This routine updates the calsses data from the actual 
+    # servo positions then calls to update the Forward Kinematics
+    # X,Z and Z position.
+    def syncServoPosition(self):
+        self.Shoulder = self.ServoS.getTargetPos()
+        self.Arm = self.ServoA.getTargetPos()
+        self.Wrist = self.ServoW.getTargetPos()
+        self.imuUpdateFK()
     
-    def setComOffsets(self, x, y, z):
-        self.CoMxOffset = x
-        self.CoMyOffset = y
-        self.CoMzOffset = z
-        
+    # When we need to move the joints of the robot, using this 
+    # function will make sure everything stays syncronized.
     def setServoPos(self, shoulder, arm, wrist):
         self.Shoulder = shoulder
         self.Arm = arm
         self.Wrist = wrist
+        self.ServoS.moveTo(self.Shoulder)
+        self.ServoA.moveTo(self.Arm)
+        self.ServoW.moveTo(self.Wrist)
         self.updateFK()
         
-    def setIMUdata(self, pitch, roll):
-        self.Pitch = pitch
-        self.Roll = roll
-        self.imuUpdateFK()
+    # If for any reason you need to adjust the Min or Max of a 
+    # servo, then you need to also update the class.
+    def updateServo(self):
+        self.ShoulderMin = self.ServoS.getMin()
+        self.ShoulderRest = self.ServoS.getRest()
+        self.ShoulderMax = self.ServoS.getMax()
+        self.ArmMin = self.ServoA.getMin()
+        self.ArmRest = self.ServoA.getRest()
+        self.ArmMax = self.ServoA.getMax()
+        self.WristMin = self.ServoW.getMin()
+        self.WristRest = self.ServoW.getRest()
+        self.WristMax = self.ServoW.getMax()
+        self.syncServoPosition()
     
-    # From time to time, the current servo position and the 
-    # actual servo positions can get out of sysnc.
-    # This routine updates the calsses data from the actual 
-    # servo pos.
-    def syncServoPosition(self):
-        self.Shoulder = self.ServoS.getCurrentInputPos()
-        self.Arm = self.ServoA.getCurrentInputPos()
-        self.Wrist = self.ServoW.getCurrentInputPos()
-        self.imuUpdateFK()
-    
+
     # Using the servo positions passed in, this routine will 
     # calculate where the foot is relative to the Robot Plane 
-    # of Reference.
+    # of Reference. (RPoR) Since this could be used in planning
+    # the current position in the class is not updated.
     def forwardKinematics(self, shoulder, arm, wrist):
         LTF = math.sqrt(self.LWF*self.LWF + self.LTW*self.LTW - 2*self.LWF*self.LTW*math.cos(math.radians(wrist+self.WristOffset)))
         AFW = math.degrees(math.acos((LTF*LTF + self.LTW*self.LTW - self.LWF*self.LWF)/(2*LTF*self.LTW)))
@@ -176,7 +234,7 @@ class Foot():
 
     # This routine call the Forward Kinimatics routine passing 
     # the current remembered servo positions then saves the 
-    # foot coordinates.
+    # foot coordinates to the Class storage.
     def updateFK(self):
         data = self.forwardKinematics(self.Shoulder, self.Arm, self.Wrist)
         self.x = data.get("X")
@@ -241,8 +299,6 @@ class Foot():
         # the Length Top Foot z
         # we use the z suffix here, because this only 
         # relative to the X-Z plane and not the XY plane
-        print(self.type, LSF, self.LST, self.LST2, legX, legY, legZ)
-        sleep(0.1)
         LTFz = math.sqrt((LSF * LSF) - self.LST2)
         Ai = math.asin(legX/LSF) # Angle inside
         Ao = math.acos(self.LST/LSF)  # Angle Outside
@@ -258,6 +314,8 @@ class Foot():
             shoulder = self.ShoulderMax
         # Now we need to work out the Length Top of arm to the Foot
         LTF = math.sqrt((LTFz*LTFz) + (legY*legY))
+        print("Leg Number %d, X:%0.1f, Y:%0.1f, Z:%0.1f, LSF:%0.3f, LTF:%0.2f, LST:%0.3f, LST2:%0.3f" % (self.type, legX, legY, legZ, LSF, LTF, self.LST, self.LST2))
+        sleep(0.1)
         if (self.LTW + self.LWF) < LTF:
             # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
             error = 7
@@ -277,11 +335,15 @@ class Foot():
             if wrist < self.WristMin:
                 error = 5
                 wrist = self.WristMin
+                ServoWR = math.radians(wrist)
             if wrist > self.WristMax:
                 error = 6
                 wrist = self.WristMax
+                ServoWR = math.radians(wrist)
             # Now we can work out the for the are relative to the line to the foot
-            Afw = math.asin((math.sin(math.radians(wrist))*self.LWF)/LTF)
+            print("Afw = asin(%.3f), sin(wrist):%.3f, LWF:%.3f, LTF:%0.3f" % ((math.sin(ServoWR)*self.LWF)/LTF, math.sin(ServoWR), self.LWF, LTF))
+            sleep(0.1)
+            Afw = math.asin((math.sin(ServoWR)*self.LWF)/LTF)
             if legY>0:
                 Af = math.acos(LTFz/LTF)
             else:
@@ -330,12 +392,7 @@ class Foot():
     def moveToRPoR(self, RX, RY, RZ):
         servos = self.inverseKinematics(RX, RY, RZ)
         if servos.get("Error") == 0:
-            self.Shoulder = servos.get("Shoulder")
-            self.Arm = servos.get("Arm")
-            self.Wrist = servos.get("Wrist")
-            self.ServoS.moveTo(self.Shoulder)
-            self.ServoA.moveTo(self.Arm)
-            self.ServoW.moveTo(self.Wrist)
+            setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
             return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
         else:
             return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
@@ -363,18 +420,11 @@ class Foot():
         #print("moveToICoMPoR:", RPoR)
         servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         if servos.get("Error") == 0:
-            self.Shoulder = servos.get("Shoulder")
-            self.Arm = servos.get("Arm")
-            self.Wrist = servos.get("Wrist")
-            self.ServoS.moveTo(self.Shoulder)
-            self.ServoA.moveTo(self.Arm)
-            self.ServoW.moveTo(self.Wrist)
+            setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
             return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
         else:
             return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
-    
-    #def moveToLevel(self):
-        
+       
     
 # The Feet class creates 4 Foot objects based on the Foot class.
 # It also provide a number of common update interfaces such as
@@ -394,6 +444,27 @@ class Feet():
         self.targetRoll = 0
         self.autoLevel = 0
     
+    def __repr__(self):
+        PrintStr = "Feet Class - "
+        if self.autoLevel == 1:
+            AutoLevelStr = "Auto Level is On "
+        else:
+            AutoLevelStr = "Auto Level is Off "
+        return PrintStr + AutoLevelStr
+
+    def __str__(self):
+        print("Feet Class Status")
+        print(self.FL)
+        print(self.FR)
+        print(self.BL)
+        print(self.BR)
+        print("Roll:%.2f[%.2f] Pitch:%.2f[%.2f] TargetRoll:%.2f TargetPitch:%.2f Radians[Degrees]" % (self.Roll, math.degrees(self.Roll), self.Pitch, math.degrees(self.Pitch), self.targetRoll, self.targetPitch))
+        if self.autoLevel == 1:
+            al_State = "Auto Level is On"
+        else:
+            al_State = "Auto Level is Off"
+        return al_State
+        
     # enable or disable the auto level feature.
     def setAutoLevel(self, state):
         if state == 0:
