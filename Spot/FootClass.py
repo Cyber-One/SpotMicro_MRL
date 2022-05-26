@@ -77,7 +77,7 @@ class Foot():
     #   1=Front Right, 
     #   2=Back Left, 
     #   3=Back Right
-    def __init__(self, type=0, ShoulderServo, ArmServo, WristServo):
+    def __init__(self, type, ShoulderServo, ArmServo, WristServo):
         self.type = type
         # Create the Servo entries
         self.shoulder = Servos(ShoulderServo)
@@ -131,7 +131,7 @@ class Foot():
             print_str = "Back Left Foot Class Status"
         else:
             print_str = "Back Right Foot Class Status"
-        print ("  Servos - Shoulder: %.2f Arm: %.2f Wrist: %.2f" % (self.Shoulder, self.Arm, self.Wrist))
+        print ("  Servos - Shoulder: %.2f Arm: %.2f Wrist: %.2f" % (self.shoulder.pos, self.arm.pos, self.wrist.pos))
         print ("  RPoR - X:%.2f, Y:%.2f, Z:%.2f" % (self.RPoR.X, self.RPoR.Y, self.RPoR.Z))
         print ("  IComPoR - X:%.2f, Y:%.2f, Z:%.2f" % (self.ICoMPoR.X, self.ICoMPoR.Y, self.ICoMPoR.Z))
         return print_str
@@ -142,11 +142,12 @@ class Foot():
     # rearly change, so we only need to calculate them when 
     # they do change.
     def calulateStaticValues(self):
-        self.MaxLTF = self.LTW + self.LWF
         self.LWF2 = self.LWF * self.LWF
         self.LTW2 = self.LTW * self.LTW
         self.LTWxLWFx2 = 2 * self.LTW * self.LWF
         self.LST2 = self.LST * self.LST
+        self.MaxLTF = self.LTW + self.LWF
+        self.MinLTF = math.sqrt(self.LWF2 + self.LTW2 - (self.LTWxLWFx2 * math.cos(math.radians(self.wrist.min))))
     
     def setLWF(self, lwf):
         self.LWF = lwf
@@ -200,7 +201,14 @@ class Foot():
         self.arm.setServoPos(Arm)
         self.wrist.setServoPos(Wrist)
         self.imuUpdateFK()
-        
+    
+    def setServoRest(self):
+        self.shoulder.setServoPos(self.shoulder.rest)
+        self.arm.setServoPos(self.arm.rest)
+        self.wrist.setServoPos(self.wrist.rest)
+        self.imuUpdateFK()
+    
+    
     # If for any reason you need to adjust the Min or Max of a 
     # servo, then you need to also update the class.
     def updateServo(self):
@@ -286,9 +294,9 @@ class Foot():
         if self.type == 0 or self.type == 2:
             legX = RX + self.LXS
         else:
-            legX = RX - self.LXS
+            legX = -RX - self.LXS
         if self.type == 0 or self.type == 1:
-            legY = RY - self.LYS
+            legY = -RY - self.LYS
         else:
             legY = RY + self.LYS
         legZ = RZ
@@ -311,16 +319,25 @@ class Foot():
             shoulder = self.shoulder.min
         if shoulder > self.shoulder.max:
             error = 2
-            shoulder = self.ShoulderMax
+            shoulder = self.shoulder.max
         # Now we need to work out the Length Top of arm to the Foot
         LTF = math.sqrt((LTFz*LTFz) + (legY*legY))
         print("Leg Number %d, X:%0.1f, Y:%0.1f, Z:%0.1f, LSF:%0.3f, LTF:%0.2f, LST:%0.3f, LST2:%0.3f" % (self.type, legX, legY, legZ, LSF, LTF, self.LST, self.LST2))
         sleep(0.1)
-        if (self.LTW + self.LWF) < LTF:
+        if self.MaxLTF < LTF:
             # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
             error = 7
             arm = 0
+            LTF = self.MaxLTF
             wrist = self.wrist.max
+            ServoWR = math.radians(wrist)
+        elif self.MinLTF > LTF:
+            # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
+            error = 8
+            arm = 0
+            LTF = self.MinLTF
+            wrist = self.wrist.min
+            ServoWR = math.radians(wrist)
         else:
             # Now we can work out the wrist servo position.
             # Python work in Radians
@@ -335,29 +352,29 @@ class Foot():
             if wrist < self.wrist.min:
                 error = 5
                 wrist = self.wrist.min
-                ServoWR = math.radians(wrist)
-            if wrist > self.wrist.max:
+            elif wrist > self.wrist.max:
                 error = 6
                 wrist = self.wrist.max
-                ServoWR = math.radians(wrist)
-            # Now we can work out the for the are relative to the line to the foot
-            print("Afw = asin(%.3f), sin(wrist):%.3f, LWF:%.3f, LTF:%0.3f" % ((math.sin(ServoWR)*self.LWF)/LTF, math.sin(ServoWR), self.LWF, LTF))
-            sleep(0.1)
-            Afw = math.asin((math.sin(ServoWR)*self.LWF)/LTF)
-            if legY>0:
-                Af = math.acos(LTFz/LTF)
-            else:
-                Af = -math.acos(LTFz/LTF)
-            # Then combine with the angle we need the foot at 
-            # relative to the top of the arm to get the servo 
-            # position
-            arm = math.degrees(Afw - Af) - self.arm.offset
-            if arm < self.arm.min:
-                error = 3
-                arm = self.arm.min
-            if arm > self.arm.max:
-                error = 4
-                arm = self.arm.max
+            ServoWR = math.radians(wrist)
+        # Now we can work out the for the are relative to the line to the foot
+        print("Afw = asin(%.3f), sin(wrist):%.3f, LWF:%.3f, LTF:%0.3f Error:%d" % ((math.sin(ServoWR)*self.LWF)/LTF, math.sin(ServoWR), self.LWF, LTF, error))
+        sleep(0.1)
+        Afw = math.asin((math.sin(ServoWR)*self.LWF)/LTF)
+        if legY>0:
+            Af = math.acos(LTFz/LTF)
+        else:
+            Af = -math.acos(LTFz/LTF)
+        # Then combine with the angle we need the foot at 
+        # relative to the top of the arm to get the servo 
+        # position
+        arm = self.arm.offset + math.degrees(Afw - Af)
+        print("Arm Servo:%.2f, Afw:%.3f, Af:%.3f, ArmOffset:%.2f" % (arm, Afw, Af, self.arm.offset))
+        if arm < self.arm.min:
+            error = 3
+            arm = self.arm.min
+        if arm > self.arm.max:
+            error = 4
+            arm = self.arm.max
         return {"Error":error, "Shoulder":shoulder, "Arm":arm, "Wrist":wrist}
         
     # The preceding R in the coordinates is the Request.
@@ -392,16 +409,16 @@ class Foot():
     def moveToRPoR(self, RX, RY, RZ):
         servos = self.inverseKinematics(RX, RY, RZ)
         if servos.get("Error") == 0:
-            setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
-            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
+            self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
+            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
         else:
-            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
+            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
     
     def rotateAboutCoM(self, pitch, roll):
         xzL = math.sqrt((self.ICoMPoR.X*self.ICoMPoR.X)+(self.ICoMPoR.Z*self.ICoMPoR.Z))
         yzL = math.sqrt((self.ICoMPoR.Y*self.ICoMPoR.Y)+(self.ICoMPoR.Z*self.ICoMPoR.Z))
-        xzA = math.asin(self.imuX/xzL) + pitch
-        yzA = math.asin(self.imuY/yzL) + roll
+        xzA = math.asin(self.ICoMPoR.X/xzL) + pitch
+        yzA = math.asin(self.ICoMPoR.Y/yzL) + roll
         CoMx = math.sin(xzA)*xzL
         CoMy = math.sin(yzA)*yzL
         CoMz = -math.cos(yzA)*yzL
@@ -418,9 +435,9 @@ class Foot():
         servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         if servos.get("Error") == 0:
             setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
-            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
+            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
         else:
-            return {"Error":servos.get("Error"), "Shoulder":self.Shoulder, "Arm":self.Arm, "Wrist":self.Wrist}
+            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
        
     
 # The Feet class creates 4 Foot objects based on the Foot class.
@@ -531,7 +548,9 @@ class Feet():
             if self.autoLevel == 1:
                 self.levelRobot()
 
-
+    # This routine calculates the changes that are required to 
+    # level the robots RPoR with the ICoMPoR then calls the 
+    # commands to move the servos.
     def levelRobot(self):
         print("Level Robot - Pitch:", self.Pitch, "Roll:", self.Roll)
         FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
@@ -547,3 +566,24 @@ class Feet():
         print("BL", self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z")))
         print("BR", self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z")))
         
+    def rest(self):
+        self.FL.setServoRest()
+        self.FR.setServoRest()
+        self.BL.setServoRest()
+        self.BR.setServoRest()
+    
+    # This routine calls the system to make a simle 4 leeg 
+    # linear movement.
+    def moveRobotICoMPoR(self, X, Y, Z):
+        print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z + Z))
+        print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + X, self.FR.ICoMPoR.Y + Y, self.FR.ICoMPoR.Z + Z))
+        print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z + Z))
+        print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z + Z))
+    
+    def moveRobotRPoR(self, X, Y, Z):
+        print("FL", self.FL.moveToRPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z + Z))
+        print("FR", self.FR.moveToRPoR(self.FR.ICoMPoR.X + X, self.FR.ICoMPoR.Y + Y, self.FR.ICoMPoR.Z + Z))
+        print("BL", self.BL.moveToRPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z + Z))
+        print("BR", self.BR.moveToRPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z + Z))
+    
+    
