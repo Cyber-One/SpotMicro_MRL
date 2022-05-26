@@ -122,6 +122,7 @@ if EnableMPU6050A == True:
     MPU6050A.start()
     PlatformStructure = runtime.getPlatform()
     if PlatformStructure.getVersion() > "1.1.810":
+        sleep(1)
         MPU6050A.setXGyroOffset(MPU6050AgyroXOffset)
         MPU6050A.setYGyroOffset(MPU6050AgyroYOffset)
         MPU6050A.setZGyroOffset(MPU6050AgyroZOffset)

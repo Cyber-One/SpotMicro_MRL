@@ -108,11 +108,11 @@ def updateServoPositions():
 #################################################################
 execfile(RuningFolder+'/FootClass.py')
 
-legs = Feet()
-legs.FL.setServos(FLShoulder, FLArm, FLWrist)
-legs.FR.setServos(FRShoulder, FRArm, FRWrist)
-legs.BL.setServos(BLShoulder, BLArm, BLWrist)
-legs.BR.setServos(BRShoulder, BRArm, BRWrist)
+legs = Feet(FLShoulder, FLArm, FLWrist, FRShoulder, FRArm, FRWrist, BLShoulder, BLArm, BLWrist, BRShoulder, BRArm, BRWrist)
+#legs.FL.setServos(FLShoulder, FLArm, FLWrist)
+#legs.FR.setServos(FRShoulder, FRArm, FRWrist)
+#legs.BL.setServos(BLShoulder, BLArm, BLWrist)
+#legs.BR.setServos(BRShoulder, BRArm, BRWrist)
 legs.disableAutoLevel()
 
 
