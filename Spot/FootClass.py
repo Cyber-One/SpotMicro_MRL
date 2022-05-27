@@ -338,6 +338,7 @@ class Foot():
             shoulder = self.shoulder.min
         if shoulder > self.shoulder.max:
             error = 2
+            print("Error 2 - Shoulder:%.2f, Max:%.2f" % (shoulder, self.shoulder.max))
             shoulder = self.shoulder.max
         # Now we need to work out the Length Top of arm to the 
         # Foot in the Y-Axis
@@ -364,7 +365,7 @@ class Foot():
             # the Law of Cosines.
             # Python work in Radians
             WristCosC = (self.LTW2 + self.LWF2 - (LTF * LTF)) / self.LTWxLWFx2
-            print("IK ServoWrist cosC:", WristCosC)
+            #print("IK ServoWrist cosC:", WristCosC)
             if WristCosC > 1.0:
                 WristCosC = 1.0
             ServoWR = math.acos(WristCosC)
@@ -382,8 +383,8 @@ class Foot():
                 wrist = self.wrist.max
             ServoWR = math.radians(wrist)
         # Now we can work out the angle for the arm relative to the line to the foot
-        print("Afw = asin(%.3f), sin(wrist):%.3f, LWF:%.3f, LTF:%0.3f Error:%d" % ((math.sin(ServoWR)*self.LWF)/LTF, math.sin(ServoWR), self.LWF, LTF, error))
-        sleep(0.1)
+        #print("Afw = asin(%.3f), sin(wrist):%.3f, LWF:%.3f, LTF:%0.3f Error:%d" % ((math.sin(ServoWR)*self.LWF)/LTF, math.sin(ServoWR), self.LWF, LTF, error))
+        #sleep(0.1)
         Afw = math.asin((math.sin(ServoWR)*self.LWF)/LTF)
         # When you square legY as we did in an equation above, 
         # you will always get a positive result.  The thing is, 
@@ -398,7 +399,7 @@ class Foot():
         # relative to the top of the arm to get the servo 
         # position
         arm = self.arm.offset + math.degrees(Afw - Af)
-        print("Arm Servo:%.2f, Afw:%.3f, Af:%.3f, ArmOffset:%.2f" % (arm, Afw, Af, self.arm.offset))
+        #print("Arm Servo:%.2f, Afw:%.3f, Af:%.3f, ArmOffset:%.2f" % (arm, Afw, Af, self.arm.offset))
         if arm < self.arm.min:
             error = 3
             arm = self.arm.min
@@ -425,13 +426,18 @@ class Foot():
         CoMyA = yzA - self.ICoMPoR.pitch
         # With the new angle and the line lengths, we can work 
         # out the XYZ coordinates of the relative to the CoM
-        CoMx = math.sin(CoMxA)*xzL
-        CoMy = math.sin(CoMyA)*yzL
-        CoMz = math.cos(CoMyA)*yzL
+        if RX <0:
+            CoMx = -math.cos(CoMxA)*xzL
+        else:
+            CoMx = math.cos(CoMxA)*xzL
+        CoMy = math.cos(CoMyA)*yzL
+        CoMz = math.sin(CoMyA)*yzL
         # So now that it is orientated correctly, lets adjust the offset
         RPoRx = CoMx + self.CoMxOffset
         RPoRy = CoMy + self.CoMyOffset
-        RPoRz = -CoMz + self.CoMzOffset
+        RPoRz = CoMz + self.CoMzOffset
+        print("imuIK - xzL:%.2f, yzL:%.2f - xzA:%.3f, yzA:%.3f - CoMxA:%.3f, CoMyA:%.3f" % (xzL, yzL, xzA, yzA, CoMxA, CoMyA))
+        print("imuIK - RX:%.2f, RY:%.2f, RZ:%.2f - CoMx:%.2f, CoMy:%.2f, CoMz:%.2f - RPoRx:%.2f, RPoRy:%.2f, RPoRz:%.2f" %(RX, RY, RZ, CoMx, CoMy, CoMz, RPoRx, RPoRy, RPoRz))
         return {"X":RPoRx, "Y":RPoRy, "Z":RPoRz}
 
     # The RX, RY and RZ are the requested coordinated relative
@@ -463,10 +469,10 @@ class Foot():
     # we requested the servos move to.
     def moveToICoMPoR(self, RX, RY, RZ):
         RPoR = self.imuIK(RX, RY, RZ)
-        #print("moveToICoMPoR:", RPoR)
+        print("moveToICoMPoR:", RPoR)
         servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         if servos.get("Error") == 0:
-            setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
+            self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
             return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
         else:
             return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
