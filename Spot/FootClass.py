@@ -290,37 +290,57 @@ class Foot():
     # in order to place the foot at the requested coordinates.
     # The preceding R in the coordinates is the Request.
     def inverseKinematics(self, RX, RY, RZ):
+        # Lets first clear the error indication.
         error = 0
+        # Next we need to translate the coordinates from the 
+        # RPoR to the Shoulder Plane of Reference (SPoR).
+        # X-Axis, Note: the shoulders on the left and right work 
+        # opposite to each other, With the left being the 
+        # negative side, we need to invert the axis for the 
+        # left side
         if self.type == 0 or self.type == 2:
             legX = RX + self.LXS
         else:
             legX = -RX - self.LXS
+        # Y-Axis
         if self.type == 0 or self.type == 1:
-            legY = -RY - self.LYS
+            legY = RY - self.LYS
         else:
             legY = RY + self.LYS
+        # Z-Axis, Since we made the RPoR the same height as the 
+        # shoulder, there is no offset required here.
         legZ = RZ
         # Lets work out the Length Shoulder Foot (LSF)
+        # Note this is in the XZ Plane relative to the SPoR
         LSF = math.sqrt((legX * legX) + (legZ * legZ))
-        # Now that we have Length Shoulder Foot and 
-        # we know Length Shoulder Top, lets work out 
-        # the Length Top Foot z
-        # we use the z suffix here, because this only 
-        # relative to the X-Z plane and not the XY plane
+        # Now that we have Length Shoulder Foot and we know 
+        # Length Shoulder Top, lets work out the 
+        # Length Top Foot z (LTFz), we use the z suffix here, 
+        # because this only relative to the X-Z plane and not 
+        # the XY plane
         LTFz = math.sqrt((LSF * LSF) - self.LST2)
+        # Next we need to work out the position the shoulder 
+        # servo has to be in.  This is made of two angles.
+        # The angle formed by the triangle consisting of the 
+        # foot, shoulder and the top of the arm, the outside 
+        # angle and the triangle formed by the shoulder, foot 
+        # and the 90 degree angle dictly below the shoulder.
         Ai = math.asin(legX/LSF) # Angle inside
         Ao = math.acos(self.LST/LSF)  # Angle Outside
+        # Just a reminder that all angle math in Python is in 
+        # Radians, however the servo control and out offsets 
+        # are all in degrees.
         shoulder = 180 - math.degrees(Ai + Ao)-self.shoulder.offset
-        # Now that we know what the shoulder servo angle 
-        # should be, lets see it's within the servos 
-        #range limit
+        # Now that we know what the shoulder servo angle should 
+        # be, lets see if it's within the servos range limit
         if shoulder < self.shoulder.min:
             error = 1
             shoulder = self.shoulder.min
         if shoulder > self.shoulder.max:
             error = 2
             shoulder = self.shoulder.max
-        # Now we need to work out the Length Top of arm to the Foot
+        # Now we need to work out the Length Top of arm to the 
+        # Foot in the Y-Axis
         LTF = math.sqrt((LTFz*LTFz) + (legY*legY))
         print("Leg Number %d, X:%0.1f, Y:%0.1f, Z:%0.1f, LSF:%0.3f, LTF:%0.2f, LST:%0.3f, LST2:%0.3f" % (self.type, legX, legY, legZ, LSF, LTF, self.LST, self.LST2))
         sleep(0.1)
@@ -332,14 +352,16 @@ class Foot():
             wrist = self.wrist.max
             ServoWR = math.radians(wrist)
         elif self.MinLTF > LTF:
-            # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
+            # "Warning, LTF is less than LTW and LWF bent at the 
+            # wrist to the min pos"
             error = 8
             arm = 0
             LTF = self.MinLTF
             wrist = self.wrist.min
             ServoWR = math.radians(wrist)
         else:
-            # Now we can work out the wrist servo position.
+            # Now we can work out the wrist servo position using 
+            # the Law of Cosines.
             # Python work in Radians
             WristCosC = (self.LTW2 + self.LWF2 - (LTF * LTF)) / self.LTWxLWFx2
             print("IK ServoWrist cosC:", WristCosC)
@@ -349,6 +371,9 @@ class Foot():
             # Now that we have the servo position in radian we 
             # convert it to degrees
             wrist = math.degrees(ServoWR)
+            # In theory we don't need to do these checks with the 
+            # error trap for errors 7 and 8, but we will leave it 
+            # in for now.
             if wrist < self.wrist.min:
                 error = 5
                 wrist = self.wrist.min
@@ -356,10 +381,15 @@ class Foot():
                 error = 6
                 wrist = self.wrist.max
             ServoWR = math.radians(wrist)
-        # Now we can work out the for the are relative to the line to the foot
+        # Now we can work out the angle for the arm relative to the line to the foot
         print("Afw = asin(%.3f), sin(wrist):%.3f, LWF:%.3f, LTF:%0.3f Error:%d" % ((math.sin(ServoWR)*self.LWF)/LTF, math.sin(ServoWR), self.LWF, LTF, error))
         sleep(0.1)
         Afw = math.asin((math.sin(ServoWR)*self.LWF)/LTF)
+        # When you square legY as we did in an equation above, 
+        # you will always get a positive result.  The thing is, 
+        #sometimes we want the foot to move in the negative 
+        # direction.  For this reason, we check to see if that 
+        # was the case and invert the value if it was.
         if legY>0:
             Af = math.acos(LTFz/LTF)
         else:
@@ -375,6 +405,8 @@ class Foot():
         if arm > self.arm.max:
             error = 4
             arm = self.arm.max
+        # In theory, we should be able to use this result even if 
+        # it was not able to get the correct target position.
         return {"Error":error, "Shoulder":shoulder, "Arm":arm, "Wrist":wrist}
         
     # The preceding R in the coordinates is the Request.
