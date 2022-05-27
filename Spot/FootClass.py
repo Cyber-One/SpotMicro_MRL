@@ -299,9 +299,9 @@ class Foot():
         # negative side, we need to invert the axis for the 
         # left side
         if self.type == 0 or self.type == 2:
-            legX = RX + self.LXS
-        else:
             legX = -RX - self.LXS
+        else:
+            legX = RX - self.LXS
         # Y-Axis
         if self.type == 0 or self.type == 1:
             legY = RY - self.LYS
@@ -607,15 +607,15 @@ class Feet():
     # This routine calls the system to make a simle 4 leeg 
     # linear movement.
     def moveRobotICoMPoR(self, X, Y, Z):
-        print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z + Z))
-        print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + X, self.FR.ICoMPoR.Y + Y, self.FR.ICoMPoR.Z + Z))
-        print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z + Z))
-        print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z + Z))
+        print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z - Z))
+        print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + X, self.FR.ICoMPoR.Y + Y, self.FR.ICoMPoR.Z - Z))
+        print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z - Z))
+        print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z - Z))
     
     def moveRobotRPoR(self, X, Y, Z):
-        print("FL", self.FL.moveToRPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z + Z))
-        print("FR", self.FR.moveToRPoR(self.FR.ICoMPoR.X + X, self.FR.ICoMPoR.Y + Y, self.FR.ICoMPoR.Z + Z))
-        print("BL", self.BL.moveToRPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z + Z))
-        print("BR", self.BR.moveToRPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z + Z))
+        print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z))
+        print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z))
+        print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
+        print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z))
     
     
