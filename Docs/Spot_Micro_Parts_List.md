@@ -2,7 +2,7 @@
 
 
 ## Electronic Parts:
-- 12 x Servos. (I started with 12 x MG996R servos, after 3 failed I replace the 4 wrist servos with PDI6221 servos, but after 5 more failed, replaced the lot with 12 of the FEICHAO F39202-270° Waterproof Servo 35kg Coreless Servo 270° 4.8-7.2V servos)
+- 12 x Servos. (I started with 12 x MG996R servos, after 3 failed I replace the 4 wrist servos with PDI6221 servos, but after 5 more failed, replaced the lot with 12 of the FEICHAO F39202-270° Waterproof Servo 35kg Coreless Servo 270° 4.8-7.2V servos, I'm now changing to the JXservo PDI-HV5523MG servos. These run at a higher voltage so can run direct from the batteries)
 - 1 x Raspberry Pi (During the build I used a Raspi3, but a Raspi4 would be better)
 - 2 x HC-04 Ultrasonic sensor modules
 - 1 x Arduino Nano
