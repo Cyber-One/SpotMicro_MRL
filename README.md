@@ -16,7 +16,8 @@ https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/Spot_Micro_Parts_List.
 The system will be running on My Robot Lab (MRL), available from http://myrobotlab.org/
 I also have a set of instructions on setting up the Raspberry pi and installing My Robot Lab onto the Raspberry pi.:
 https://github.com/Cyber-One/SpotMicro_MRL/blob/main/Docs/3_Spot_Micro_Operating_System.md
-
+Note, that these instructions were based on MyRobotLab version 1.1.822 and do not work on later versions.
+A new set of instructions for version 1.1.1034 and above is currently beinging worked on.
 
 ## Configuring Spot Micro 
 If your not really interested in learning to program, and just want to run spot, you will need to download and install the program.
