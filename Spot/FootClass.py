@@ -338,13 +338,13 @@ class Foot():
             shoulder = self.shoulder.min
         if shoulder > self.shoulder.max:
             error = 2
-            print("Error 2 - Shoulder:%.2f, Max:%.2f" % (shoulder, self.shoulder.max))
+            #print("Error 2 - Shoulder:%.2f, Max:%.2f" % (shoulder, self.shoulder.max))
             shoulder = self.shoulder.max
         # Now we need to work out the Length Top of arm to the 
         # Foot in the Y-Axis
         LTF = math.sqrt((LTFz*LTFz) + (legY*legY))
-        print("Leg Number %d, X:%0.1f, Y:%0.1f, Z:%0.1f, LSF:%0.3f, LTF:%0.2f, LST:%0.3f, LST2:%0.3f" % (self.type, legX, legY, legZ, LSF, LTF, self.LST, self.LST2))
-        sleep(0.1)
+        #print("Leg Number %d, X:%0.1f, Y:%0.1f, Z:%0.1f, LSF:%0.3f, LTF:%0.2f, LST:%0.3f, LST2:%0.3f" % (self.type, legX, legY, legZ, LSF, LTF, self.LST, self.LST2))
+        #sleep(0.1)
         if self.MaxLTF < LTF:
             # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
             error = 7
@@ -426,6 +426,8 @@ class Foot():
         CoMyA = yzA - self.ICoMPoR.pitch
         # With the new angle and the line lengths, we can work 
         # out the XYZ coordinates of the relative to the CoM
+        # Because we squared the RX, we lost the sign, so we need 
+        # to check the source and add the sign back in here :-)
         if RX <0:
             CoMx = -math.cos(CoMxA)*xzL
         else:
@@ -436,8 +438,8 @@ class Foot():
         RPoRx = CoMx + self.CoMxOffset
         RPoRy = CoMy + self.CoMyOffset
         RPoRz = CoMz + self.CoMzOffset
-        print("imuIK - xzL:%.2f, yzL:%.2f - xzA:%.3f, yzA:%.3f - CoMxA:%.3f, CoMyA:%.3f" % (xzL, yzL, xzA, yzA, CoMxA, CoMyA))
-        print("imuIK - RX:%.2f, RY:%.2f, RZ:%.2f - CoMx:%.2f, CoMy:%.2f, CoMz:%.2f - RPoRx:%.2f, RPoRy:%.2f, RPoRz:%.2f" %(RX, RY, RZ, CoMx, CoMy, CoMz, RPoRx, RPoRy, RPoRz))
+        #print("imuIK - xzL:%.2f, yzL:%.2f - xzA:%.3f, yzA:%.3f - CoMxA:%.3f, CoMyA:%.3f" % (xzL, yzL, xzA, yzA, CoMxA, CoMyA))
+        #print("imuIK - RX:%.2f, RY:%.2f, RZ:%.2f - CoMx:%.2f, CoMy:%.2f, CoMz:%.2f - RPoRx:%.2f, RPoRy:%.2f, RPoRz:%.2f" %(RX, RY, RZ, CoMx, CoMy, CoMz, RPoRx, RPoRy, RPoRz))
         return {"X":RPoRx, "Y":RPoRy, "Z":RPoRz}
 
     # The RX, RY and RZ are the requested coordinated relative
@@ -469,7 +471,7 @@ class Foot():
     # we requested the servos move to.
     def moveToICoMPoR(self, RX, RY, RZ):
         RPoR = self.imuIK(RX, RY, RZ)
-        print("moveToICoMPoR:", RPoR)
+        #print("moveToICoMPoR:", RPoR)
         servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         if servos.get("Error") == 0:
             self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
@@ -610,18 +612,28 @@ class Feet():
         self.BL.setServoRest()
         self.BR.setServoRest()
     
-    # This routine calls the system to make a simle 4 leeg 
-    # linear movement.
+    # This routine calls the system to make a simle 4 leg 
+    # linear movement relative to the ICoMPoR.
     def moveRobotICoMPoR(self, X, Y, Z):
         print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z - Z))
         print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + X, self.FR.ICoMPoR.Y + Y, self.FR.ICoMPoR.Z - Z))
         print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z - Z))
         print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z - Z))
     
+    # This routine calls the system to make a simle 4 leg 
+    # linear movement relative to the RPoR.
     def moveRobotRPoR(self, X, Y, Z):
         print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z))
         print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z))
         print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
         print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z))
     
-    
+    def calculateBalancePoint(self):
+        # Lets work out the FL, BR line, lets call this LR.
+        # We will be calculating a line slope and the the point 
+        # where that line crosses the Y-Axis.
+        # First the slope
+        aLR = (self.FL.ICoMPoR.Y - self.BR.ICoMPoR.Y) / (self.FL.ICoMPoR.X - self.BR.ICoMPoR.X))
+        # and now where the slope crosses the Y-Axis.
+        bLR = self.BR.ICoMPoR.Y - (aLR * self.BR.ICoMPoR.X)
+        return {"bLR":bLR}
