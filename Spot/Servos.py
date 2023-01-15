@@ -16,7 +16,7 @@
 # This file is to start all the servos used in the Robot        #
 #                                                               #
 #################################################################
-print "Starting the various Servos Services"
+print ("Starting the various Servos Services")
 
 #################################################################
 # Load the configuration for the Servos.                        #
