@@ -578,7 +578,7 @@ class Feet():
                 self.imuCalibrate = self.imuCalibrate - 1
                 self.imuCalibrationRoll = self.imuCalibrationRoll + roll
                 self.imuCalibrationPitch = self.imuCalibrationPitch + pitch
-        if self.Pitch <> (pitch + self.pitchOffset) or self.Roll <> (roll + self.rollOffset):
+        if self.Pitch != (pitch + self.pitchOffset) or self.Roll != (roll + self.rollOffset):
             self.Pitch = pitch  + self.pitchOffset
             self.Roll = roll + self.rollOffset
             self.FL.setIMUdata(self.Pitch, self.Roll)
@@ -633,7 +633,7 @@ class Feet():
         # We will be calculating a line slope and the the point 
         # where that line crosses the Y-Axis.
         # First the slope
-        aLR = (self.FL.ICoMPoR.Y - self.BR.ICoMPoR.Y) / (self.FL.ICoMPoR.X - self.BR.ICoMPoR.X))
+        aLR = (self.FL.ICoMPoR.Y - self.BR.ICoMPoR.Y) / (self.FL.ICoMPoR.X - self.BR.ICoMPoR.X)
         # and now where the slope crosses the Y-Axis.
         bLR = self.BR.ICoMPoR.Y - (aLR * self.BR.ICoMPoR.X)
         return {"bLR":bLR}

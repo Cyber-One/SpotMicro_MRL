@@ -17,7 +17,7 @@
 #                                                               #
 #################################################################
 import time
-print "Starting the various Life Services"
+print ("Starting the various Life Services")
 
 # Display time on the LCD
 # I was having an issue with the Raspi dropping ofline.
@@ -98,10 +98,10 @@ def updateServoPositions():
     BR_X = BRPos.get("X") + LXS
     BR_Y = BRPos.get("Y") - LYS
     BR_Z = BRPos.get("Z")
-    print FL_Z, " FL-Z:", FL_Y, " FL-Y:", FL_X, "FL-X:"
-    print FR_Z, " FR-Z:", FR_Y, " FR-Y:", FR_X, "FR-X:"
-    print BL_Z, " BL-Z:", BL_Y, " BL-Y:", BL_X, "BL-X:"
-    print BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:"
+    print (FL_Z, " FL-Z:", FL_Y, " FL-Y:", FL_X, "FL-X:")
+    print (FR_Z, " FR-Z:", FR_Y, " FR-Y:", FR_X, "FR-X:")
+    print (BL_Z, " BL-Z:", BL_Y, " BL-Y:", BL_X, "BL-X:")
+    print (BR_Z, " BR-Z:", BR_Y, " BR-Y:", BR_X, "BR-X:")
 
 #################################################################
 # Setup the Foot Class routines.                                #
