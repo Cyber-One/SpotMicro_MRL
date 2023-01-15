@@ -22,7 +22,7 @@ from org.myrobotlab.kinematics import DHRobotArm
 from org.myrobotlab.kinematics import DHLink
 from org.myrobotlab.kinematics import DHLinkType
 
-print "Starting the leg IK3D service"
+print ("Starting the leg IK3D service")
 
 #################################################################
 #                                                               #
@@ -101,6 +101,6 @@ ik3d.setCurrentArm("FrontLeftLeg", myRobotArm)
 # create the method that will take the calculated joint angles
 # and apply them to the required servos.
 def ik3dProcessor(angleData):
-    print angleData.name, " - ", angleData.angle
+    print (angleData.name, " - ", angleData.angle)
 
 python.subscribe('ik3d', 'publishJointAngle', 'python', 'ik3dProcessor')

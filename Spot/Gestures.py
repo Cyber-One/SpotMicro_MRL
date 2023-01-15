@@ -16,7 +16,7 @@
 # This file is a group of commands that perform actions         #
 #                                                               #
 #################################################################
-print "Starting the various Gestures Services"
+print ("Starting the various Gestures Services")
 
 
 #################################################################
@@ -24,7 +24,7 @@ print "Starting the various Gestures Services"
 # position.  Handy when calibrating.                            #
 #################################################################
 def rest(Speed):
-    print "Moving to Rest postition"
+    print ("Moving to Rest postition")
     setAllServoSpeeds(Speed)
     # Now send the legs to the rest position
     FLShoulder.rest()
@@ -54,7 +54,7 @@ def rest(Speed):
 #################################################################
 def Laydown(Speed):
     global PhysicalState
-    print "Laying Down"
+    print ("Laying Down")
     lMoveFeetTo(0.0, -93.0, 127.85, -92.24, 0.0, 93.0, 127.85, -92.24, 0.0, -93.0, -52.15, -92.24, 0.0, 93.0, -52.15, -92.24, Speed, 5)
     PhysicalState = 0
     #setAllServoSpeeds(Speed)

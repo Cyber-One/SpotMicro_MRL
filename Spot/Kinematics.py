@@ -18,7 +18,7 @@
 #                                                               #
 #################################################################
 import math
-print "Starting the leg calculation Functions"
+print ("Starting the leg calculation Functions")
 
 #################################################################
 #                                                               #
@@ -127,7 +127,7 @@ def LeginverseKinematics(LSFx, LAFy, Zt):
     Af = math.acos(LTFz/LTF)
     WorkServoA = math.degrees(Afw+Af) - 90
 
-def inverseKinematics(Leg, Xt, Yt, Zt):
+#def inverseKinematics(Leg, Xt, Yt, Zt):
 
 def FL_Leg(data):
     global FL_X
@@ -137,8 +137,8 @@ def FL_Leg(data):
     FL_X = workX
     FL_Y = workY
     FL_Z = workZ
-    print "Front-Left-Leg"
-    print data
+    print ("Front-Left-Leg")
+    print (data)
 
 def FR_Leg(data):
     global FR_X
@@ -148,8 +148,8 @@ def FR_Leg(data):
     FR_X = workX
     FR_Y = workY
     FR_Z = workZ
-    print "Front-Right-Leg"
-    print data
+    print ("Front-Right-Leg")
+    print (data)
 
 def BL_Leg(data):
     global BL_X
@@ -159,8 +159,8 @@ def BL_Leg(data):
     BL_X = workX
     BL_Y = workY
     BL_Z = workZ
-    print "Back-Left-Leg"
-    print data
+    print ("Back-Left-Leg")
+    print (data)
 
 def BR_Leg(data):
     global BR_X
@@ -170,8 +170,8 @@ def BR_Leg(data):
     BR_X = workX
     BR_Y = workY
     BR_Z = workZ
-    print "Back-Right-Leg"
-    print data
+    print ("Back-Right-Leg")
+    print (data)
 
 python.subscribe('FLShoulder', 'publishServoMoveTo', 'python', 'FL_Leg')
 python.subscribe('FLArm', 'publishServoMoveTo', 'python', 'FL_Leg')
@@ -191,5 +191,5 @@ python.subscribe('BRWrist', 'publishServoMoveTo', 'python', 'BR_Leg')
 
 
 forwardKinematics(0, FLShoulder.getCurrentInputPos(), FLArm.getCurrentInputPos()+180, FLWrist.getCurrentInputPos())
-print FLShoulder.getCurrentInputPos(), "FL Shoulder = ", FLArm.getCurrentInputPos(), ", FL Arm = ", FLWrist.getCurrentInputPos(), ", FL Wrist = "
-print workX, "X = ", workY, ", Y = ", workZ, ", Z = "
+print (FLShoulder.getCurrentInputPos(), "FL Shoulder = ", FLArm.getCurrentInputPos(), ", FL Arm = ", FLWrist.getCurrentInputPos(), ", FL Wrist = ")
+print (workX, "X = ", workY, ", Y = ", workZ, ", Z = ")
