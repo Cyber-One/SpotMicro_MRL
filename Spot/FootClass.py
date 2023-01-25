@@ -36,7 +36,13 @@ class Servos():
         self.updateServo()
         self.offset = 0
         self.pos = self.rest
-           
+    
+    def __repr__(self):
+        return "Foot Class"
+        
+    def __str__(self):
+        print ("  Servos - Min: %.2f Rest: %.2f Max: %.2f Pos: %.2f" % (self.min, self.rest, self.max, self.pos))
+    
     def setOffset(self, Offset):
         self.offset = Offset
 
@@ -167,6 +173,7 @@ class Foot():
     def setLXS(self, lxs):
         self.LXS = lxs
     
+    # Set the Centre Of Mass Offset.
     def setComOffsets(self, x, y, z):
         self.CoMxOffset = x
         self.CoMyOffset = y

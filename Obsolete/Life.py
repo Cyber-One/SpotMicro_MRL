@@ -33,9 +33,9 @@ def LCD_DisplayTime(data):
     
 
 
-clock = Runtime.start("clock","Clock")
+#clock = Runtime.start("clock","Clock")
 clock.addListener("publishTime", "python", "LCD_DisplayTime")
-clock.setInterval(1000)
+#clock.setInterval(1000)
 clock.startClock()
 LCD.clear()
 
@@ -109,17 +109,16 @@ def updateServoPositions():
 execfile(RuningFolder+'/FootClass.py')
 
 legs = Feet(FLShoulder, FLArm, FLWrist, FRShoulder, FRArm, FRWrist, BLShoulder, BLArm, BLWrist, BRShoulder, BRArm, BRWrist)
-#legs.FL.setServos(FLShoulder, FLArm, FLWrist)
-#legs.FR.setServos(FRShoulder, FRArm, FRWrist)
-#legs.BL.setServos(BLShoulder, BLArm, BLWrist)
-#legs.BR.setServos(BRShoulder, BRArm, BRWrist)
 legs.disableAutoLevel()
 
 
-#data.getPitch()
-#data.getRoll()
-#data.getYaw()
+#################################################################
+# Setup the MPU6050 calibration and callback functions          #
+#################################################################
 if runtime.isStarted("MPU6050A"):
+    MPU6050A.setXGyroOffset(MPU6050A.getGyroXSelfTestFactoryTrim())
+    MPU6050A.setYGyroOffset(MPU6050A.getGyroYSelfTestFactoryTrim())
+    MPU6050A.setZGyroOffset(MPU6050A.getGyroZSelfTestFactoryTrim())
     def updateOrientation(data):
         global Pitch
         global Roll
@@ -133,12 +132,12 @@ if runtime.isStarted("MPU6050A"):
 #################################################################
 # Setup the Froward Kinematics routines.                        #
 #################################################################
-execfile(RuningFolder+'/Life/ForwardKinematics.py')
+#execfile(RuningFolder+'/Life/ForwardKinematics.py')
 
 #################################################################
 # Setup the Inverse Kinematics routines.                        #
 #################################################################
-execfile(RuningFolder+'/Life/InverseKinematics.py')
+#execfile(RuningFolder+'/Life/InverseKinematics.py')
 
 #################################################################
 # Setup the Leg Movement routines.                        #

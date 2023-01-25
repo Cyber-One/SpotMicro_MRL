@@ -17,7 +17,7 @@
 #                                                               #
 #################################################################
 print ("Starting the various Gestures Services")
-
+import FootClass
 
 #################################################################
 # this command returns all the servos to the starting rest      #

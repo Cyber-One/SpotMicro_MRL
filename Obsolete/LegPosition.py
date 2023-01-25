@@ -18,7 +18,7 @@
 #                                                               #
 #################################################################
 import math
-print "Starting the leg calculation Functions"
+print ("Starting the leg calculation Functions")
 
 #################################################################
 #                                                               #
