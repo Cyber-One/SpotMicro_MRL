@@ -1,0 +1,3 @@
+!!org.myrobotlab.service.config.RasPiConfig
+autoStartPeers: true
+type: RasPi

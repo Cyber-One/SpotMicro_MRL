@@ -1,0 +1,32 @@
+!!org.myrobotlab.service.config.RuntimeConfig
+autoStartPeers: true
+enableCli: true
+locale: en-AU
+logLevel: null
+registry:
+- runtime
+- security
+- webgui
+- intro
+- raspi
+- Back
+- Front
+- MPU6050A
+- LCDPCF8574
+- LCD
+- FLShoulder
+- FLArm
+- FLWrist
+- FRShoulder
+- FRArm
+- FRWrist
+- BLShoulder
+- BLArm
+- BLWrist
+- BRShoulder
+- BRArm
+- BRWrist
+- clock
+- python
+type: Runtime
+virtual: false

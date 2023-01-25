@@ -1,0 +1,6 @@
+!!org.myrobotlab.service.config.Adafruit16CServoDriverConfig
+autoStartPeers: true
+controller: raspi
+deviceAddress: '0x40'
+deviceBus: '1'
+type: Adafruit16CServoDriver

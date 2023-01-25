@@ -1,0 +1,8 @@
+!!org.myrobotlab.service.config.Mpu6050Config
+address: '0x68'
+autoStartPeers: true
+bus: '1'
+controller: raspi
+sampleRate: 3.0
+start: false
+type: Mpu6050

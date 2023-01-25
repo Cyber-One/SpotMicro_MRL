@@ -1,0 +1,10 @@
+!!org.myrobotlab.service.config.PythonConfig
+autoStartPeers: true
+modulePaths: [
+  ]
+startScripts: [
+Spot/Start.py
+  ]
+stopScripts: [
+  ]
+type: Python

@@ -35,7 +35,7 @@ RobotsName = "Spot"
 # Load in the Common Variables used to help track and control   #
 # various functions                                             #
 #################################################################
-execfile(RuningFolder+'/Common_Variables.py')
+#execfile(RuningFolder+'/Common_Variables.py')
 
 #################################################################
 # Setup the Foot Class routines.                                #
