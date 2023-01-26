@@ -4,7 +4,7 @@
 # Of the Cyber_One YouTube Channel                              #
 # https://www.youtube.com/cyber_one                             #
 #                                                               #
-# This is version 0.1                                           #
+# This is version 0.2                                           #
 # Divided up into sub programs                                  #
 # Coded for the Nixie Version of MyRobotLab.                    #
 #                                                               #
@@ -65,7 +65,13 @@ class Servos():
         else:
             self.Servo.moveTo(Pos)  
             self.pos = Pos 
-            
+    
+    def enableAutoDisable(self):
+        self.Servo.setAutoDisable(True)
+    
+    def disableAutoDisable(self):
+        self.Servo.setAutoDisable(false)
+        self.Servo.enable()
     
 # The Foot class contains a number of routines required to
 # manage the location of a single foot.
@@ -215,6 +221,15 @@ class Foot():
         self.wrist.setServoPos(self.wrist.rest)
         self.imuUpdateFK()
     
+    def enableAutoDisable(self):
+        self.shoulder.enableAutoDisable()
+        self.arm.enableAutoDisable()
+        self.wrist.enableAutoDisable()
+    
+    def disableAutoDisable(self):
+        self.shoulder.disableAutoDisable()
+        self.arm.disableAutoDisable()
+        self.wrist.disableAutoDisable()
     
     # If for any reason you need to adjust the Min or Max of a 
     # servo, then you need to also update the class.
@@ -600,6 +615,7 @@ class Feet():
     # commands to move the servos.
     def levelRobot(self):
         print("Level Robot - Pitch:", self.Pitch, "Roll:", self.Roll)
+        self.disableAutoDisable()
         FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
         print("FL", FLdata)
         FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
@@ -612,16 +628,31 @@ class Feet():
         print("FR", self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z")))
         print("BL", self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z")))
         print("BR", self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z")))
+    
+    def enableAutoDisable(self):
+        self.FL.enableAutoDisable()
+        self.FR.enableAutoDisable()
+        self.BL.enableAutoDisable()
+        self.BR.enableAutoDisable()
+
+    def disableAutoDisable(self):
+        self.FL.disableAutoDisable()
+        self.FR.disableAutoDisable()
+        self.BL.disableAutoDisable()
+        self.BR.disableAutoDisable()
         
     def rest(self):
         self.FL.setServoRest()
         self.FR.setServoRest()
         self.BL.setServoRest()
         self.BR.setServoRest()
+        self.disableAutoLevel()
+        self.enableAutoDisable()
     
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the ICoMPoR.
     def moveRobotICoMPoR(self, X, Y, Z):
+        self.disableAutoDisable()
         print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z - Z))
         print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + X, self.FR.ICoMPoR.Y + Y, self.FR.ICoMPoR.Z - Z))
         print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z - Z))
@@ -630,6 +661,7 @@ class Feet():
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the RPoR.
     def moveRobotRPoR(self, X, Y, Z):
+        self.disableAutoDisable()
         print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z))
         print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z))
         print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
@@ -644,3 +676,4 @@ class Feet():
         # and now where the slope crosses the Y-Axis.
         bLR = self.BR.ICoMPoR.Y - (aLR * self.BR.ICoMPoR.X)
         return {"bLR":bLR}
+    
