@@ -70,7 +70,7 @@ class Servos():
         self.Servo.setAutoDisable(True)
     
     def disableAutoDisable(self):
-        self.Servo.setAutoDisable(false)
+        self.Servo.setAutoDisable(False)
         self.Servo.enable()
     
 # The Foot class contains a number of routines required to
