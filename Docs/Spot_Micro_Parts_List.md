@@ -68,6 +68,14 @@ SpotMicro using Raspberry Pi by leodemacondo
 - 1 x rpi3b_plate.stl
 - 2 x battery_holder_X2.stl
 
+https://www.thingiverse.com/thing:4179385
+
+SpotMicro - Top Cover with T  Rail by Messerschmidts
+
+- 1 x Top-Cover-T-Nut-Rail.stl
+- 2 x Top-Traeger.stl
+- 4 x Nut-M3.stl
+
 
 https://www.thingiverse.com/thing:3638679
 
