@@ -14,6 +14,9 @@
 #                                                               #
 #                                                               #
 #################################################################
+import time
+
+#################################################################
 # Because you might want to place your robots files into a      #
 # different dicrectory compared to what I have,                 #
 # the RunningFolder variable is the name of the folder you      #
