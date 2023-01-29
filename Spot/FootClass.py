@@ -41,15 +41,17 @@ class Servos():
         return "Foot Class"
         
     def __str__(self):
-        print ("  Servos - Min: %.2f Rest: %.2f Max: %.2f Pos: %.2f" % (self.min, self.rest, self.max, self.pos))
+        print_str = "  Servo Status - "
+        print ("Min: %.2f Rest: %.2f Max: %.2f Pos: %.2f" % (self.min, self.rest, self.max, self.pos))
+        return print_str
     
     def setOffset(self, Offset):
         self.offset = Offset
 
     def updateServo(self):
-        self.min = self.Servo.getMin()
+        self.min = self.Servo.getMinInput()
         self.rest = self.Servo.getRest()
-        self.max = self.Servo.getMax()
+        self.max = self.Servo.getMaxInput()
         self.syncServo()
         
     def syncServo(self):
@@ -651,6 +653,9 @@ class Feet():
     
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the ICoMPoR.
+    # X is the side ways movement.
+    # Y is the Back and forward movement.
+    # Z is the Up and Down movement.
     def moveRobotICoMPoR(self, X, Y, Z):
         self.disableAutoDisable()
         print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + X, self.FL.ICoMPoR.Y + Y, self.FL.ICoMPoR.Z - Z))
@@ -660,6 +665,9 @@ class Feet():
     
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the RPoR.
+    # X is the side ways movement.
+    # Y is the Back and forward movement.
+    # Z is the Up and Down movement.
     def moveRobotRPoR(self, X, Y, Z):
         self.disableAutoDisable()
         print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z))
@@ -669,6 +677,7 @@ class Feet():
     
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
+        # The other line from FR to BL we will call RL.
         # We will be calculating a line slope and the the point 
         # where that line crosses the Y-Axis.
         # First the slope

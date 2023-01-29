@@ -34,15 +34,35 @@ RobotsName = "Spot"
 #execfile(RuningFolder+'/Common_Variables.py')
 
 #################################################################
-# This next line is to correct a PWM Frequency error in my 	#
-# PCA9685. This error may not effect you.			#
-# The only true way to know is to measure the PWM signal	#
-# frequency being sent from the PCA9685 to the servos.		#
+# This next line is to correct a PWM Frequency error in my      #
+# PCA9685. This error may not effect you.                       #
+# The only true way to know is to measure the PWM signal        #
+# frequency being sent from the PCA9685 to the servos.          #
 # You should have 60Hz, if not, you will need to adjust the PWM	#
-# frequency up or down to get 60Hz				#
-# Use small changes or you could damage your servos.		#
+# frequency up or down to get 60Hz                              #
+# Use small changes or you could damage your servos.            #
 #################################################################
 Back.setPWMFreq(1, 54)
+
+#################################################################
+# Display time on the LCD                                       #
+# I was having an issue with the Raspi dropping ofline.         #
+# In order to help narrow down the cause, I am adding in a      #
+# clock to the LCD display.                                     #
+# If the clock continues to keep time on the LCD, then the      #
+# fault is with the network interface.                          #
+#################################################################
+def LCD_DisplayTime(data):
+    LCD.display(RobotsName, 0)
+    format = "%I:%M:%S %p"
+    LCD.display(time.strftime(format), 1)
+    #LCD.display(str(data), 1)
+    
+#clock = Runtime.start("clock","Clock")
+clock.addListener("publishTime", "python", "LCD_DisplayTime")
+#clock.setInterval(1000)
+clock.startClock()
+LCD.clear()
 
 #################################################################
 # Setup the Foot Class routines.                                #

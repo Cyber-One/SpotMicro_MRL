@@ -31,8 +31,6 @@ def LCD_DisplayTime(data):
     LCD.display(time.strftime(format), 1)
     #LCD.display(str(data), 1)
     
-
-
 #clock = Runtime.start("clock","Clock")
 clock.addListener("publishTime", "python", "LCD_DisplayTime")
 #clock.setInterval(1000)
