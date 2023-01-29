@@ -49,9 +49,10 @@ class Servos():
         self.offset = Offset
 
     def updateServo(self):
-        self.min = self.Servo.getMinInput()
+        mapper = self.Servo.getMapper()
+        self.min = mapper.getMinX()
         self.rest = self.Servo.getRest()
-        self.max = self.Servo.getMaxInput()
+        self.max = mapper.getMaxX()
         self.syncServo()
         
     def syncServo(self):
