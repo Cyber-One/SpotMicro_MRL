@@ -17,7 +17,7 @@
 #                                                               #
 #################################################################
 print ("Starting the various Gestures Services")
-import FootClass
+
 
 #################################################################
 # this command returns all the servos to the starting rest      #
@@ -37,10 +37,10 @@ def rest():
 
 
 def Stand():
-    legs.FL.setServoPos(90, 139, 90)
-    legs.FR.setServoPos(90, 139, 90)
-    legs.BL.setServoPos(90, 139, 90)
-    legs.BR.setServoPos(90, 139, 90)
+    legs.FL.setServoPos(90, 140.64, 86.06)
+    legs.FR.setServoPos(90, 140.64, 86.06)
+    legs.BL.setServoPos(90, 140.64, 86.06)
+    legs.BR.setServoPos(90, 140.64, 86.06)
     legs.syncServos()
     print(legs)
 
