@@ -664,6 +664,14 @@ class Feet():
         print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z - Z))
         print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z - Z))
     
+    def moveRobotICoMPoRs(self, X, Y, Z, steps):
+        self.disableAutoDisable()
+        for i in range(steps):
+            print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + (X/steps), self.FL.ICoMPoR.Y + (Y/steps), self.FL.ICoMPoR.Z - (Z/steps)))
+            print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + (X/steps), self.FR.ICoMPoR.Y + (Y/steps), self.FR.ICoMPoR.Z - (Z/steps)))
+            print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + (X/steps), self.BL.ICoMPoR.Y + (Y/steps), self.BL.ICoMPoR.Z - (Z/steps)))
+            print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + (X/steps), self.BR.ICoMPoR.Y + (Y/steps), self.BR.ICoMPoR.Z - (Z/steps)))
+    
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the RPoR.
     # X is the side ways movement.
@@ -675,6 +683,14 @@ class Feet():
         print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z))
         print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
         print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z))
+    
+    def moveRobotRPoRs(self, X, Y, Z, steps):
+        self.disableAutoDisable()
+        for i in range(steps):
+            print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps)))
+            print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps)))
+            print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps)))
+            print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps)))
     
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
