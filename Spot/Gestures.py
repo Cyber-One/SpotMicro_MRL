@@ -34,7 +34,18 @@ def rest():
     legs.syncServos()
     print(legs)
 
-
+#################################################################
+# This function uses a series of small steps to move the legs   #
+# in a straight line.  The more steps used, the slower it will  #
+# travel from rest to stand.                                    #
+# This function uses the RPoR Kinematics.                       #
+#################################################################
+def restToStand(steps):
+    print ("Moving from Rest to Stand position")
+    legs.moveRobotRPoRs(0, 0, 40, steps)
+    legs.moveRobotRPoRs(0, -60, 30, steps)
+    legs.syncServos()
+    print(legs)
 
 def Stand():
     legs.FL.setServoPos(90, 140.64, 86.06)
