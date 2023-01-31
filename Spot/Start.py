@@ -119,4 +119,4 @@ if runtime.isStarted("MPU6050A"):
 # and performing other random like movements, just to make our  #
 # robot appear to be alive.                                     #
 #################################################################
-#execfile(RuningFolder+'/Gestures.py')
+execfile(RuningFolder+'/Gestures.py')
