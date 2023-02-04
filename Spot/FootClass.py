@@ -713,8 +713,11 @@ class Feet():
             self.FR.setServoPos(self.FR.shoulder.pos+(Shoulder/Steps), self.FR.arm.pos+(Arm/Steps), self.FR.wrist.pos+(Wrist/Steps))
             self.BL.setServoPos(self.BL.shoulder.pos+(Shoulder/Steps), self.BL.arm.pos+(Arm/Steps), self.BL.wrist.pos+(Wrist/Steps))
             self.BR.setServoPos(self.BR.shoulder.pos+(Shoulder/Steps), self.BR.arm.pos+(Arm/Steps), self.BR.wrist.pos+(Wrist/Steps))
-            sleep(10)
-        self.imuUpdateFK()
+            sleep(0.01)
+        self.FL.imuUpdateFK()
+        self.FR.imuUpdateFK()
+        self.BL.imuUpdateFK()
+        self.BR.imuUpdateFK()
 
         #self.FL.moveServos(Shoulder, Arm, Wrist, Steps)
         #self.FR.moveServos(Shoulder, Arm, Wrist, Steps)
