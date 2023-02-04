@@ -72,7 +72,7 @@ class Servos():
             self.pos = Pos 
     
     def enableAutoDisable(self):
-        self.Servo.setAutoDisable(True)
+        self.Servo.setAutoDisable(False)
     
     def disableAutoDisable(self):
         self.Servo.setAutoDisable(False)
@@ -533,6 +533,7 @@ class Feet():
         self.FR = Foot(1, FRShoulder, FRArm, FRWrist)
         self.BL = Foot(2, BLShoulder, BLArm, BLWrist)
         self.BR = Foot(3, BRShoulder, BRArm, BRWrist)
+        self.pos = Coordinates()
         # This is the last updated Inertial Measurement Unit 
         # (IMU) input
         self.Pitch = 0
@@ -541,16 +542,8 @@ class Feet():
         self.targetPitch = 0
         self.targetRoll = 0
         # This value correct for an error in mounting of the IMU
-        self.rollOffset = 0.06701
-        self.pitchOffset = 0.06604
-        # To help with setting this up, we will take a number of 
-        # samples and average them out. Set this to the number 
-        # of samples to be used, as each sample comes in, this 
-        # value will be decremented.
-        self.imuCalibrate = 0
-        self.imuLastCalibration = 0
-        self.imuCalibrationRoll = 0
-        self.imuCalibrationPitch = 0
+        self.rollOffset = 0.0
+        self.pitchOffset = 0.0
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = 0
@@ -575,7 +568,13 @@ class Feet():
         else:
             al_State = "Auto Level is Off"
         return al_State
-        
+
+    def setRollOffset(self, RollOffset):
+        self.rollOffset = RollOffset
+    
+    def setPitchOffset(self, PitchOffset):
+        pitchOffset = PitchOffset
+    
     # enable or disable the auto level feature.
     def setAutoLevel(self, state):
         if state == 0:
@@ -604,22 +603,8 @@ class Feet():
     # This routine updates the Pitch and Roll of each of the sub classes
     def updateIMU(self, pitch, roll):
         #print("UpdateIMU")
-        if self.imuCalibrate > 0:
-            if self.imuLastCalibration == 0:
-                self.imuLastCalibration = self.imuCalibrate
-                self.imuCalibrationRoll = 0
-                self.imuCalibrationPitch = 0
-            if self.imuCalibrate == 1:
-                self.imuCalibrate = 0
-                self.rollOffset = -self.imuCalibrationRoll / self.imuLastCalibration
-                self.pitchOffset = -self.imuCalibrationPitch / self.imuLastCalibration
-                self.imuLastCalibration = 0
-            else:
-                self.imuCalibrate = self.imuCalibrate - 1
-                self.imuCalibrationRoll = self.imuCalibrationRoll + roll
-                self.imuCalibrationPitch = self.imuCalibrationPitch + pitch
         if self.Pitch != (pitch + self.pitchOffset) or self.Roll != (roll + self.rollOffset):
-            self.Pitch = pitch  + self.pitchOffset
+            self.Pitch = pitch + self.pitchOffset
             self.Roll = roll + self.rollOffset
             self.FL.setIMUdata(self.Pitch, self.Roll)
             self.FR.setIMUdata(self.Pitch, self.Roll)
@@ -665,7 +650,7 @@ class Feet():
         self.BL.setServoRest()
         self.BR.setServoRest()
         self.disableAutoLevel()
-        self.enableAutoDisable()
+        #self.enableAutoDisable()
     
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the ICoMPoR.
@@ -719,11 +704,6 @@ class Feet():
         self.BL.imuUpdateFK()
         self.BR.imuUpdateFK()
 
-        #self.FL.moveServos(Shoulder, Arm, Wrist, Steps)
-        #self.FR.moveServos(Shoulder, Arm, Wrist, Steps)
-        #self.BL.moveServos(Shoulder, Arm, Wrist, Steps)
-        #self.BR.moveServos(Shoulder, Arm, Wrist, Steps)
-        
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
         # The other line from FR to BL we will call RL.
