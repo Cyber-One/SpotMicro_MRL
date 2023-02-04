@@ -236,7 +236,7 @@ class Foot():
     # absolute position.  I may need to add a delay here.
     def moveServos(self, Shoulder, Arm, Wrist, Steps):
         for i in range(Steps):
-            setServoPos(self.shoulder.pos+(Shoulder/Steps), self.arm.pos+(Arm/Steps), self.wrist.pos+(Wrist/Steps))
+            self.setServoPos(self.shoulder.pos+(Shoulder/Steps), self.arm.pos+(Arm/Steps), self.wrist.pos+(Wrist/Steps))
         self.imuUpdateFK()
     
     def enableAutoDisable(self):
