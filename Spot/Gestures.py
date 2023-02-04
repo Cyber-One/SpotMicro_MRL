@@ -42,7 +42,7 @@ def rest():
 #################################################################
 def restToStand(steps):
     print ("Moving from Rest to Stand position")
-    legs.moveServos(0, 31, 0, steps)
+    legs.moveServos(0, 45, 0, steps)
     legs.moveRobotRPoRs(0, 0, 70, steps)
     print(legs)
 
