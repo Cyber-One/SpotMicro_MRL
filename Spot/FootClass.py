@@ -562,7 +562,7 @@ class Feet():
         print(self.FR)
         print(self.BL)
         print(self.BR)
-        print("Roll:%.4f[%.3f] Pitch:%.4f[%.3f] TargetRoll:%.2f TargetPitch:%.2f Radians[Degrees]" % (self.Roll, math.degrees(self.Roll), self.Pitch, math.degrees(self.Pitch), self.targetRoll, self.targetPitch))
+        print("Roll:%.6f[%.3f] Pitch:%.6f[%.3f] TargetRoll:%.2f TargetPitch:%.2f Radians[Degrees]" % (self.Roll, math.degrees(self.Roll), self.Pitch, math.degrees(self.Pitch), self.targetRoll, self.targetPitch))
         if self.autoLevel == 1:
             al_State = "Auto Level is On"
         else:
