@@ -67,6 +67,7 @@ LCD.clear()
 execfile(RuningFolder+'/FootClass.py')
 legs = Feet(FLShoulder, FLArm, FLWrist, FRShoulder, FRArm, FRWrist, BLShoulder, BLArm, BLWrist, BRShoulder, BRArm, BRWrist)
 legs.disableAutoLevel()
+legs.rest()
 
 #################################################################
 # Setup the MPU6050 calibration and callback functions          #
