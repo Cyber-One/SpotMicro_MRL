@@ -40,7 +40,13 @@ def rest():
 # travel from rest to stand.                                    #
 # This function uses the RPoR Kinematics.                       #
 #################################################################
-def restToStand(steps):
+def restToStands(steps):
+    print ("Moving from Rest to Stand position")
+    legs.moveServos(0, 31, 0, steps)
+    legs.moveRobotRPoRs(0, 0, 70, steps)
+    print(legs)
+
+def restToStands(steps):
     print ("Moving from Rest to Stand position")
     legs.moveRobotRPoRs(0, 0, 40, steps)
     legs.moveRobotRPoRs(0, -60, 30, steps)
