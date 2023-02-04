@@ -708,10 +708,17 @@ class Feet():
             print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps)))
     
     def moveServos(self, Shoulder, Arm, Wrist, Steps):
-        self.FL.moveServos(Shoulder, Arm, Wrist, Steps)
-        self.FR.moveServos(Shoulder, Arm, Wrist, Steps)
-        self.BL.moveServos(Shoulder, Arm, Wrist, Steps)
-        self.BR.moveServos(Shoulder, Arm, Wrist, Steps)
+        for i in range(Steps):
+            self.FL.setServoPos(self.FL.shoulder.pos+(Shoulder/Steps), self.FL.arm.pos+(Arm/Steps), self.FL.wrist.pos+(Wrist/Steps))
+            self.FR.setServoPos(self.FR.shoulder.pos+(Shoulder/Steps), self.FR.arm.pos+(Arm/Steps), self.FR.wrist.pos+(Wrist/Steps))
+            self.BL.setServoPos(self.BL.shoulder.pos+(Shoulder/Steps), self.BL.arm.pos+(Arm/Steps), self.BL.wrist.pos+(Wrist/Steps))
+            self.BR.setServoPos(self.BR.shoulder.pos+(Shoulder/Steps), self.BR.arm.pos+(Arm/Steps), self.BR.wrist.pos+(Wrist/Steps))
+        self.imuUpdateFK()
+
+        #self.FL.moveServos(Shoulder, Arm, Wrist, Steps)
+        #self.FR.moveServos(Shoulder, Arm, Wrist, Steps)
+        #self.BL.moveServos(Shoulder, Arm, Wrist, Steps)
+        #self.BR.moveServos(Shoulder, Arm, Wrist, Steps)
         
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
