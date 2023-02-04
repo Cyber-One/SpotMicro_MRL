@@ -30,6 +30,8 @@ class Coordinates():
         self.roll = 0
         self.pitch = 0
 
+# This class manages the interface between the parent class and
+# the Servo Objects.
 class Servos():
     def __init__(self, ServoObject):
         self.Servo = ServoObject
@@ -222,6 +224,19 @@ class Foot():
         self.shoulder.setServoPos(self.shoulder.rest)
         self.arm.setServoPos(self.arm.rest)
         self.wrist.setServoPos(self.wrist.rest)
+        self.imuUpdateFK()
+    
+    # While setServoPos() will set the servos to the required
+    # position, it does it in one step resulting in a very fast 
+    # servo move.  This function does the same thing but using
+    # a series of steps to slow down or syncronize the movements 
+    # to help approximate a straigt line move.
+    # This vunction also is a relative move as well, that is it 
+    # will rotate the number degrees passed rather than the 
+    # absolute position.  I may need to add a delay here.
+    def moveServos(self, Shoulder, Arm, Wrist, Steps):
+        for i in range(Steps):
+            setServoPos(self.shoulder.pos+(Shoulder/Steps), self.arm.pos+(Arm/Steps), self.wrist.pos+(Wrist/Steps))
         self.imuUpdateFK()
     
     def enableAutoDisable(self):
@@ -692,6 +707,12 @@ class Feet():
             print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps)))
             print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps)))
     
+    def moveServos(self, Shoulder, Arm, Wrist, Steps):
+        self.FL.moveServos(Shoulder, Arm, Wrist, Steps)
+        self.FR.moveServos(Shoulder, Arm, Wrist, Steps)
+        self.BL.moveServos(Shoulder, Arm, Wrist, Steps)
+        self.BR.moveServos(Shoulder, Arm, Wrist, Steps)
+        
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
         # The other line from FR to BL we will call RL.
