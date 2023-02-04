@@ -100,8 +100,8 @@ if runtime.isStarted("MPU6050A"):
 # give the error amount. Subtract that from the currect set     #
 # values and restart the robot.                                 #
 #################################################################
-legs.setRollOffset(0.0)
-legs.setPitchOffset(0.04)
+legs.setRollOffset(0.0552)
+legs.setPitchOffset(0.040)
 
 #################################################################
 # When not activly executing a command, we don't want the       #
