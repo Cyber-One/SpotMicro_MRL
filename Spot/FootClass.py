@@ -544,6 +544,9 @@ class Feet():
         # This value correct for an error in mounting of the IMU
         self.rollOffset = 0.0
         self.pitchOffset = 0.0
+        # This value allows for a dead band in the IMU readings.
+        self.rollTollerance = 0.0174533
+        self.pitchTollerance = 0.0174533
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = 0
@@ -603,7 +606,7 @@ class Feet():
     # This routine updates the Pitch and Roll of each of the sub classes
     def updateIMU(self, pitch, roll):
         #print("UpdateIMU")
-        if self.Pitch != (pitch + self.pitchOffset) or self.Roll != (roll + self.rollOffset):
+        if abs(self.Pitch - (pitch + self.pitchOffset)) <= self.pitchTollerance or abs(self.Roll - (roll + self.rollOffset)) <= self.rollTollerance:
             self.Pitch = pitch + self.pitchOffset
             self.Roll = roll + self.rollOffset
             self.FL.setIMUdata(self.Pitch, self.Roll)
@@ -619,13 +622,13 @@ class Feet():
     def levelRobot(self):
         print("Level Robot - Pitch:", self.Pitch, "Roll:", self.Roll)
         self.disableAutoDisable()
-        FLdata = self.FL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
         print("FL", FLdata)
-        FRdata = self.FR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
         print("FR", FRdata)
-        BLdata = self.BL.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
         print("BL", BLdata)
-        BRdata = self.BR.rotateAboutCoM(self.targetPitch-self.Pitch, self.targetRoll-self.Roll)
+        BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
         print("BR", BRdata)
         print("FL", self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z")))
         print("FR", self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z")))
