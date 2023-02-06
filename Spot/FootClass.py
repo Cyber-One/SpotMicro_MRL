@@ -711,6 +711,12 @@ class Feet():
         self.BL.imuUpdateFK()
         self.BR.imuUpdateFK()
 
+    def getRobotXYZ(self):
+        zHeight = (self.FL.RPoR.Z + self.FR.RPoR.Z + self.BL.RPoR.Z + self.BR.RPoR.Z)/4
+        xOffset = self.FL.RPoR.X + self.FR.RPoR.X + self.BL.RPoR.X + self.BR.RPoR.X
+        yOffset = self.FL.RPoR.Y + self.FR.RPoR.Y + self.BL.RPoR.Y + self.BR.RPoR.Y
+        return {"X":xOffset, "Y":yOffset, "Z":zHeight}
+
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
         # The other line from FR to BL we will call RL.
