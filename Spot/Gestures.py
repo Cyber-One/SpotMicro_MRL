@@ -30,9 +30,12 @@ def rest():
     legs.FR.updateServo()
     legs.BL.updateServo()
     legs.BR.updateServo()
+    data = legs.getRobotXYZ()
+    legs.moveRobotRPoRs(0, 0, data.get("Z")+100, 10)
     legs.rest()
     legs.syncServos()
     print(legs)
+    print(legs.getRobotXYZ())
 
 #################################################################
 # This function uses a series of small steps to move the legs   #
@@ -42,9 +45,15 @@ def rest():
 #################################################################
 def restToStand(steps):
     print ("Moving from Rest to Stand position")
-    legs.moveServos(0, 45, 0, steps)
-    legs.moveRobotRPoRs(0, 0, 70, steps)
-    print(legs)
+    #Rotate the arm to pivot the feet under the shoulders.
+    legs.moveServos(0, 46, 0, 2) 
+    #Get the robots current position.
+    data = legs.getRobotXYZ()
+    print(legs.getRobotXYZ())
+    #Move the robot up 100mm to around 195 above the ground
+    #correcting for and Y error inposition.
+    legs.moveRobotRPoRs(0, -data.get("Y"), 100, 10)
+    print(legs.getRobotXYZ())
 
 def restToStands(steps):
     print ("Moving from Rest to Stand position")
