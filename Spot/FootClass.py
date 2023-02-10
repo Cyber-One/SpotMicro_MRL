@@ -713,8 +713,8 @@ class Feet():
 
     def getRobotXYZ(self):
         zHeight = (self.FL.RPoR.Z + self.FR.RPoR.Z + self.BL.RPoR.Z + self.BR.RPoR.Z)/4
-        xOffset = self.FL.RPoR.X + self.FR.RPoR.X + self.BL.RPoR.X + self.BR.RPoR.X
-        yOffset = self.FL.RPoR.Y + self.FR.RPoR.Y + self.BL.RPoR.Y + self.BR.RPoR.Y
+        xOffset = (self.FL.RPoR.X + self.FR.RPoR.X + self.BL.RPoR.X + self.BR.RPoR.X)/4
+        yOffset = (self.FL.RPoR.Y + self.FR.RPoR.Y + self.BL.RPoR.Y + self.BR.RPoR.Y)/4
         return {"X":xOffset, "Y":yOffset, "Z":zHeight}
 
     def calculateBalancePoint(self):
