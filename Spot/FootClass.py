@@ -17,6 +17,7 @@
 #                                                               #
 #################################################################
 import math
+from threading import Thread
 print("creating the Foot and Feet classes")
 
 # The Coordinates class is a data holder for different X, Y and 
@@ -536,11 +537,11 @@ class Feet():
         self.pos = Coordinates()
         # This is the last updated Inertial Measurement Unit 
         # (IMU) input
-        self.Pitch = 0
-        self.Roll = 0
+        self.Pitch = 0.0
+        self.Roll = 0.0
         # This is where we want the current Pitch and roll to be
-        self.targetPitch = 0
-        self.targetRoll = 0
+        self.targetPitch = 0.0
+        self.targetRoll = 0.0
         # This value correct for an error in mounting of the IMU
         self.rollOffset = 0.0
         self.pitchOffset = 0.0
@@ -549,7 +550,7 @@ class Feet():
         self.pitchTollerance = 0.0174533
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
-        self.autoLevel = 0
+        self.autoLevel = False
     
     def __repr__(self):
         PrintStr = "Feet Class - "
@@ -566,7 +567,7 @@ class Feet():
         print(self.BL)
         print(self.BR)
         print("Roll:%.6f[%.3f] Pitch:%.6f[%.3f] TargetRoll:%.2f TargetPitch:%.2f Radians[Degrees]" % (self.Roll, math.degrees(self.Roll), self.Pitch, math.degrees(self.Pitch), self.targetRoll, self.targetPitch))
-        if self.autoLevel == 1:
+        if self.autoLevel == True:
             al_State = "Auto Level is On"
         else:
             al_State = "Auto Level is Off"
@@ -579,18 +580,24 @@ class Feet():
         pitchOffset = PitchOffset
     
     # enable or disable the auto level feature.
-    def setAutoLevel(self, state):
-        if state == 0:
-            self.autoLevel = 0
-        elif state == 1:
-            self.autoLevel = 1
+    @property
+    def autoLevel(self):
+        return self._autoLevel
+    
+    @temperature.setter
+    def autoLevel(self, state):
+        if state == False:
+            self._autoLevel = False
+        elif state == True:
+            self._autoLevel = True
+            self.levelRobot()
+
     
     def enableAutoLevel(self):
-        self.autoLevel = 1
-        self.levelRobot()
+        self.autoLevel = True
     
     def disableAutoLevel(self):
-        self.autoLevel = 0
+        self.autoLevel = False
     
     
     def setLevel(self, pitch, roll):
@@ -613,7 +620,7 @@ class Feet():
             self.FR.setIMUdata(self.Pitch, self.Roll)
             self.BL.setIMUdata(self.Pitch, self.Roll)
             self.BR.setIMUdata(self.Pitch, self.Roll)
-            if self.autoLevel == 1:
+            if self.autoLevel == True:
                 self.levelRobot()
 
     # This routine calculates the changes that are required to 
@@ -638,6 +645,9 @@ class Feet():
         #print("FR", FRservo)
         #print("BL", BLservo)
         #print("BR", BRservo)
+    
+    #t = Thread(target=target_fun)
+    #t.start()
     
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
