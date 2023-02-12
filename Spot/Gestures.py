@@ -47,12 +47,12 @@ def restToStand(steps):
     print ("Moving from Rest to Stand position")
     #Rotate the arm to pivot the feet under the shoulders.
     legs.moveServos(0, 46, 0, 2) 
-    #Get the robots current position.
+    #Get the robots current position. 
     data = legs.getRobotXYZ()
     print(legs.getRobotXYZ())
     #Move the robot up 100mm to around 195 above the ground
     #correcting for and Y error inposition.
-    legs.moveRobotRPoRs(0, -data.get("Y"), 100, 10)
+    legs.moveRobotRPoRs(0, -data.get("Y"), 100, steps)
     print(legs.getRobotXYZ())
 
 def restToStands(steps):
