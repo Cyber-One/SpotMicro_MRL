@@ -51,6 +51,8 @@ class Servos():
     def setOffset(self, Offset):
         self.offset = Offset
 
+    # Makes the call to the Servo Object 
+    # to update the values in the class.
     def updateServo(self):
         mapper = self.Servo.getMapper()
         self.min = mapper.getMinX()
@@ -551,6 +553,9 @@ class Feet():
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = False
+        # Create the Auto Level Thread. 
+        # We will start it when AutoLevel is enabled.
+        alt = Thread(target=self.levelRobot)
     
     def __repr__(self):
         PrintStr = "Feet Class - "
@@ -584,13 +589,14 @@ class Feet():
     def autoLevel(self):
         return self._autoLevel
     
-    @temperature.setter
+    @autoLevel.setter
     def autoLevel(self, state):
         if state == False:
             self._autoLevel = False
         elif state == True:
-            self._autoLevel = True
-            self.levelRobot()
+            if self._autoLevel == False
+                self._autoLevel = True
+                alt.start()
 
     
     def enableAutoLevel(self):
@@ -612,7 +618,6 @@ class Feet():
 
     # This routine updates the Pitch and Roll of each of the sub classes
     def updateIMU(self, pitch, roll):
-        #print("UpdateIMU")
         if abs(self.Pitch - (pitch + self.pitchOffset)) <= self.pitchTollerance or abs(self.Roll - (roll + self.rollOffset)) <= self.rollTollerance:
             self.Pitch = pitch + self.pitchOffset
             self.Roll = roll + self.rollOffset
@@ -620,8 +625,6 @@ class Feet():
             self.FR.setIMUdata(self.Pitch, self.Roll)
             self.BL.setIMUdata(self.Pitch, self.Roll)
             self.BR.setIMUdata(self.Pitch, self.Roll)
-            if self.autoLevel == True:
-                self.levelRobot()
 
     # This routine calculates the changes that are required to 
     # level the robots RPoR with the ICoMPoR then calls the 
@@ -629,14 +632,15 @@ class Feet():
     def levelRobot(self):
         print("Level Robot - Pitch:", self.Pitch, "Roll:", self.Roll)
         self.disableAutoDisable()
-        FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        FLservo = self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
-        FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
-        BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
-        BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
+        while (self.autoLevel):
+            FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
+            FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
+            BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
+            BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
+            FLservo = self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
+            FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
+            BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
+            BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
         #print("FL", FLdata)
         #print("FR", FRdata)
         #print("BL", BLdata)
@@ -645,9 +649,6 @@ class Feet():
         #print("FR", FRservo)
         #print("BL", BLservo)
         #print("BR", BRservo)
-    
-    #t = Thread(target=target_fun)
-    #t.start()
     
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
