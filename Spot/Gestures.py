@@ -24,14 +24,23 @@ print ("Starting the various Gestures Services")
 # position and makes sure all the servos are updated.           #
 # Handy when calibrating.                                       #
 #################################################################
-def rest(Time = 0.1):
+def rest(Steps = 10, Time = 0.1):
     print ("Moving to Rest postition")
     legs.FL.updateServo()
     legs.FR.updateServo()
     legs.BL.updateServo()
     legs.BR.updateServo()
     data = legs.getRobotXYZ()
-    legs.moveRobotRPoRs(0, 0, data.get("Z")+100, 10, Time)
+    legs.moveRobotRPoRs(0, 0, data.get("Z")+100, Steps, Time)
+    #data = legs.getRobotXYZ()
+    #print(legs.getRobotXYZ())
+    Shoulder = (legs.FL.shoulder.pos + legs.FR.shoulder.pos + legs.BL.shoulder.pos + legs.BR.shoulder.pos)/4
+    Arm = (legs.FL.arm.pos + legs.FR.arm.pos + legs.BL.arm.pos + legs.BR.arm.pos)/4
+    Wrist = (legs.FL.wrist.pos + legs.FR.wrist.pos + legs.BL.wrist.pos + legs.BR.wrist.pos)/4
+    ShoulderRest = (legs.FL.shoulder.rest + legs.FR.shoulder.rest + legs.BL.shoulder.rest + legs.BR.shoulder.rest)/4
+    ArmRest = (legs.FL.arm.rest + legs.FR.arm.rest + legs.BL.arm.rest + legs.BR.arm.rest)/4
+    WristRest = (legs.FL.wrist.rest + legs.FR.wrist.rest + legs.BL.wrist.rest + legs.BR.wrist.rest)/4
+    legs.moveServos(ShoulderRest - Shoulder, ArmRest - Arm, WristRest - Wrist, Steps, Time)
     legs.rest()
     legs.syncServos()
     print(legs)
