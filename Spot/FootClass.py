@@ -539,8 +539,8 @@ class Feet():
         self.pos = Coordinates()
         # This is the last updated Inertial Measurement Unit 
         # (IMU) input
-        self.Pitch = 0.0
-        self.Roll = 0.0
+        self.pitch = 0.0
+        self.roll = 0.0
         # This is where we want the current Pitch and roll to be
         self.targetPitch = 0.0
         self.targetRoll = 0.0
@@ -572,7 +572,7 @@ class Feet():
         print(self.FR)
         print(self.BL)
         print(self.BR)
-        print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] Radians[Degrees]" % (self.Pitch, math.degrees(self.Pitch), self.Roll, math.degrees(self.Roll)))
+        print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] Radians[Degrees]" % (self.pitch, math.degrees(self.pitch), self.roll, math.degrees(self.roll)))
         print("TargetPitch:%.6f[%.3f] TargetRoll:%.6f[%.3f] Radians[Degrees]" % (self.targetPitch, math.degrees(self.targetPitch), self.targetRoll, math.degrees(self.targetRoll)))
         print("OffsetPitch:%.6f[%.3f] OffsetRoll:%.6f[%.3f] Radians[Degrees]" % (self.pitchOffset, math.degrees(self.pitchOffset), self.rollOffset, math.degrees(self.rollOffset)))
         if self.autoLevel == True:
@@ -600,7 +600,6 @@ class Feet():
     
     def disableAutoLevel(self):
         self.autoLevel = False
-    
 
     def setRollOffset(self, RollOffset):
         self.rollOffset = RollOffset
@@ -620,19 +619,19 @@ class Feet():
 
     # This routine updates the Pitch and Roll of each of the sub classes
     def updateIMU(self, pitch, roll):
-        self.Pitch = pitch + self.pitchOffset
-        self.Roll = roll + self.rollOffset
-        if abs(self.FL.ICoMPoR.Pitch - self.Pitch) <= self.pitchTollerance or abs(self.FL.ICoMPoR.Roll - self.Roll) <= self.rollTollerance:
-            self.FL.setIMUdata(self.Pitch, self.Roll)
-            self.FR.setIMUdata(self.Pitch, self.Roll)
-            self.BL.setIMUdata(self.Pitch, self.Roll)
-            self.BR.setIMUdata(self.Pitch, self.Roll)
+        self.pitch = pitch + self.pitchOffset
+        self.roll = roll + self.rollOffset
+        if abs(self.FL.ICoMPoR.pitch - self.pitch) <= self.pitchTollerance or abs(self.FL.ICoMPoR.roll - self.roll) <= self.rollTollerance:
+            self.FL.setIMUdata(self.pitch, self.roll)
+            self.FR.setIMUdata(self.pitch, self.roll)
+            self.BL.setIMUdata(self.pitch, self.roll)
+            self.BR.setIMUdata(self.pitch, self.roll)
 
     # This routine calculates the changes that are required to 
     # level the robots RPoR with the ICoMPoR then calls the 
     # commands to move the servos.
     def levelRobot(self):
-        print("Level Robot - Pitch:", self.Pitch, "Roll:", self.Roll)
+        #print("Level Robot - Pitch:", self.pitch, "Roll:", self.roll)
         self.disableAutoDisable()
         while (True):
             FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
@@ -643,9 +642,9 @@ class Feet():
             FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
             BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
             BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
-            sleep(self.autoLevelTime)
             if self.autoLevel == False:
                 break
+            sleep(self.autoLevelTime)
     
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
@@ -679,14 +678,15 @@ class Feet():
         print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z - Z))
         print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z - Z))
     
-    def moveRobotICoMPoRs(self, X, Y, Z, steps):
+    def moveRobotICoMPoRs(self, X, Y, Z, steps, Time = 0.01):
         self.disableAutoDisable()
         for i in range(steps):
             print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + (X/steps), self.FL.ICoMPoR.Y + (Y/steps), self.FL.ICoMPoR.Z - (Z/steps)))
             print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + (X/steps), self.FR.ICoMPoR.Y + (Y/steps), self.FR.ICoMPoR.Z - (Z/steps)))
             print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + (X/steps), self.BL.ICoMPoR.Y + (Y/steps), self.BL.ICoMPoR.Z - (Z/steps)))
             print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + (X/steps), self.BR.ICoMPoR.Y + (Y/steps), self.BR.ICoMPoR.Z - (Z/steps)))
-    
+            sleep(Time)
+
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the RPoR.
     # X is the side ways movement.
