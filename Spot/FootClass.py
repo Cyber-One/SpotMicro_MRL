@@ -553,6 +553,7 @@ class Feet():
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = False
+        self.autoLevelTime = 0.1
         # Create the Auto Level Thread. 
         # We will start it when AutoLevel is enabled.
         self.alt = Thread(target=self.levelRobot)
@@ -631,7 +632,7 @@ class Feet():
     def levelRobot(self):
         print("Level Robot - Pitch:", self.Pitch, "Roll:", self.Roll)
         self.disableAutoDisable()
-        while (self.autoLevel):
+        while (True):
             FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
             FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
             BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
@@ -640,14 +641,9 @@ class Feet():
             FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
             BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
             BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
-        #print("FL", FLdata)
-        #print("FR", FRdata)
-        #print("BL", BLdata)
-        #print("BR", BRdata)
-        #print("FL", FLservo)
-        #print("FR", FRservo)
-        #print("BL", BLservo)
-        #print("BR", BRservo)
+            sleep(self.autoLevelTime)
+            if !self.autoLevel:
+                break
     
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
@@ -734,6 +730,12 @@ class Feet():
         zHeight = (self.FL.RPoR.Z + self.FR.RPoR.Z + self.BL.RPoR.Z + self.BR.RPoR.Z)/4
         xOffset = (self.FL.RPoR.X + self.FR.RPoR.X + self.BL.RPoR.X + self.BR.RPoR.X)/4
         yOffset = (self.FL.RPoR.Y + self.FR.RPoR.Y + self.BL.RPoR.Y + self.BR.RPoR.Y)/4
+        return {"X":xOffset, "Y":yOffset, "Z":zHeight}
+
+    def getRobotICoMXYZ(self):
+        zHeight = (self.FL.ICoMPoR.Z + self.FR.ICoMPoR.Z + self.BL.ICoMPoR.Z + self.BR.ICoMPoR.Z)/4
+        xOffset = (self.FL.ICoMPoR.X + self.FR.ICoMPoR.X + self.BL.ICoMPoR.X + self.BR.ICoMPoR.X)/4
+        yOffset = (self.FL.ICoMPoR.Y + self.FR.ICoMPoR.Y + self.BL.ICoMPoR.Y + self.BR.ICoMPoR.Y)/4
         return {"X":xOffset, "Y":yOffset, "Z":zHeight}
 
     def calculateBalancePoint(self):
