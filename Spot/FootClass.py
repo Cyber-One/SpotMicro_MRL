@@ -572,7 +572,7 @@ class Feet():
         print(self.FR)
         print(self.BL)
         print(self.BR)
-        print("Roll:%.6f[%.3f] Pitch:%.6f[%.3f] TargetRoll:%.2f TargetPitch:%.2f Radians[Degrees]" % (self.Roll, math.degrees(self.Roll), self.Pitch, math.degrees(self.Pitch), self.targetRoll, self.targetPitch))
+        print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] TargetPitch:%.2f TargetRoll:%.2f OffsetPitch:%.6f OffsetRoll:%.6f Radians[Degrees]" % (self.Pitch, math.degrees(self.Pitch), self.Roll, math.degrees(self.Roll), self.targetPitch, self.targetRoll, pitchOffset, rollOffset))
         if self.autoLevel == True:
             al_State = "Auto Level is On"
         else:
@@ -618,9 +618,9 @@ class Feet():
 
     # This routine updates the Pitch and Roll of each of the sub classes
     def updateIMU(self, pitch, roll):
-        if abs(self.Pitch - (pitch + self.pitchOffset)) <= self.pitchTollerance or abs(self.Roll - (roll + self.rollOffset)) <= self.rollTollerance:
-            self.Pitch = pitch + self.pitchOffset
-            self.Roll = roll + self.rollOffset
+        self.Pitch = pitch + self.pitchOffset
+        self.Roll = roll + self.rollOffset
+        if abs(self.FL.ICoMPoR.Pitch - self.Pitch) <= self.pitchTollerance or abs(self.FL.ICoMPoR.Roll - self.Roll) <= self.rollTollerance:
             self.FL.setIMUdata(self.Pitch, self.Roll)
             self.FR.setIMUdata(self.Pitch, self.Roll)
             self.BL.setIMUdata(self.Pitch, self.Roll)
@@ -642,7 +642,7 @@ class Feet():
             BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
             BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
             sleep(self.autoLevelTime)
-            if !self.autoLevel:
+            if self.autoLevel == False:
                 break
     
     def enableAutoDisable(self):
