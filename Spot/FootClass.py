@@ -553,7 +553,7 @@ class Feet():
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = False
-        self.autoLevelTime = 0.1
+        self.autoLevelTime = 0.5
         # Create the Auto Level Thread. 
         # We will start it when AutoLevel is enabled.
         self.alt = Thread(target=self.levelRobot)
@@ -572,7 +572,9 @@ class Feet():
         print(self.FR)
         print(self.BL)
         print(self.BR)
-        print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] TargetPitch:%.2f TargetRoll:%.2f OffsetPitch:%.6f OffsetRoll:%.6f Radians[Degrees]" % (self.Pitch, math.degrees(self.Pitch), self.Roll, math.degrees(self.Roll), self.targetPitch, self.targetRoll, pitchOffset, rollOffset))
+        print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] Radians[Degrees]" % (self.Pitch, math.degrees(self.Pitch), self.Roll, math.degrees(self.Roll)))
+        print("TargetPitch:%.6f[%.3f] TargetRoll:%.6f[%.3f] Radians[Degrees]" % (self.targetPitch, math.degrees(self.targetPitch), self.targetRoll, math.degrees(self.targetRoll)))
+        print("OffsetPitch:%.6f[%.3f] OffsetRoll:%.6f[%.3f] Radians[Degrees]" % (self.pitchOffset, math.degrees(self.pitchOffset), self.rollOffset, math.degrees(self.rollOffset)))
         if self.autoLevel == True:
             al_State = "Auto Level is On"
         else:
@@ -604,7 +606,7 @@ class Feet():
         self.rollOffset = RollOffset
     
     def setPitchOffset(self, PitchOffset):
-        pitchOffset = PitchOffset
+        self.pitchOffset = PitchOffset
     
     def setLevel(self, pitch, roll):
         self.targetPitch = pitch
