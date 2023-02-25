@@ -24,14 +24,14 @@ print ("Starting the various Gestures Services")
 # position and makes sure all the servos are updated.           #
 # Handy when calibrating.                                       #
 #################################################################
-def rest():
+def rest(Time = 0.1):
     print ("Moving to Rest postition")
     legs.FL.updateServo()
     legs.FR.updateServo()
     legs.BL.updateServo()
     legs.BR.updateServo()
     data = legs.getRobotXYZ()
-    legs.moveRobotRPoRs(0, 0, data.get("Z")+100, 10)
+    legs.moveRobotRPoRs(0, 0, data.get("Z")+100, 10, Time)
     legs.rest()
     legs.syncServos()
     print(legs)
@@ -43,16 +43,16 @@ def rest():
 # travel from rest to stand.                                    #
 # This function uses the RPoR Kinematics.                       #
 #################################################################
-def restToStand(steps):
+def restToStand(steps, Time = 0.1):
     print ("Moving from Rest to Stand position")
     #Rotate the arm to pivot the feet under the shoulders.
-    legs.moveServos(0, 46, 0, 2) 
+    legs.moveServos(0, 46, 0, steps, Time) 
     #Get the robots current position. 
     data = legs.getRobotXYZ()
     print(legs.getRobotXYZ())
     #Move the robot up 100mm to around 195 above the ground
     #correcting for and Y error inposition.
-    legs.moveRobotRPoRs(0, -data.get("Y"), 100, steps)
+    legs.moveRobotRPoRs(0, -data.get("Y"), 100, steps, Time)
     print(legs.getRobotXYZ())
 
 def restToStands(steps):
