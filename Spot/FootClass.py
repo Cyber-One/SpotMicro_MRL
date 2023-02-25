@@ -578,12 +578,6 @@ class Feet():
             al_State = "Auto Level is Off"
         return al_State
 
-    def setRollOffset(self, RollOffset):
-        self.rollOffset = RollOffset
-    
-    def setPitchOffset(self, PitchOffset):
-        pitchOffset = PitchOffset
-    
     # enable or disable the auto level feature.
     @property
     def autoLevel(self):
@@ -594,17 +588,22 @@ class Feet():
         if state == False:
             self._autoLevel = False
         elif state == True:
-            if self._autoLevel == False
+            if self._autoLevel == False:
                 self._autoLevel = True
                 alt.start()
 
-    
     def enableAutoLevel(self):
         self.autoLevel = True
     
     def disableAutoLevel(self):
         self.autoLevel = False
     
+
+    def setRollOffset(self, RollOffset):
+        self.rollOffset = RollOffset
+    
+    def setPitchOffset(self, PitchOffset):
+        pitchOffset = PitchOffset
     
     def setLevel(self, pitch, roll):
         self.targetPitch = pitch
@@ -702,21 +701,22 @@ class Feet():
         print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
         print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z))
     
-    def moveRobotRPoRs(self, X, Y, Z, steps):
+    def moveRobotRPoRs(self, X, Y, Z, steps, Time = 0.01):
         self.disableAutoDisable()
         for i in range(steps):
             print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps)))
             print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps)))
             print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps)))
             print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps)))
+            sleep(Time)
     
-    def moveServos(self, Shoulder, Arm, Wrist, Steps):
+    def moveServos(self, Shoulder, Arm, Wrist, Steps, Time = 0.1):
         for i in range(Steps):
             self.FL.setServoPos(self.FL.shoulder.pos+(Shoulder/Steps), self.FL.arm.pos+(Arm/Steps), self.FL.wrist.pos+(Wrist/Steps))
             self.FR.setServoPos(self.FR.shoulder.pos+(Shoulder/Steps), self.FR.arm.pos+(Arm/Steps), self.FR.wrist.pos+(Wrist/Steps))
             self.BL.setServoPos(self.BL.shoulder.pos+(Shoulder/Steps), self.BL.arm.pos+(Arm/Steps), self.BL.wrist.pos+(Wrist/Steps))
             self.BR.setServoPos(self.BR.shoulder.pos+(Shoulder/Steps), self.BR.arm.pos+(Arm/Steps), self.BR.wrist.pos+(Wrist/Steps))
-            sleep(0.01)
+            sleep(Time)
         self.FL.imuUpdateFK()
         self.FR.imuUpdateFK()
         self.BL.imuUpdateFK()
