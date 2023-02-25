@@ -555,7 +555,7 @@ class Feet():
         self.autoLevel = False
         # Create the Auto Level Thread. 
         # We will start it when AutoLevel is enabled.
-        alt = Thread(target=self.levelRobot)
+        self.alt = Thread(target=self.levelRobot)
     
     def __repr__(self):
         PrintStr = "Feet Class - "
@@ -590,7 +590,7 @@ class Feet():
         elif state == True:
             if self._autoLevel == False:
                 self._autoLevel = True
-                alt.start()
+                self.alt.start()
 
     def enableAutoLevel(self):
         self.autoLevel = True
@@ -696,18 +696,26 @@ class Feet():
     # Z is the Up and Down movement.
     def moveRobotRPoR(self, X, Y, Z):
         self.disableAutoDisable()
-        print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z))
-        print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z))
-        print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
-        print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z))
+        self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z)
+        self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z)
+        self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z)
+        self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z)
+        #print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z))
+        #print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z))
+        #print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
+        #print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z))
     
     def moveRobotRPoRs(self, X, Y, Z, steps, Time = 0.01):
         self.disableAutoDisable()
         for i in range(steps):
-            print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps)))
-            print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps)))
-            print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps)))
-            print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps)))
+            self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps))
+            self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps))
+            self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps))
+            self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps))
+            #print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps)))
+            #print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps)))
+            #print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps)))
+            #print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps)))
             sleep(Time)
     
     def moveServos(self, Shoulder, Arm, Wrist, Steps, Time = 0.1):
