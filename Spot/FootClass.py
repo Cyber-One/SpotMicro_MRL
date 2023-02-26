@@ -655,6 +655,10 @@ class Feet():
             BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
             BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
             if self.autoLevel == False:
+                print("FL:",FLdata)
+                print("FR:",FRdata)
+                print("BL:",BLdata)
+                print("BR:",BRdata)
                 print("FL:",FLservo)
                 print("FR:",FRservo)
                 print("BL:",BLservo)
