@@ -357,7 +357,7 @@ class Foot():
         if self.type == 0 or self.type == 1:
             legY = RY - self.LYS
         else:
-            legY = RY + self.LYS
+            legY = -RY - self.LYS
         # Z-Axis, Since we made the RPoR the same height as the 
         # shoulder, there is no offset required here.
         legZ = RZ
