@@ -357,7 +357,7 @@ class Foot():
         if self.type == 0 or self.type == 1:
             legY = RY - self.LYS
         else:
-            legY = -RY - self.LYS
+            legY = RY + self.LYS
         # Z-Axis, Since we made the RPoR the same height as the 
         # shoulder, there is no offset required here.
         legZ = RZ
@@ -394,7 +394,7 @@ class Foot():
         # Now we need to work out the Length Top of arm to the 
         # Foot in the Y-Axis
         LTF = math.sqrt((LTFz*LTFz) + (legY*legY))
-        #print("Leg Number %d, X:%0.1f, Y:%0.1f, Z:%0.1f, LSF:%0.3f, LTF:%0.2f, LST:%0.3f, LST2:%0.3f" % (self.type, legX, legY, legZ, LSF, LTF, self.LST, self.LST2))
+        #print("Leg Number %d, RX:%0.2f, RY:%0.2f, RZ:%0.2f, X:%0.1f, Y:%0.1f, Z:%0.1f, LSF:%0.3f, LTF:%0.2f, LST:%0.3f, LST2:%0.3f" % (self.type, RX, RY, RZ, legX, legY, legZ, LSF, LTF, self.LST, self.LST2))
         #sleep(0.1)
         if self.MaxLTF < LTF:
             # "Warning, LTF is longer than LTW and LWF combined, this is impossible"
@@ -483,7 +483,10 @@ class Foot():
             CoMx = -math.cos(CoMxA)*xzL
         else:
             CoMx = math.cos(CoMxA)*xzL
-        CoMy = math.cos(CoMyA)*yzL
+        if RY <0:
+            CoMy = -math.cos(CoMyA)*yzL
+        else:
+            CoMy = math.cos(CoMyA)*yzL
         CoMz = math.sin(CoMyA)*yzL
         # So now that it is orientated correctly, lets adjust the offset
         RPoRx = CoMx + self.CoMxOffset
