@@ -524,11 +524,12 @@ class Foot():
         RPoR = self.imuIK(RX, RY, RZ)
         #print("moveToICoMPoR:", RPoR)
         servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
-        if servos.get("Error") == 0:
-            self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
-            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
-        else:
-            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
+        self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
+        return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
+#        if servos.get("Error") == 0:
+#            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
+#        else:
+#            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
        
     
 # The Feet class creates 4 Foot objects based on the Foot class.
