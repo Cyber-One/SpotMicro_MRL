@@ -30,6 +30,14 @@ class Coordinates():
         self.Z = 0
         self.roll = 0
         self.pitch = 0
+    def __repr__(self):
+        return "Coordinates Class"
+        
+    def __str__(self):
+        print_str = "Coordinates Class"
+        print ("X: %.2f Y: %.2f Z: %.2f" %(self.X, self.Y, self.Z))
+        print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] Radians[Degrees]" % (self.pitch, math.degrees(self.pitch), self.roll, math.degrees(self.roll)))
+        return print_str
 
 # This class manages the interface between the parent class and
 # the Servo Objects.
@@ -500,8 +508,8 @@ class Foot():
     def rotateAboutCoM(self, pitch, roll):
         xzL = math.sqrt((self.ICoMPoR.X*self.ICoMPoR.X)+(self.ICoMPoR.Z*self.ICoMPoR.Z))
         yzL = math.sqrt((self.ICoMPoR.Y*self.ICoMPoR.Y)+(self.ICoMPoR.Z*self.ICoMPoR.Z))
-        xzA = math.asin(self.ICoMPoR.X/xzL) + pitch
-        yzA = math.asin(self.ICoMPoR.Y/yzL) + roll
+        xzA = math.asin(self.ICoMPoR.X/xzL) + roll
+        yzA = math.asin(self.ICoMPoR.Y/yzL) + pitch
         CoMx = math.sin(xzA)*xzL
         CoMy = math.sin(yzA)*yzL
         CoMz = -math.cos(yzA)*yzL
@@ -607,7 +615,7 @@ class Feet():
     def setPitchOffset(self, PitchOffset):
         self.pitchOffset = PitchOffset
     
-    def setLevel(self, pitch, roll):
+    def setLevel(self, pitch = 0.0, roll = 0.0):
         self.targetPitch = pitch
         self.targetRoll = roll
     
@@ -643,6 +651,10 @@ class Feet():
             BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
             BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
             if self.autoLevel == False:
+                print("FL:",FLservo)
+                print("FR:",FRservo)
+                print("BL:",BLservo)
+                print("BR:",BRservo)
                 break
             sleep(self.autoLevelTime)
     
