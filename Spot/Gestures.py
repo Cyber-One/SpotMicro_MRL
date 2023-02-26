@@ -44,7 +44,6 @@ def rest(Steps = 10, Time = 0.1):
     legs.rest()
     legs.syncServos()
     print(legs)
-    print(legs.getRobotXYZ())
 
 #################################################################
 # This function uses a series of small steps to move the legs   #
@@ -63,13 +62,6 @@ def restToStand(steps, Time = 0.1):
     #correcting for and Y error inposition.
     legs.moveRobotRPoRs(0, -data.get("Y"), 100, steps, Time)
     print(legs.getRobotXYZ())
-
-def restToStands(steps):
-    print ("Moving from Rest to Stand position")
-    legs.moveRobotRPoRs(0, 0, 40, steps)
-    legs.moveRobotRPoRs(0, -60, 30, steps)
-    legs.syncServos()
-    print(legs)
 
 def Stand():
     legs.FL.setServoPos(90, 140.64, 86.06)
