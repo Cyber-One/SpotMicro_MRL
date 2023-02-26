@@ -583,6 +583,10 @@ class Feet():
         print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] Radians[Degrees]" % (self.pitch, math.degrees(self.pitch), self.roll, math.degrees(self.roll)))
         print("TargetPitch:%.6f[%.3f] TargetRoll:%.6f[%.3f] Radians[Degrees]" % (self.targetPitch, math.degrees(self.targetPitch), self.targetRoll, math.degrees(self.targetRoll)))
         print("OffsetPitch:%.6f[%.3f] OffsetRoll:%.6f[%.3f] Radians[Degrees]" % (self.pitchOffset, math.degrees(self.pitchOffset), self.rollOffset, math.degrees(self.rollOffset)))
+        RPoRdata = self.getRobotXYZ()
+        print("Robot Plane of Reference, X:%.2f, Y:%.2f, Z:%.2f" % (RPoRdata.get("X"), RPoRdata.get("Y"), RPoRdata.get("Z")))
+        ICoMdata = self.getRobotICoMXYZ()
+        print("Inertial Center of Mass Reference, X:%.2f, Y:%.2f, Z:%.2f" % (ICoMdata.get("X"), ICoMdata.get("Y"), ICoMdata.get("Z")))
         if self.autoLevel == True:
             al_State = "Auto Level is On"
         else:
