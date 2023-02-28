@@ -7,11 +7,11 @@ enabled: true
 idleTimeout: 3000
 inverted: true
 maxIn: 130.0
-maxOut: 155.0
+maxOut: 145.0
 minIn: 50.0
 minOut: 44.0
 pin: '8'
-rest: 98.0
+rest: 90.0
 speed: 272.0
 sweepMax: null
 sweepMin: null

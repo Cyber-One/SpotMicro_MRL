@@ -2,9 +2,8 @@
 autoStartPeers: true
 modulePaths: [
   ]
-startScripts: [
-data/Spot/Start.py
-  ]
+startScripts:
+- data/Spot/Start.py
 stopScripts: [
   ]
 type: Python

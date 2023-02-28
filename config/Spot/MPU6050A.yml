@@ -4,5 +4,5 @@ autoStartPeers: true
 bus: '1'
 controller: raspi
 sampleRate: 3.0
-start: false
+start: true
 type: Mpu6050

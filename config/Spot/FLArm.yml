@@ -6,12 +6,12 @@ controller: Back
 enabled: true
 idleTimeout: 3000
 inverted: false
-maxIn: 165.0
-maxOut: 175.0
-minIn: 15.0
+maxIn: 200.0
+maxOut: 170.0
+minIn: 63.0
 minOut: 0.0
 pin: '13'
-rest: 99.0
+rest: 133.0
 speed: 272.0
 sweepMax: null
 sweepMin: null
