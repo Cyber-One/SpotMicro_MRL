@@ -759,6 +759,14 @@ class Feet():
         yOffset = (self.FL.ICoMPoR.Y + self.FR.ICoMPoR.Y + self.BL.ICoMPoR.Y + self.BR.ICoMPoR.Y)/4
         return {"X":xOffset, "Y":yOffset, "Z":zHeight}
 
+    def centerToRPoR(self):
+        pos = self.getRobotXYZ()
+        self.moveRobotRPoR(pos.get("X"), pos.get("Y"), 0)
+        
+    def centerToICoM(self):
+        pos = self.getRobotICoMXYZ()
+        self.moveRobotICoMPoR(pos.get("X"), pos.get("Y"), 0)
+        
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
         # The other line from FR to BL we will call RL.
