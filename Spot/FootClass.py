@@ -239,15 +239,15 @@ class Foot():
     
     # While setServoPos() will set the servos to the required
     # position, it does it in one step resulting in a very fast 
-    # servo move.  This function does the same thing but using
-    # a series of steps to slow down or syncronize the movements 
-    # to help approximate a straigt line move.
-    # This vunction also is a relative move as well, that is it 
+    # servo moves.  This function does the same thing but using
+    # a series of steps to slow down or syncronize the movements.
+    # This function is also a relative move as well, that is it 
     # will rotate the number degrees passed rather than the 
     # absolute position.  I may need to add a delay here.
-    def moveServos(self, Shoulder, Arm, Wrist, Steps):
+    def moveServos(self, Shoulder, Arm, Wrist, Steps, Delay=0.01):
         for i in range(Steps):
             self.setServoPos(self.shoulder.pos+(Shoulder/Steps), self.arm.pos+(Arm/Steps), self.wrist.pos+(Wrist/Steps))
+            sleep(Delay)
         self.imuUpdateFK()
     
     def enableAutoDisable(self):
@@ -311,7 +311,7 @@ class Foot():
         CoMY = Y - self.CoMyOffset
         CoMZ = Z - self.CoMzOffset
         # Next lets work out the distance between the Centre of 
-        # Mass and the feet
+        # Mass and the foot
         xzL = math.sqrt((CoMX*CoMX)+(CoMZ*CoMZ))
         yzL = math.sqrt((CoMY*CoMY)+(CoMZ*CoMZ))
         # We also need to know the angle of the line between the
@@ -502,12 +502,10 @@ class Foot():
     # we requested the servos move to.
     def moveToRPoR(self, RX, RY, RZ):
         servos = self.inverseKinematics(RX, RY, RZ)
-        if servos.get("Error") == 0:
-            self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
-            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
-        else:
-            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
+        self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
+        return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
     
+    # This is my suspect faulty bit of code.
     def rotateAboutCoM(self, pitch, roll):
         xzL = math.sqrt((self.ICoMPoR.X*self.ICoMPoR.X)+(self.ICoMPoR.Z*self.ICoMPoR.Z))
         yzL = math.sqrt((self.ICoMPoR.Y*self.ICoMPoR.Y)+(self.ICoMPoR.Z*self.ICoMPoR.Z))
@@ -529,10 +527,6 @@ class Foot():
         servos = self.inverseKinematics(RPoR.get("X"), RPoR.get("Y"), RPoR.get("Z"))
         self.setServoPos(servos.get("Shoulder"), servos.get("Arm"), servos.get("Wrist"))
         return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
-#        if servos.get("Error") == 0:
-#            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
-#        else:
-#            return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
        
     
 # The Feet class creates 4 Foot objects based on the Foot class.
@@ -690,6 +684,48 @@ class Feet():
         self.disableAutoLevel()
         #self.enableAutoDisable()
     
+    def moveServos(self, Shoulder, Arm, Wrist, Steps, Time = 0.1):
+        for i in range(Steps):
+            self.FL.setServoPos(self.FL.shoulder.pos+(Shoulder/Steps), self.FL.arm.pos+(Arm/Steps), self.FL.wrist.pos+(Wrist/Steps))
+            self.FR.setServoPos(self.FR.shoulder.pos+(Shoulder/Steps), self.FR.arm.pos+(Arm/Steps), self.FR.wrist.pos+(Wrist/Steps))
+            self.BL.setServoPos(self.BL.shoulder.pos+(Shoulder/Steps), self.BL.arm.pos+(Arm/Steps), self.BL.wrist.pos+(Wrist/Steps))
+            self.BR.setServoPos(self.BR.shoulder.pos+(Shoulder/Steps), self.BR.arm.pos+(Arm/Steps), self.BR.wrist.pos+(Wrist/Steps))
+            sleep(Time)
+        self.FL.imuUpdateFK()
+        self.FR.imuUpdateFK()
+        self.BL.imuUpdateFK()
+        self.BR.imuUpdateFK()
+
+    # This routine calls the system to make a simletanous 4 leg 
+    # linear movement relative to the RPoR.
+    # X is the side ways movement.
+    # Y is the Back and forward movement.
+    # Z is the Up and Down movement.
+    def moveRobotRPoR(self, X, Y, Z):
+        self.disableAutoDisable()
+        self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z)
+        self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z)
+        self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z)
+        self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z)
+    
+    # Speed controlled version of the moveRobotRPoR.
+    def moveRobotRPoRs(self, X, Y, Z, steps, Time = 0.01):
+        self.disableAutoDisable()
+        for i in range(steps):
+            self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps))
+            self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps))
+            self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps))
+            self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps))
+            sleep(Time)
+    
+    # This allows each of the legs to be moved in different directions.
+    def moveRobotRPoR4D(self, FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ):
+        self.disableAutoDisable()
+        self.FL.moveToRPoR(self.FL.RPoR.X + FLX, self.FL.RPoR.Y + FLY, self.FL.RPoR.Z - FLZ)
+        self.FR.moveToRPoR(self.FR.RPoR.X + FRX, self.FR.RPoR.Y + FRY, self.FR.RPoR.Z - FRZ)
+        self.BL.moveToRPoR(self.BL.RPoR.X + BLX, self.BL.RPoR.Y + BLY, self.BL.RPoR.Z - BLZ)
+        self.BR.moveToRPoR(self.BR.RPoR.X + BRX, self.BR.RPoR.Y + BRY, self.BR.RPoR.Z - BRZ)
+    
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the ICoMPoR.
     # X is the side ways movement.
@@ -710,47 +746,6 @@ class Feet():
             print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + (X/steps), self.BL.ICoMPoR.Y + (Y/steps), self.BL.ICoMPoR.Z - (Z/steps)))
             print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + (X/steps), self.BR.ICoMPoR.Y + (Y/steps), self.BR.ICoMPoR.Z - (Z/steps)))
             sleep(Time)
-
-    # This routine calls the system to make a simle 4 leg 
-    # linear movement relative to the RPoR.
-    # X is the side ways movement.
-    # Y is the Back and forward movement.
-    # Z is the Up and Down movement.
-    def moveRobotRPoR(self, X, Y, Z):
-        self.disableAutoDisable()
-        self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z)
-        self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z)
-        self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z)
-        self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z)
-        #print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + X, self.FL.RPoR.Y + Y, self.FL.RPoR.Z - Z))
-        #print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + X, self.FR.RPoR.Y + Y, self.FR.RPoR.Z - Z))
-        #print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + X, self.BL.RPoR.Y + Y, self.BL.RPoR.Z - Z))
-        #print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z))
-    
-    def moveRobotRPoRs(self, X, Y, Z, steps, Time = 0.01):
-        self.disableAutoDisable()
-        for i in range(steps):
-            self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps))
-            self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps))
-            self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps))
-            self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps))
-            #print("FL", self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps)))
-            #print("FR", self.FR.moveToRPoR(self.FR.RPoR.X + (X/steps), self.FR.RPoR.Y + (Y/steps), self.FR.RPoR.Z - (Z/steps)))
-            #print("BL", self.BL.moveToRPoR(self.BL.RPoR.X + (X/steps), self.BL.RPoR.Y + (Y/steps), self.BL.RPoR.Z - (Z/steps)))
-            #print("BR", self.BR.moveToRPoR(self.BR.RPoR.X + (X/steps), self.BR.RPoR.Y + (Y/steps), self.BR.RPoR.Z - (Z/steps)))
-            sleep(Time)
-    
-    def moveServos(self, Shoulder, Arm, Wrist, Steps, Time = 0.1):
-        for i in range(Steps):
-            self.FL.setServoPos(self.FL.shoulder.pos+(Shoulder/Steps), self.FL.arm.pos+(Arm/Steps), self.FL.wrist.pos+(Wrist/Steps))
-            self.FR.setServoPos(self.FR.shoulder.pos+(Shoulder/Steps), self.FR.arm.pos+(Arm/Steps), self.FR.wrist.pos+(Wrist/Steps))
-            self.BL.setServoPos(self.BL.shoulder.pos+(Shoulder/Steps), self.BL.arm.pos+(Arm/Steps), self.BL.wrist.pos+(Wrist/Steps))
-            self.BR.setServoPos(self.BR.shoulder.pos+(Shoulder/Steps), self.BR.arm.pos+(Arm/Steps), self.BR.wrist.pos+(Wrist/Steps))
-            sleep(Time)
-        self.FL.imuUpdateFK()
-        self.FR.imuUpdateFK()
-        self.BL.imuUpdateFK()
-        self.BR.imuUpdateFK()
 
     def getRobotXYZ(self):
         zHeight = (self.FL.RPoR.Z + self.FR.RPoR.Z + self.BL.RPoR.Z + self.BR.RPoR.Z)/4
