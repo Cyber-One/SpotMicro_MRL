@@ -761,11 +761,11 @@ class Feet():
 
     def centerToRPoR(self):
         pos = self.getRobotXYZ()
-        self.moveRobotRPoR(pos.get("X"), pos.get("Y"), 0)
+        self.moveRobotRPoR(-pos.get("X"), -pos.get("Y"), 0)
         
     def centerToICoM(self):
         pos = self.getRobotICoMXYZ()
-        self.moveRobotICoMPoR(pos.get("X"), pos.get("Y"), 0)
+        self.moveRobotICoMPoR(-pos.get("X"), -pos.get("Y"), 0)
         
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
