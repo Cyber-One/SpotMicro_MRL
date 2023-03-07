@@ -18,13 +18,21 @@
 #################################################################
 print ("Starting the various Gestures Services")
 
+#################################################################
+# The following variable will help with the movement controls.  #
+# 0 = Rest Position.
+# 1 = Standing Position.
+# 2 = Sitting Position.
+# 3 = Stand Tall.
+#################################################################
+gestureStatus = 0
 
 #################################################################
 # this command returns all the servos to the starting rest      #
 # position and makes sure all the servos are updated.           #
 # Handy when calibrating.                                       #
 #################################################################
-def rest(Steps = 10, Time = 0.1):
+def rest(Steps = 10, Time = 0.03):
     print ("Moving to Rest postition")
     legs.FL.updateServo()
     legs.FR.updateServo()
@@ -43,6 +51,7 @@ def rest(Steps = 10, Time = 0.1):
     legs.moveServos(ShoulderRest - Shoulder, ArmRest - Arm, WristRest - Wrist, Steps, Time)
     legs.rest()
     legs.syncServos()
+    gestureStatus = 0
     print(legs)
 
 #################################################################
@@ -51,24 +60,29 @@ def rest(Steps = 10, Time = 0.1):
 # travel from rest to stand.                                    #
 # This function uses the RPoR Kinematics.                       #
 #################################################################
-def restToStand(steps, Time = 0.1):
+def restToStand(steps = 20, Time = 0.03):
     print ("Moving from Rest to Stand position")
     #Rotate the arm to pivot the feet under the shoulders.
     legs.moveServos(0, 46, 0, steps, Time) 
     #Get the robots current position. 
     data = legs.getRobotXYZ()
-    print(legs.getRobotXYZ())
+    #print(legs.getRobotXYZ())
     #Move the robot up 100mm to around 195 above the ground
     #correcting for and Y error inposition.
     legs.moveRobotRPoRs(0, -data.get("Y"), 100, steps, Time)
-    print(legs.getRobotXYZ())
+    gestureStatus = 1
+    print(legs)
 
 def Stand():
-    legs.FL.setServoPos(90, 140.64, 86.06)
-    legs.FR.setServoPos(90, 140.64, 86.06)
-    legs.BL.setServoPos(90, 140.64, 86.06)
-    legs.BR.setServoPos(90, 140.64, 86.06)
-    legs.syncServos()
+    if gestureStatus == 0:
+        restToStand()
+    else:
+        legs.FL.setServoPos(90, 124.45, 115.44)
+        legs.FR.setServoPos(90, 124.45, 115.44)
+        legs.BL.setServoPos(90, 124.45, 115.44)
+        legs.BR.setServoPos(90, 124.45, 115.44)
+        legs.syncServos()
+    gestureStatus = 1
     print(legs)
 
 def StandTall():
@@ -77,14 +91,12 @@ def StandTall():
     legs.BL.setServoPos(90, 90, 180)
     legs.BR.setServoPos(90, 90, 180)
     legs.syncServos()
+    gestureStatus = 3
     print(legs)
 
 def Sit():
-    Stand()
-    legs.FL.setServoPos(90, 90, 180)
-    legs.FR.setServoPos(90, 90, 180)
-    legs.BL.setServoPos(90, 160, 50)
-    legs.BR.setServoPos(90, 160, 50)
+    legs.moveRobotRPoR4D(90-legs.FL.shoulder.pos, 127-legs.FL.arm.pos, 180-legs.FL.wrist.pos, 90-legs.FR.shoulder.pos, 127-legs.FR.arm.pos, 180-legs.FR.wrist.pos, 90-legs.BL.shoulder.pos, 180-legs.BL.arm.pos, 52-legs.BL.wrist.pos, 90-legs.BR.shoulder.pos, 180-legs.BR.arm.pos, 52-legs.BR.wrist.pos)
     legs.syncServos()
+    gestureStatus = 2
     print(legs)
 
