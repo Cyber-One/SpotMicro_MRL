@@ -684,7 +684,7 @@ class Feet():
         self.disableAutoLevel()
         #self.enableAutoDisable()
     
-    def moveServos(self, Shoulder, Arm, Wrist, Steps, Time = 0.1):
+    def moveServos(self, Shoulder, Arm, Wrist, Steps = 10, Time = 0.1):
         for i in range(Steps):
             self.FL.setServoPos(self.FL.shoulder.pos+(Shoulder/Steps), self.FL.arm.pos+(Arm/Steps), self.FL.wrist.pos+(Wrist/Steps))
             self.FR.setServoPos(self.FR.shoulder.pos+(Shoulder/Steps), self.FR.arm.pos+(Arm/Steps), self.FR.wrist.pos+(Wrist/Steps))
@@ -709,7 +709,7 @@ class Feet():
         self.BR.moveToRPoR(self.BR.RPoR.X + X, self.BR.RPoR.Y + Y, self.BR.RPoR.Z - Z)
     
     # Speed controlled version of the moveRobotRPoR.
-    def moveRobotRPoRs(self, X, Y, Z, steps, Time = 0.01):
+    def moveRobotRPoRs(self, X, Y, Z, steps = 10, Time = 0.01):
         self.disableAutoDisable()
         for i in range(steps):
             self.FL.moveToRPoR(self.FL.RPoR.X + (X/steps), self.FL.RPoR.Y + (Y/steps), self.FL.RPoR.Z - (Z/steps))
@@ -738,7 +738,7 @@ class Feet():
         print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + X, self.BL.ICoMPoR.Y + Y, self.BL.ICoMPoR.Z - Z))
         print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + X, self.BR.ICoMPoR.Y + Y, self.BR.ICoMPoR.Z - Z))
     
-    def moveRobotICoMPoRs(self, X, Y, Z, steps, Time = 0.01):
+    def moveRobotICoMPoRs(self, X, Y, Z, steps = 10, Time = 0.01):
         self.disableAutoDisable()
         for i in range(steps):
             print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + (X/steps), self.FL.ICoMPoR.Y + (Y/steps), self.FL.ICoMPoR.Z - (Z/steps)))
@@ -765,7 +765,7 @@ class Feet():
         
     def centerToICoM(self):
         pos = self.getRobotICoMXYZ()
-        self.moveRobotICoMPoR(-pos.get("X"), -pos.get("Y"), 0)
+        self.moveRobotRPoR(-pos.get("X"), -pos.get("Y"), 0)
         
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
