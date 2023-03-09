@@ -33,6 +33,7 @@ gestureStatus = 0
 # Handy when calibrating.                                       #
 #################################################################
 def rest(Steps = 10, Time = 0.03):
+    global gestureStatus
     print ("Moving to Rest postition")
     legs.FL.updateServo()
     legs.FR.updateServo()
@@ -61,6 +62,7 @@ def rest(Steps = 10, Time = 0.03):
 # This function uses the RPoR Kinematics.                       #
 #################################################################
 def restToStand(steps = 20, Time = 0.03):
+    global gestureStatus
     print ("Moving from Rest to Stand position")
     #Rotate the arm to pivot the feet under the shoulders.
     legs.moveServos(0, 46, 0, steps, Time) 
@@ -74,6 +76,7 @@ def restToStand(steps = 20, Time = 0.03):
     print(legs)
 
 def Stand():
+    global gestureStatus
     if gestureStatus == 0:
         restToStand()
     else:
@@ -86,6 +89,7 @@ def Stand():
     print(legs)
 
 def StandTall():
+    global gestureStatus
     legs.FL.setServoPos(90, 90, 180)
     legs.FR.setServoPos(90, 90, 180)
     legs.BL.setServoPos(90, 90, 180)
@@ -95,6 +99,7 @@ def StandTall():
     print(legs)
 
 def Sit():
+    global gestureStatus
     legs.moveRobotRPoR4D(90-legs.FL.shoulder.pos, 127-legs.FL.arm.pos, 180-legs.FL.wrist.pos, 90-legs.FR.shoulder.pos, 127-legs.FR.arm.pos, 180-legs.FR.wrist.pos, 90-legs.BL.shoulder.pos, 180-legs.BL.arm.pos, 52-legs.BL.wrist.pos, 90-legs.BR.shoulder.pos, 180-legs.BR.arm.pos, 52-legs.BR.wrist.pos)
     legs.syncServos()
     gestureStatus = 2
