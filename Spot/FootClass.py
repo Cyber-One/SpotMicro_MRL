@@ -442,10 +442,14 @@ class Foot():
         #sometimes we want the foot to move in the negative 
         # direction.  For this reason, we check to see if that 
         # was the case and invert the value if it was.
-        if legY>0:
-            Af = math.acos(LTFz/LTF)
+        if abs(LTFz/LTF) > 1:
+            print("*** ERROR *** LTFz/LTF = %.3f, LTFz = %.3f, LTF = %.3f" % (LTFz/LTF, LTFz, LTF)
+            Af = 0
         else:
-            Af = -math.acos(LTFz/LTF)
+            if legY>0:
+                Af = math.acos(LTFz/LTF)
+            else:
+                Af = -math.acos(LTFz/LTF)
         # Then combine with the angle we need the foot at 
         # relative to the top of the arm to get the servo 
         # position
