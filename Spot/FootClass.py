@@ -701,6 +701,18 @@ class Feet():
         self.BL.imuUpdateFK()
         self.BR.imuUpdateFK()
 
+    def moveServos4D(self, FLS, FLA, FLW, FRS, FRA, FRW, BLS, BLA, BLW, BRS, BRA, BRW, Steps = 10, Time = 0.1):
+        for i in range(Steps):
+            self.FL.setServoPos(self.FL.shoulder.pos+(FLS/Steps), self.FL.arm.pos+(FLA/Steps), self.FL.wrist.pos+(FLW/Steps))
+            self.FR.setServoPos(self.FR.shoulder.pos+(FRS/Steps), self.FR.arm.pos+(FRA/Steps), self.FR.wrist.pos+(FRW/Steps))
+            self.BL.setServoPos(self.BL.shoulder.pos+(BLS/Steps), self.BL.arm.pos+(BLA/Steps), self.BL.wrist.pos+(BLW/Steps))
+            self.BR.setServoPos(self.BR.shoulder.pos+(BRS/Steps), self.BR.arm.pos+(BRA/Steps), self.BR.wrist.pos+(BRW/Steps))
+            sleep(Time)
+        self.FL.imuUpdateFK()
+        self.FR.imuUpdateFK()
+        self.BL.imuUpdateFK()
+        self.BR.imuUpdateFK()
+
     # This routine calls the system to make a simletanous 4 leg 
     # linear movement relative to the RPoR.
     # X is the side ways movement.
