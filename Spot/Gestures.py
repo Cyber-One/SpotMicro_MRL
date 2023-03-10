@@ -98,9 +98,9 @@ def StandTall():
     gestureStatus = 3
     print(legs)
 
-def Sit():
+def Sit(Steps = 10, Time = 0.05):
     global gestureStatus
-    legs.moveRobotRPoR4D(90-legs.FL.shoulder.pos, 127-legs.FL.arm.pos, 180-legs.FL.wrist.pos, 90-legs.FR.shoulder.pos, 127-legs.FR.arm.pos, 180-legs.FR.wrist.pos, 90-legs.BL.shoulder.pos, 180-legs.BL.arm.pos, 52-legs.BL.wrist.pos, 90-legs.BR.shoulder.pos, 180-legs.BR.arm.pos, 52-legs.BR.wrist.pos)
+    legs.moveServos4D(90-legs.FL.shoulder.pos, 127-legs.FL.arm.pos, 180-legs.FL.wrist.pos, 90-legs.FR.shoulder.pos, 127-legs.FR.arm.pos, 180-legs.FR.wrist.pos, 90-legs.BL.shoulder.pos, 180-legs.BL.arm.pos, 52-legs.BL.wrist.pos, 90-legs.BR.shoulder.pos, 180-legs.BR.arm.pos, 52-legs.BR.wrist.pos, Steps, Time)
     legs.syncServos()
     gestureStatus = 2
     print(legs)
