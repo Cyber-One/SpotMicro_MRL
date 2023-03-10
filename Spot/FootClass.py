@@ -443,8 +443,9 @@ class Foot():
         # direction.  For this reason, we check to see if that 
         # was the case and invert the value if it was.
         if abs(LTFz/LTF) > 1:
-            print("*** ERROR *** LTFz/LTF = %.3f, LTFz = %.3f, LTF = %.3f" % (LTFz/LTF, LTFz, LTF))
+            print("*** ERROR *** LTFz/LTF = %.3f, LTFz = %.3f, LTF = %.3f, RX = %.3f, RY = %.3f, RZ = %.3f, Type = %.1f" % (LTFz/LTF, LTFz, LTF, RX, RY, RZ, self.type))
             Af = 0
+            error = 9
         else:
             if legY>0:
                 Af = math.acos(LTFz/LTF)
