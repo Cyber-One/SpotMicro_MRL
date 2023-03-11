@@ -304,7 +304,7 @@ class Foot():
     # This is a simple conversion of the foot coordinates from 
     # the Robot Plane of Reference to the Inertial Center of 
     # Mass Plane of Reference based on the coordinates passed in.
-    def imuForwardKinimatics(self, X, Y, Z):
+    def imuForwardKinimatics(self, X, Y, Z, roll, pitch):
         # Lets change our reference from the Robot origin to the 
         # Centre of Mass origin
         CoMX = X - self.CoMxOffset
@@ -319,8 +319,8 @@ class Foot():
         xzA = math.asin(CoMX/xzL)
         yzA = math.asin(CoMY/yzL)
         # Now simpley add the Roll and Pitch to the current angles
-        imuXZA = xzA + self.ICoMPoR.roll
-        imuYZA = yzA + self.ICoMPoR.pitch
+        imuXZA = xzA + roll
+        imuYZA = yzA + pitch
         # Now we can calculate the new X, Y, and Z based on the 
         # new origin and angle.
         ImuX = math.sin(imuXZA)*xzL
@@ -332,7 +332,7 @@ class Foot():
     # Frame of Reference is up to date
     def imuUpdateFK(self):
         self.updateFK()
-        IComPoR = self.imuForwardKinimatics(self.RPoR.X, self.RPoR.Y, self.RPoR.Z)
+        IComPoR = self.imuForwardKinimatics(self.RPoR.X, self.RPoR.Y, self.RPoR.Z, self.ICoMPoR.roll, self.ICoMPoR.pitch)
         self.ICoMPoR.X = IComPoR.get("X")
         self.ICoMPoR.Y = IComPoR.get("Y")
         self.ICoMPoR.Z = IComPoR.get("Z")
@@ -565,6 +565,8 @@ class Feet():
         # body at the target pitch and roll.
         self.autoLevel = False
         self.autoLevelTime = 0.5
+        self.autoBalance = False
+        self.autoBalanceTime = 0.5
         # Create the Auto Level Thread. 
         # We will start it when AutoLevel is enabled.
         self.alt = Thread(target=self.levelRobot)
@@ -615,6 +617,19 @@ class Feet():
     
     def disableAutoLevel(self):
         self.autoLevel = False
+
+    @property
+    def autoBalance(self):
+        return self._autoBalance
+        
+    @autoBalance.setter
+    def autoBalance(self, state):
+        if state == False:
+            self._autoBalance = False
+        elif state == True:
+            if self._autoBalance == False:
+                self._autoBalance = True
+                self.alt.start()
 
     def setRollOffset(self, RollOffset):
         self.rollOffset = RollOffset
@@ -780,9 +795,9 @@ class Feet():
         pos = self.getRobotXYZ()
         self.moveRobotRPoR(-pos.get("X"), -pos.get("Y"), 0)
         
-    def centerToICoM(self):
+    def centerToICoM(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotICoMXYZ()
-        self.moveRobotRPoR(-pos.get("X"), -pos.get("Y"), 0)
+        self.moveRobotRPoR(-(pos.get("X")+Xoffset), -(pos.get("Y")+Yoffset), 0)
         
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
