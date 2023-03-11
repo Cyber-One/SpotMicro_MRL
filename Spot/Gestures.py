@@ -71,7 +71,7 @@ def restToStand(steps = 20, Time = 0.03):
     #print(legs.getRobotXYZ())
     #Move the robot up 100mm to around 195 above the ground
     #correcting for and Y error inposition.
-    legs.moveRobotRPoRs(0, -data.get("Y"), 100, steps, Time)
+    legs.moveRobotRPoRs(-data.get("X"), -data.get("Y"), 100, steps, Time)
     gestureStatus = 1
     print(legs)
 
