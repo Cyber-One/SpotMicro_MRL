@@ -660,7 +660,7 @@ class Feet():
     def balanceLevelRobot(self):
         self.disableAutoDisable()
         while (True):
-            if self._autoBalance == True:
+            if self.autoBalance == True:
                 centerToICoM()
             if self.autoLevel == True:
                 levelRobot()
