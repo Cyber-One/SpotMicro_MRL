@@ -561,12 +561,14 @@ class Feet():
         # This value allows for a dead band in the IMU readings.
         self.rollTollerance = 0.0174533
         self.pitchTollerance = 0.0174533
+        # This is where we want the current IMCoM X and Y offset.
+        self.TargetBalanceX = 0.0
+        self.TargetBalanceY = 0.0
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = False
-        self.autoLevelTime = 0.5
+        self.autoLevelBalanceTime = 0.5
         self.autoBalance = False
-        self.autoBalanceTime = 0.5
         # Create the Auto Level Thread. 
         # We will start it when AutoLevel is enabled.
         self.alt = Thread(target=self.balanceLevelRobot)
@@ -591,6 +593,7 @@ class Feet():
         print("OffsetPitch:%.6f[%.3f] OffsetRoll:%.6f[%.3f] Radians[Degrees]" % (self.pitchOffset, math.degrees(self.pitchOffset), self.rollOffset, math.degrees(self.rollOffset)))
         RPoRdata = self.getRobotXYZ()
         print("Robot Plane of Reference, X:%.2f, Y:%.2f, Z:%.2f" % (RPoRdata.get("X"), RPoRdata.get("Y"), RPoRdata.get("Z")))
+        print("Target X & Y Offset for ICoM, X:%.2f, Y:%.2f, Balance/Level Time: %.3f seconds" %(self.TargetBalanceX, self.TargetBalanceY, self.autoLevelBalanceTime))
         ICoMdata = self.getRobotICoMXYZ()
         print("Inertial Center of Mass Reference, X:%.2f, Y:%.2f, Z:%.2f" % (ICoMdata.get("X"), ICoMdata.get("Y"), ICoMdata.get("Z")))
         if self.autoLevel == True:
@@ -676,14 +679,14 @@ class Feet():
         FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
         BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
         BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
-        print("FL:",FLdata)
-        print("FR:",FRdata)
-        print("BL:",BLdata)
-        print("BR:",BRdata)
-        print("FL:",FLservo)
-        print("FR:",FRservo)
-        print("BL:",BLservo)
-        print("BR:",BRservo)
+        #print("FL:",FLdata)
+        #print("FR:",FRdata)
+        #print("BL:",BLdata)
+        #print("BR:",BRdata)
+        #print("FL:",FLservo)
+        #print("FR:",FRservo)
+        #print("BL:",BLservo)
+        #print("BR:",BRservo)
     
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
