@@ -569,7 +569,8 @@ class Feet():
         self.autoBalanceTime = 0.5
         # Create the Auto Level Thread. 
         # We will start it when AutoLevel is enabled.
-        self.alt = Thread(target=self.levelRobot)
+        self.alt = Thread(target=self.balanceLevelRobot)
+        self.alt.start()
     
     def __repr__(self):
         PrintStr = "Feet Class - "
@@ -608,9 +609,7 @@ class Feet():
         if state == False:
             self._autoLevel = False
         elif state == True:
-            if self._autoLevel == False:
-                self._autoLevel = True
-                self.alt.start()
+            self._autoLevel = True
 
     def enableAutoLevel(self):
         self.autoLevel = True
@@ -627,9 +626,7 @@ class Feet():
         if state == False:
             self._autoBalance = False
         elif state == True:
-            if self._autoBalance == False:
-                self._autoBalance = True
-                self.alt.start()
+            self._autoBalance = True
 
     def setRollOffset(self, RollOffset):
         self.rollOffset = RollOffset
@@ -657,32 +654,36 @@ class Feet():
             self.BL.setIMUdata(self.pitch, self.roll)
             self.BR.setIMUdata(self.pitch, self.roll)
 
+    def balanceLevelRobot(self):
+        self.disableAutoDisable()
+        while (True):
+            if self._autoBalance == True:
+                centerToICoM()
+            if self.autoLevel == True:
+                levelRobot()
+            sleep(self.autoLevelTime)
+            
     # This routine calculates the changes that are required to 
     # level the robots RPoR with the ICoMPoR then calls the 
     # commands to move the servos.
     def levelRobot(self):
         #print("Level Robot - Pitch:", self.pitch, "Roll:", self.roll)
-        self.disableAutoDisable()
-        while (True):
-            FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-            FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-            BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-            BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-            FLservo = self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
-            FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
-            BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
-            BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
-            if self.autoLevel == False:
-                print("FL:",FLdata)
-                print("FR:",FRdata)
-                print("BL:",BLdata)
-                print("BR:",BRdata)
-                print("FL:",FLservo)
-                print("FR:",FRservo)
-                print("BL:",BLservo)
-                print("BR:",BRservo)
-                break
-            sleep(self.autoLevelTime)
+        FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
+        FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
+        BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
+        BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
+        FLservo = self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
+        FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
+        BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
+        BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
+        print("FL:",FLdata)
+        print("FR:",FRdata)
+        print("BL:",BLdata)
+        print("BR:",BRdata)
+        print("FL:",FLservo)
+        print("FR:",FRservo)
+        print("BL:",BLservo)
+        print("BR:",BRservo)
     
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
