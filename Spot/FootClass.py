@@ -600,7 +600,11 @@ class Feet():
             al_State = "Auto Level is On"
         else:
             al_State = "Auto Level is Off"
-        return al_State
+        if self.autoBalance == True
+            ab_State = " Auto Balance is On"
+        else
+            ab_State = " Auto Balance is Off"
+        return al_State + ab_State
 
     # enable or disable the auto level feature.
     @property
@@ -664,7 +668,7 @@ class Feet():
                 centerToICoM()
             if self.autoLevel == True:
                 levelRobot()
-            sleep(self.autoLevelTime)
+            sleep(self.autoLevelBalanceTime)
             
     # This routine calculates the changes that are required to 
     # level the robots RPoR with the ICoMPoR then calls the 
