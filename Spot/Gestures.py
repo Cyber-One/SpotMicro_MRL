@@ -35,6 +35,8 @@ gestureStatus = 0
 def rest(Steps = 10, Time = 0.03):
     global gestureStatus
     print ("Moving to Rest postition")
+    legs.autoBalance = False
+    legs.autoLevel = False
     legs.FL.updateServo()
     legs.FR.updateServo()
     legs.BL.updateServo()
@@ -90,6 +92,8 @@ def Stand():
 
 def StandTall():
     global gestureStatus
+    legs.autoBalance = False
+    legs.autoLevel = False
     legs.FL.setServoPos(90, 90, 180)
     legs.FR.setServoPos(90, 90, 180)
     legs.BL.setServoPos(90, 90, 180)
@@ -100,6 +104,8 @@ def StandTall():
 
 def Sit(Steps = 10, Time = 0.05):
     global gestureStatus
+    legs.autoBalance = False
+    legs.autoLevel = False
     legs.moveServos4D(90-legs.FL.shoulder.pos, 127-legs.FL.arm.pos, 180-legs.FL.wrist.pos, 90-legs.FR.shoulder.pos, 127-legs.FR.arm.pos, 180-legs.FR.wrist.pos, 90-legs.BL.shoulder.pos, 180-legs.BL.arm.pos, 52-legs.BL.wrist.pos, 90-legs.BR.shoulder.pos, 180-legs.BR.arm.pos, 52-legs.BR.wrist.pos, Steps, Time)
     legs.syncServos()
     gestureStatus = 2
