@@ -665,32 +665,23 @@ class Feet():
         self.disableAutoDisable()
         while (True):
             if self.autoBalance == True:
-                centerToICoM()
+                self.centerToICoM()
             if self.autoLevel == True:
-                levelRobot()
+                self.levelRobot()
             sleep(self.autoLevelBalanceTime)
             
     # This routine calculates the changes that are required to 
     # level the robots RPoR with the ICoMPoR then calls the 
     # commands to move the servos.
-    def levelRobot(self):
-        #print("Level Robot - Pitch:", self.pitch, "Roll:", self.roll)
-        FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-        FLservo = self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
-        FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
-        BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
-        BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
-        #print("FL:",FLdata)
-        #print("FR:",FRdata)
-        #print("BL:",BLdata)
-        #print("BR:",BRdata)
-        #print("FL:",FLservo)
-        #print("FR:",FRservo)
-        #print("BL:",BLservo)
-        #print("BR:",BRservo)
+    #def levelRobot(self):
+    #    FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
+    #    FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
+    #    BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
+    #    BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
+    #    FLservo = self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
+    #    FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
+    #    BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
+    #    BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
     
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
@@ -803,9 +794,15 @@ class Feet():
         pos = self.getRobotXYZ()
         self.moveRobotRPoR(-pos.get("X"), -pos.get("Y"), 0)
         
+    # this will center the robot over the point of balance 
+    # or to the ofseet point specified in the parameters.
     def centerToICoM(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotICoMXYZ()
         self.moveRobotRPoR(-(pos.get("X")+Xoffset), -(pos.get("Y")+Yoffset), 0)
+
+    def levelRobot(self):
+        pos = self.getRobotICoMXYZ()
+        self.moveRobotRPoR4D(0, 0, (sin(self.roll)*self.FL.LXS)-(sin(self.pitch)*self.FL.LYS), 0, 0, (-sin(self.roll)*self.FR.LXS)-(sin(self.pitch)*self.FR.LYS), 0, 0, (sin(self.roll)*self.BL.LXS)+(sin(self.pitch)*self.BL.LYS), 0, 0, (-sin(self.roll)*self.BR.LXS)+(sin(self.pitch)*self.BR.LYS))
         
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
