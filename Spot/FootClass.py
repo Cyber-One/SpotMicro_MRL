@@ -802,7 +802,7 @@ class Feet():
 
     def levelRobot(self):
         pos = self.getRobotICoMXYZ()
-        self.moveRobotRPoR4D(0, 0, (sin(self.roll)*self.FL.LXS)-(sin(self.pitch)*self.FL.LYS), 0, 0, (-sin(self.roll)*self.FR.LXS)-(sin(self.pitch)*self.FR.LYS), 0, 0, (sin(self.roll)*self.BL.LXS)+(sin(self.pitch)*self.BL.LYS), 0, 0, (-sin(self.roll)*self.BR.LXS)+(sin(self.pitch)*self.BR.LYS))
+        self.moveRobotRPoR4D(0, 0, (math.sin(self.roll)*self.FL.LXS)-(math.sin(self.pitch)*self.FL.LYS), 0, 0, (-math.sin(self.roll)*self.FR.LXS)-(math.sin(self.pitch)*self.FR.LYS), 0, 0, (math.sin(self.roll)*self.BL.LXS)+(math.sin(self.pitch)*self.BL.LYS), 0, 0, (-math.sin(self.roll)*self.BR.LXS)+(math.sin(self.pitch)*self.BR.LYS))
         
     def calculateBalancePoint(self):
         # Lets work out the FL, BR line, lets call this LR.
