@@ -602,7 +602,7 @@ class Feet():
             al_State = "Auto Level is Off"
         if self.autoBalance == True:
             ab_State = " Auto Balance is On"
-        else
+        else:
             ab_State = " Auto Balance is Off"
         return al_State + ab_State
 
