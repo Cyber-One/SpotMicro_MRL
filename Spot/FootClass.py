@@ -161,6 +161,7 @@ class Foot():
             print_str = "Back Right Foot Class Status"
         print ("  Servos - Shoulder: %.2f Arm: %.2f Wrist: %.2f" % (self.shoulder.pos, self.arm.pos, self.wrist.pos))
         print ("  RPoR - X:%.2f, Y:%.2f, Z:%.2f" % (self.RPoR.X, self.RPoR.Y, self.RPoR.Z))
+        print ("  Pitch - %.2f[%.2f], Roll - %.2f[%.2f]" % (self.ICoMPoR.pitch, math.degrees(self.ICoMPoR.pitch), self.ICoMPoR.roll, math.degrees(self.ICoMPoR.roll)))
         print ("  IComPoR - X:%.2f, Y:%.2f, Z:%.2f" % (self.ICoMPoR.X, self.ICoMPoR.Y, self.ICoMPoR.Z))
         return print_str
 
