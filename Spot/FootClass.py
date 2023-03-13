@@ -666,7 +666,7 @@ class Feet():
         self.disableAutoDisable()
         while (True):
             if self.autoBalance == True:
-                self.centerToICoM()
+                self.centerToICoM(self.TargetBalanceX, self.TargetBalanceY)
             if self.autoLevel == True:
                 self.levelRobot()
             sleep(self.autoLevelBalanceTime)
@@ -791,9 +791,9 @@ class Feet():
         yOffset = (self.FL.ICoMPoR.Y + self.FR.ICoMPoR.Y + self.BL.ICoMPoR.Y + self.BR.ICoMPoR.Y)/4
         return {"X":xOffset, "Y":yOffset, "Z":zHeight}
 
-    def centerToRPoR(self):
+    def centerToRPoR(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotXYZ()
-        self.moveRobotRPoR(-pos.get("X"), -pos.get("Y"), 0)
+        self.moveRobotRPoR(-pos.get("X")+Xoffset, -pos.get("Y")+Yoffset, 0)
         
     # this will center the robot over the point of balance 
     # or to the ofseet point specified in the parameters.
