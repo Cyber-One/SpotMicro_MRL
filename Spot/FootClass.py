@@ -570,6 +570,10 @@ class Feet():
         # This is where we want the current IMCoM X and Y offset.
         self.TargetBalanceX = 0.0
         self.TargetBalanceY = 0.0
+        # we need to calculate a inverse Kinematic if we are more 
+        # than this distance out in mm.
+        self.BalanceXTollerance = 1.0
+        self.BalanceYTollerance = 1.0
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = False
@@ -804,7 +808,8 @@ class Feet():
     # or to the ofseet point specified in the parameters.
     def centerToICoM(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotICoMXYZ()
-        self.moveRobotRPoR(-(pos.get("X")+Xoffset), -(pos.get("Y")+Yoffset), 0)
+        if abs((pos.get("X")+Xoffset)) > self.BalanceXTollerance or abs(-(pos.get("Y")+Yoffset)) > self.BalanceYTollerance:
+            self.moveRobotRPoR(-(pos.get("X")+Xoffset), -(pos.get("Y")+Yoffset), 0)
 
     def levelRobot(self):
         pos = self.getRobotICoMXYZ()
