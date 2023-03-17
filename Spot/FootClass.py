@@ -665,11 +665,11 @@ class Feet():
     def updateIMU(self, pitch, roll):
         self.pitch = pitch + self.pitchOffset
         self.roll = roll + self.rollOffset
-        if abs(self.FL.ICoMPoR.pitch - self.pitch) <= self.pitchTollerance or abs(self.FL.ICoMPoR.roll - self.roll) <= self.rollTollerance:
-            self.FL.setIMUdata(self.pitch, self.roll)
-            self.FR.setIMUdata(self.pitch, self.roll)
-            self.BL.setIMUdata(self.pitch, self.roll)
-            self.BR.setIMUdata(self.pitch, self.roll)
+        #if abs(self.FL.ICoMPoR.pitch - self.pitch) <= self.pitchTollerance or abs(self.FL.ICoMPoR.roll - self.roll) <= self.rollTollerance:
+        self.FL.setIMUdata(self.pitch, self.roll)
+        self.FR.setIMUdata(self.pitch, self.roll)
+        self.BL.setIMUdata(self.pitch, self.roll)
+        self.BR.setIMUdata(self.pitch, self.roll)
 
     def balanceLevelRobot(self):
         self.disableAutoDisable()
