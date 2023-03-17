@@ -77,10 +77,10 @@ def restToStand(steps = 20, Time = 0.03):
     gestureStatus = 1
     print(legs)
 
-def Stand():
+def Stand(steps = 20, Time = 0.03):
     global gestureStatus
     if gestureStatus == 0:
-        restToStand()
+        restToStand(steps, Time)
     else:
         legs.FL.setServoPos(90, 124.45, 115.44)
         legs.FR.setServoPos(90, 124.45, 115.44)
