@@ -222,6 +222,7 @@ class Foot():
         self.shoulder.syncServo()
         self.arm.syncServo()
         self.wrist.syncServo()
+        self.updateFK()
         self.imuUpdateFK()
     
     # When we need to move the joints of the robot, using this 
@@ -230,12 +231,14 @@ class Foot():
         self.shoulder.setServoPos(Shoulder)
         self.arm.setServoPos(Arm)
         self.wrist.setServoPos(Wrist)
+        self.updateFK()
         self.imuUpdateFK()
     
     def setServoRest(self):
         self.shoulder.setServoPos(self.shoulder.rest)
         self.arm.setServoPos(self.arm.rest)
         self.wrist.setServoPos(self.wrist.rest)
+        self.updateFK()
         self.imuUpdateFK()
     
     # While setServoPos() will set the servos to the required
@@ -249,6 +252,7 @@ class Foot():
         for i in range(Steps):
             self.setServoPos(self.shoulder.pos+(Shoulder/Steps), self.arm.pos+(Arm/Steps), self.wrist.pos+(Wrist/Steps))
             sleep(Delay)
+        self.updateFK()
         self.imuUpdateFK()
     
     def enableAutoDisable(self):
@@ -267,6 +271,7 @@ class Foot():
         self.shoulder.updateServo()
         self.arm.updateServo()
         self.wrist.updateServo()
+        self.updateFK()
         self.imuUpdateFK()
     
 
@@ -332,7 +337,6 @@ class Foot():
     # This will make sure the current Inertial Centre of Mass 
     # Frame of Reference is up to date
     def imuUpdateFK(self):
-        self.updateFK()
         IComPoR = self.imuForwardKinimatics(self.RPoR.X, self.RPoR.Y, self.RPoR.Z, self.ICoMPoR.roll, self.ICoMPoR.pitch)
         self.ICoMPoR.X = IComPoR.get("X")
         self.ICoMPoR.Y = IComPoR.get("Y")
