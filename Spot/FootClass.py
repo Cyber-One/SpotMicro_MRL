@@ -145,6 +145,7 @@ class Foot():
         self.ICoMPoR = Coordinates()
         # Now we have the required info set, lets update the 
         # RPoR and ICoMPoR values.
+        self.updateFK()
         self.imuUpdateFK()
         
     def __repr__(self):
