@@ -24,6 +24,7 @@ print ("Starting the various Gestures Services")
 # 1 = Standing Position.
 # 2 = Sitting Position.
 # 3 = Stand Tall.
+# 4 = Crouch.
 #################################################################
 gestureStatus = 0
 
@@ -57,36 +58,48 @@ def rest(Steps = 10, Time = 0.03):
     gestureStatus = 0
     print(legs)
 
+def crouch(Steps = 20, Time = 0.03):
+    global gestureStatus
+    ShoulderRest = (legs.FL.shoulder.rest + legs.FR.shoulder.rest + legs.BL.shoulder.rest + legs.BR.shoulder.rest)/4
+    WristRest = (legs.FL.wrist.rest + legs.FR.wrist.rest + legs.BL.wrist.rest + legs.BR.wrist.rest)/4
+    legs.moveServosTo(ShoulderRest, 180, WristRest, Steps, Time)
+    gestureStatus = 4
+
 #################################################################
 # This function uses a series of small steps to move the legs   #
 # in a straight line.  The more steps used, the slower it will  #
 # travel from rest to stand.                                    #
 # This function uses the RPoR Kinematics.                       #
 #################################################################
-def restToStand(steps = 20, Time = 0.03):
+def restToStand(Steps = 20, Time = 0.03):
     global gestureStatus
     print ("Moving from Rest to Stand position")
+    # Move to the Crouch position first
+    crouch(Steps, Time)
     #Rotate the arm to pivot the feet under the shoulders.
-    legs.moveServos(0, 46, 0, steps, Time) 
+    #legs.moveServos(0, 46, 0, steps, Time) 
     #Get the robots current position. 
     data = legs.getRobotXYZ()
-    #print(legs.getRobotXYZ())
+    print(legs)
     #Move the robot up 100mm to around 195 above the ground
     #correcting for and Y error inposition.
-    legs.moveRobotRPoRs(-data.get("X"), -data.get("Y"), 100, steps, Time)
+    legs.moveRobotRPoRs(-data.get("X"), -data.get("Y"), 100, Steps, Time)
     gestureStatus = 1
-    print(legs)
+    #print(legs)
 
 def Stand(steps = 20, Time = 0.03):
     global gestureStatus
     if gestureStatus == 0:
         restToStand(steps, Time)
+    elif gestureStatus == 2:
+        crouch(Steps, Time)
+        legs.moveServosTo(90, 124.45, 115.44, Steps, Time)
     else:
-        legs.FL.setServoPos(90, 124.45, 115.44)
-        legs.FR.setServoPos(90, 124.45, 115.44)
-        legs.BL.setServoPos(90, 124.45, 115.44)
-        legs.BR.setServoPos(90, 124.45, 115.44)
-        legs.syncServos()
+        legs.moveServosTo(90, 124.45, 115.44, Steps, Time)
+        #legs.FL.setServoPos(90, 124.45, 115.44)
+        #legs.FR.setServoPos(90, 124.45, 115.44)
+        #legs.BL.setServoPos(90, 124.45, 115.44)
+        #legs.BR.setServoPos(90, 124.45, 115.44)
     gestureStatus = 1
     print(legs)
 
@@ -94,11 +107,11 @@ def StandTall():
     global gestureStatus
     legs.autoBalance = False
     legs.autoLevel = False
-    legs.FL.setServoPos(90, 90, 180)
-    legs.FR.setServoPos(90, 90, 180)
-    legs.BL.setServoPos(90, 90, 180)
-    legs.BR.setServoPos(90, 90, 180)
-    legs.syncServos()
+    legs.moveServosTo(90, 90, 180, Steps, Time)
+    #legs.FL.setServoPos(90, 90, 180)
+    #legs.FR.setServoPos(90, 90, 180)
+    #legs.BL.setServoPos(90, 90, 180)
+    #legs.BR.setServoPos(90, 90, 180)
     gestureStatus = 3
     print(legs)
 
