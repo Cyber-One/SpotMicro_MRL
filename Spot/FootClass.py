@@ -739,24 +739,28 @@ class Feet():
     
     # This moves all the servos to the same  absolute position with speed control.
     def moveServosTo(self, Shoulder, Arm, Wrist, Steps = 10, Time = 0.1):
-        flShoulderMove = (self.FL.shoulder.pos - Shoulder)/Steps
-        flArmMove = (self.FL.arm.pos - Arm)/Steps
-        flWristMove = (self.FL.wrist.pos - Wrist)/Steps
-        frShoulderMove = (self.FR.shoulder.pos - Shoulder)/Steps
-        frArmMove = (self.FR.arm.pos - Arm)/Steps
-        frWristMove = (self.FR.wrist.pos - Wrist)/Steps
-        blShoulderMove = (self.BL.shoulder.pos - Shoulder)/Steps
-        blArmMove = (self.BL.arm.pos - Arm)/Steps
-        blWristMove = (self.BL.wrist.pos - Wrist)/Steps
-        brShoulderMove = (self.BR.shoulder.pos - Shoulder)/Steps
-        brArmMove = (self.BR.arm.pos - Arm)/Steps
-        brWristMove = (self.BR.wrist.pos - Wrist)/Steps
-        for i in range(Steps):
+        flShoulderMove = -(self.FL.shoulder.pos - Shoulder)/Steps
+        flArmMove = -(self.FL.arm.pos - Arm)/Steps
+        flWristMove = -(self.FL.wrist.pos - Wrist)/Steps
+        frShoulderMove = -(self.FR.shoulder.pos - Shoulder)/Steps
+        frArmMove = -(self.FR.arm.pos - Arm)/Steps
+        frWristMove = -(self.FR.wrist.pos - Wrist)/Steps
+        blShoulderMove = -(self.BL.shoulder.pos - Shoulder)/Steps
+        blArmMove = -(self.BL.arm.pos - Arm)/Steps
+        blWristMove = -(self.BL.wrist.pos - Wrist)/Steps
+        brShoulderMove = -(self.BR.shoulder.pos - Shoulder)/Steps
+        brArmMove = -(self.BR.arm.pos - Arm)/Steps
+        brWristMove = -(self.BR.wrist.pos - Wrist)/Steps
+        for i in range(Steps-1):
             self.FL.setServoPos(self.FL.shoulder.pos+flShoulderMove, self.FL.arm.pos+flArmMove, self.FL.wrist.pos+flWristMove)
             self.FR.setServoPos(self.FR.shoulder.pos+frShoulderMove, self.FR.arm.pos+frArmMove, self.FR.wrist.pos+frWristMove)
             self.BL.setServoPos(self.BL.shoulder.pos+blShoulderMove, self.BL.arm.pos+blArmMove, self.BL.wrist.pos+blWristMove)
             self.BR.setServoPos(self.BR.shoulder.pos+brShoulderMove, self.BR.arm.pos+brArmMove, self.BR.wrist.pos+brWristMove)
             sleep(Time)
+        self.FL.setServoPos(Shoulder, Arm, Wrist)
+        self.FR.setServoPos(Shoulder, Arm, Wrist)
+        self.BL.setServoPos(Shoulder, Arm, Wrist)
+        self.BR.setServoPos(Shoulder, Arm, Wrist)
         #self.FL.imuUpdateFK()
         #self.FR.imuUpdateFK()
         #self.BL.imuUpdateFK()
