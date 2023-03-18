@@ -874,7 +874,7 @@ class Feet():
     def centerToICoM(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotICoMXYZ()
         if abs((pos.get("X")+Xoffset)) > self.BalanceXTollerance or abs(-(pos.get("Y")+Yoffset)) > self.BalanceYTollerance:
-            self.moveRobotRPoR(-(pos.get("X")+Xoffset), -(pos.get("Y")+Yoffset), 0)
+            self.moveRobotRPoR(-(pos.get("X")+Xoffset)/2, -(pos.get("Y")+Yoffset)/2, 0)
 
     def levelRobot(self):
         pos = self.getRobotICoMXYZ()
