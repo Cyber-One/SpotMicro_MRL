@@ -87,10 +87,10 @@ def restToStand(Steps = 20, Time = 0.03):
     gestureStatus = 1
     #print(legs)
 
-def Stand(steps = 20, Time = 0.03):
+def Stand(Steps = 20, Time = 0.03):
     global gestureStatus
     if gestureStatus == 0:
-        restToStand(steps, Time)
+        restToStand(Steps, Time)
     elif gestureStatus == 2:
         crouch(Steps, Time)
         legs.moveServosTo(90, 124.45, 115.44, Steps, Time)
