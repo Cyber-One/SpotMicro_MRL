@@ -20,9 +20,11 @@ import math
 from threading import Thread
 print("creating the Foot and Feet classes")
 
-# The Coordinates class is a data holder for different X, Y and 
-# Z coordinates and Inertial Measuerment Unit (IMU) Pitch and 
-# Roll values.
+#################################################################
+# The Coordinates class is a data holder for different X, Y and #
+# Z coordinates and Inertial Measuerment Unit (IMU) Pitch and   #
+# Roll values.                                                  #
+#################################################################
 class Coordinates():
     def __init__(self):
         self.X = 0
@@ -39,8 +41,10 @@ class Coordinates():
         print("Pitch:%.6f[%.3f] Roll:%.6f[%.3f] Radians[Degrees]" % (self.pitch, math.degrees(self.pitch), self.roll, math.degrees(self.roll)))
         return print_str
 
-# This class manages the interface between the parent class and
-# the Servo Objects.
+#################################################################
+# This class manages the interface between the parent class and #
+# the Servo Objects.                                            #
+#################################################################
 class Servos():
     def __init__(self, ServoObject):
         self.Servo = ServoObject
@@ -89,13 +93,15 @@ class Servos():
         self.Servo.setAutoDisable(False)
         self.Servo.enable()
     
-# The Foot class contains a number of routines required to
-# manage the location of a single foot.
-# This include links to the Servos for that foot and calculating
-# the position based on forward kinematics and also working out
-# the required servo positions for a requested set of X, Y, Z
-# coordinates in eaither the Robot Plane of Reference or the
-# Inertial Centre of Mass Plane of Reference.
+#################################################################
+# The Foot class contains a number of routines required to      #
+# manage the location of a single foot.                         #
+# This include links to the Servos for that foot and            #
+# calculating the position based on forward kinematics and also #
+# working out the required servo positions for a requested set  #
+# of X, Y, Z coordinates in eaither the Robot Plane of          #
+# Reference or the Inertial Centre of Mass Plane of Reference.  #
+#################################################################
 class Foot():
     # The definition of a single foot
     # When creating pass in the foot type and the 3 servos for 
@@ -228,6 +234,9 @@ class Foot():
     
     # When we need to move the joints of the robot, using this 
     # function will make sure everything stays syncronized.
+    # the values pased are Absolute.  If you pass 90 the the 
+    # servo will be set to the 90 degree position regardless 
+    # of where it started from.
     def setServoPos(self, Shoulder, Arm, Wrist):
         self.shoulder.setServoPos(Shoulder)
         self.arm.setServoPos(Arm)
@@ -247,9 +256,11 @@ class Foot():
     # servo moves.  This function does the same thing but using
     # a series of steps to slow down or syncronize the movements.
     # This function is also a relative move as well, that is it 
-    # will rotate the number degrees passed rather than the 
-    # absolute position.  I may need to add a delay here.
-    def moveServos(self, Shoulder, Arm, Wrist, Steps, Delay=0.01):
+    # will rotate the number degrees passed rather than to the 
+    # absolute position.  If the servo is at the 90 degree 
+    # position and you pass 20, then it will move to the 110 
+    # degree position.
+    def moveServos(self, Shoulder, Arm, Wrist, Steps=10, Delay=0.01):
         for i in range(Steps):
             self.setServoPos(self.shoulder.pos+(Shoulder/Steps), self.arm.pos+(Arm/Steps), self.wrist.pos+(Wrist/Steps))
             sleep(Delay)
@@ -540,12 +551,14 @@ class Foot():
         return {"Error":servos.get("Error"), "Shoulder":self.shoulder.pos, "Arm":self.arm.pos, "Wrist":self.wrist.pos}
        
     
-# The Feet class creates 4 Foot objects based on the Foot class.
-# It also provide a number of common update interfaces such as
-# update the roll and pitch of the robot.
-# It also has a number of unified movement functions that
-# combine all 4 feet to assist with ballance and other
-# coordinated movements.
+#################################################################
+# The Feet class creates 4 Foot objects based on the Foot class.#
+# It also provide a number of common update interfaces such as  #
+# update the roll and pitch of the robot.                       #
+# It also has a number of unified movement functions that       #
+# combine all 4 feet to assist with ballance and other          #
+# coordinated movements.                                        #
+#################################################################
 class Feet():
     def __init__(self, FLShoulder, FLArm, FLWrist, FRShoulder, FRArm, FRWrist, BLShoulder, BLArm, BLWrist, BRShoulder, BRArm, BRWrist):
         # These are the objects representing each of the feet
@@ -655,22 +668,32 @@ class Feet():
         self.targetPitch = pitch
         self.targetRoll = roll
     
+    # if you manually move a servo via its service page in MRL,
+    # you will need to run the syncServos() so the class knows 
+    # where the servos are currently positiond.  
+    # This will affect all the Forward Kinematics position calculations.
     def syncServos(self):
         self.FL.syncServoPosition()
         self.FR.syncServoPosition()
         self.BL.syncServoPosition()
         self.BR.syncServoPosition()
 
-    # This routine updates the Pitch and Roll of each of the sub classes
+    # This routine updates the Pitch and Roll of each of the 
+    # sub classes after applying the pitch and roll offset we 
+    # need for the level position.
     def updateIMU(self, pitch, roll):
         self.pitch = pitch + self.pitchOffset
         self.roll = roll + self.rollOffset
-        #if abs(self.FL.ICoMPoR.pitch - self.pitch) <= self.pitchTollerance or abs(self.FL.ICoMPoR.roll - self.roll) <= self.rollTollerance:
         self.FL.setIMUdata(self.pitch, self.roll)
         self.FR.setIMUdata(self.pitch, self.roll)
         self.BL.setIMUdata(self.pitch, self.roll)
         self.BR.setIMUdata(self.pitch, self.roll)
 
+    # This is the start point for the balance/level thread.
+    # It should not be called by user programs.  This routine 
+    # calls the centerToICoM(TargetBalanceX, TargetBalanceY)
+    # and the levelRobot() when they are enabled.
+    # A user may call either of those routines without issue.
     def balanceLevelRobot(self):
         self.disableAutoDisable()
         while (True):
@@ -680,31 +703,32 @@ class Feet():
                 self.levelRobot()
             sleep(self.autoLevelBalanceTime)
             
-    # This routine calculates the changes that are required to 
-    # level the robots RPoR with the ICoMPoR then calls the 
-    # commands to move the servos.
-    #def levelRobot(self):
-    #    FLdata = self.FL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-    #    FRdata = self.FR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-    #    BLdata = self.BL.rotateAboutCoM(self.targetPitch, self.targetRoll)
-    #    BRdata = self.BR.rotateAboutCoM(self.targetPitch, self.targetRoll)
-    #    FLservo = self.FL.moveToICoMPoR(FLdata.get("X"), FLdata.get("Y"), FLdata.get("Z"))
-    #    FRservo = self.FR.moveToICoMPoR(FRdata.get("X"), FRdata.get("Y"), FRdata.get("Z"))
-    #    BLservo = self.BL.moveToICoMPoR(BLdata.get("X"), BLdata.get("Y"), BLdata.get("Z"))
-    #    BRservo = self.BR.moveToICoMPoR(BRdata.get("X"), BRdata.get("Y"), BRdata.get("Z"))
-    
+    # The MRL servo service can stop sending PWM signals to turn 
+    # off a servo controll.  This cann allow the servos to be 
+    # shut down when not needed to maintain a balance.  
+    # Normally we would only do this in the rest position.
     def enableAutoDisable(self):
         self.FL.enableAutoDisable()
         self.FR.enableAutoDisable()
         self.BL.enableAutoDisable()
         self.BR.enableAutoDisable()
 
+    # If we have had the autoDisabled turned on, when starting 
+    # to stand of perform any other movement, we need to turn 
+    # off the autodisable to the robot doesn't fall over.
     def disableAutoDisable(self):
         self.FL.disableAutoDisable()
         self.FR.disableAutoDisable()
         self.BL.disableAutoDisable()
         self.BR.disableAutoDisable()
         
+    #############################################################
+    # This is the start of the Servo positioning routines.      #
+    # Here we specify the Shoulder, Arm and Wrist angles.       #
+    #############################################################
+    
+    # This function moves all the servos into the Rest Position.
+    # Note: this is done at full speed.
     def rest(self):
         self.FL.setServoRest()
         self.FR.setServoRest()
@@ -713,6 +737,33 @@ class Feet():
         self.disableAutoLevel()
         #self.enableAutoDisable()
     
+    # This moves all the servos to the same  absolute position with speed control.
+    def moveServosTo(self, Shoulder, Arm, Wrist, Steps = 10, Time = 0.1):
+        flShoulderMove = (self.FL.shoulder.pos - Shoulder)/Steps
+        flArmMove = (self.FL.arm.pos - Arm)/Steps
+        flWristMove = (self.FL.wrist.pos - Wrist)/Steps
+        frShoulderMove = (self.FR.shoulder.pos - Shoulder)/Steps
+        frArmMove = (self.FR.arm.pos - Arm)/Steps
+        frWristMove = (self.FR.wrist.pos - Wrist)/Steps
+        blShoulderMove = (self.BL.shoulder.pos - Shoulder)/Steps
+        blArmMove = (self.BL.arm.pos - Arm)/Steps
+        blWristMove = (self.BL.wrist.pos - Wrist)/Steps
+        brShoulderMove = (self.BR.shoulder.pos - Shoulder)/Steps
+        brArmMove = (self.BR.arm.pos - Arm)/Steps
+        brWristMove = (self.BR.wrist.pos - Wrist)/Steps
+        for i in range(Steps):
+            self.FL.setServoPos(self.FL.shoulder.pos+flShoulderMove, self.FL.arm.pos+flArmMove, self.FL.wrist.pos+flWristMove)
+            self.FR.setServoPos(self.FR.shoulder.pos+frShoulderMove, self.FR.arm.pos+frArmMove, self.FR.wrist.pos+frWristMove)
+            self.BL.setServoPos(self.BL.shoulder.pos+blShoulderMove, self.BL.arm.pos+blArmMove, self.BL.wrist.pos+blWristMove)
+            self.BR.setServoPos(self.BR.shoulder.pos+brShoulderMove, self.BR.arm.pos+brArmMove, self.BR.wrist.pos+brWristMove)
+            sleep(Time)
+        #self.FL.imuUpdateFK()
+        #self.FR.imuUpdateFK()
+        #self.BL.imuUpdateFK()
+        #self.BR.imuUpdateFK()
+        
+    # This function moves all 4 leg servos in the same way as a relative move.
+    # That is, the value passed is added to the current position of the servos.
     def moveServos(self, Shoulder, Arm, Wrist, Steps = 10, Time = 0.1):
         for i in range(Steps):
             self.FL.setServoPos(self.FL.shoulder.pos+(Shoulder/Steps), self.FL.arm.pos+(Arm/Steps), self.FL.wrist.pos+(Wrist/Steps))
@@ -720,11 +771,13 @@ class Feet():
             self.BL.setServoPos(self.BL.shoulder.pos+(Shoulder/Steps), self.BL.arm.pos+(Arm/Steps), self.BL.wrist.pos+(Wrist/Steps))
             self.BR.setServoPos(self.BR.shoulder.pos+(Shoulder/Steps), self.BR.arm.pos+(Arm/Steps), self.BR.wrist.pos+(Wrist/Steps))
             sleep(Time)
-        self.FL.imuUpdateFK()
-        self.FR.imuUpdateFK()
-        self.BL.imuUpdateFK()
-        self.BR.imuUpdateFK()
+        #self.FL.imuUpdateFK()
+        #self.FR.imuUpdateFK()
+        #self.BL.imuUpdateFK()
+        #self.BR.imuUpdateFK()
 
+    # This function is similar to the one above, except each leg can be moved in a different direction.
+    # This is a Relative Move.
     def moveServos4D(self, FLS, FLA, FLW, FRS, FRA, FRW, BLS, BLA, BLW, BRS, BRA, BRW, Steps = 10, Time = 0.1):
         for i in range(Steps):
             self.FL.setServoPos(self.FL.shoulder.pos+(FLS/Steps), self.FL.arm.pos+(FLA/Steps), self.FL.wrist.pos+(FLW/Steps))
@@ -732,10 +785,18 @@ class Feet():
             self.BL.setServoPos(self.BL.shoulder.pos+(BLS/Steps), self.BL.arm.pos+(BLA/Steps), self.BL.wrist.pos+(BLW/Steps))
             self.BR.setServoPos(self.BR.shoulder.pos+(BRS/Steps), self.BR.arm.pos+(BRA/Steps), self.BR.wrist.pos+(BRW/Steps))
             sleep(Time)
-        self.FL.imuUpdateFK()
-        self.FR.imuUpdateFK()
-        self.BL.imuUpdateFK()
-        self.BR.imuUpdateFK()
+        #self.FL.imuUpdateFK()
+        #self.FR.imuUpdateFK()
+        #self.BL.imuUpdateFK()
+        #self.BR.imuUpdateFK()
+
+    #############################################################
+    # This is the start of the Kinematics based movement        #
+    # controls to move the feet.  Here we specify the X, Y and  #
+    # Z coordinates or the X, Y and Z directions to move the    #
+    # feet.  The first set are based on the Robots Plane of     #
+    # Reference RPoR.                                           #
+    #############################################################
 
     # This routine calls the system to make a simletanous 4 leg 
     # linear movement relative to the RPoR.
@@ -805,7 +866,7 @@ class Feet():
         self.moveRobotRPoR(-pos.get("X")+Xoffset, -pos.get("Y")+Yoffset, 0)
         
     # this will center the robot over the point of balance 
-    # or to the ofseet point specified in the parameters.
+    # or to the offset point specified in the parameters.
     def centerToICoM(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotICoMXYZ()
         if abs((pos.get("X")+Xoffset)) > self.BalanceXTollerance or abs(-(pos.get("Y")+Yoffset)) > self.BalanceYTollerance:
