@@ -29,7 +29,7 @@ print ("Starting the various Gestures Services")
 gestureStatus = 0
 
 #################################################################
-# this command returns all the servos to the starting rest      #
+# This command returns all the servos to the starting rest      #
 # position and makes sure all the servos are updated.           #
 # Handy when calibrating.                                       #
 #################################################################
@@ -38,14 +38,12 @@ def rest(Steps = 10, Time = 0.03):
     print ("Moving to Rest postition")
     legs.autoBalance = False
     legs.autoLevel = False
-    legs.FL.updateServo()
-    legs.FR.updateServo()
-    legs.BL.updateServo()
-    legs.BR.updateServo()
-    data = legs.getRobotXYZ()
-    legs.moveRobotRPoRs(0, 0, data.get("Z")+100, Steps, Time)
-    #data = legs.getRobotXYZ()
-    #print(legs.getRobotXYZ())
+    legs.syncServos()
+    legs.updateServos()
+    # If we move to the rest position without going to the 
+    # crouch position first, the robot tends to fall over.
+    if gestureStatus != 4:
+        crouch(Steps, Time)
     Shoulder = (legs.FL.shoulder.pos + legs.FR.shoulder.pos + legs.BL.shoulder.pos + legs.BR.shoulder.pos)/4
     Arm = (legs.FL.arm.pos + legs.FR.arm.pos + legs.BL.arm.pos + legs.BR.arm.pos)/4
     Wrist = (legs.FL.wrist.pos + legs.FR.wrist.pos + legs.BL.wrist.pos + legs.BR.wrist.pos)/4
@@ -58,11 +56,24 @@ def rest(Steps = 10, Time = 0.03):
     gestureStatus = 0
     print(legs)
 
+#################################################################
+# Thye crouch() command send the robot into a position that is  #
+# safe to move into other positions first.  Examples is from    #
+# rest to standing will result in the robot falling over        #
+# backwards unless the robot moves via the crouch position      #
+# first.  The same applies to moving from Sit or to Rest.
+#################################################################
 def crouch(Steps = 20, Time = 0.03):
     global gestureStatus
+    print ("Moving to Crouch postition")
+    legs.autoBalance = False
+    legs.autoLevel = False
+    # we work out the average rest position for both the 
+    # shoulder and the wrist, we don't really want to change 
+    # these.
     ShoulderRest = (legs.FL.shoulder.rest + legs.FR.shoulder.rest + legs.BL.shoulder.rest + legs.BR.shoulder.rest)/4
     WristRest = (legs.FL.wrist.rest + legs.FR.wrist.rest + legs.BL.wrist.rest + legs.BR.wrist.rest)/4
-    legs.moveServosTo(ShoulderRest, 180, WristRest, Steps, Time)
+    legs.moveServosTo(ShoulderRest, 170, WristRest, Steps, Time)
     gestureStatus = 4
 
 #################################################################
@@ -74,11 +85,6 @@ def crouch(Steps = 20, Time = 0.03):
 def restToStand(Steps = 20, Time = 0.03):
     global gestureStatus
     print ("Moving from Rest to Stand position")
-    # Move to the Crouch position first
-    crouch(Steps, Time)
-    #Rotate the arm to pivot the feet under the shoulders.
-    #legs.moveServos(0, 46, 0, steps, Time) 
-    #Get the robots current position. 
     data = legs.getRobotXYZ()
     print(legs)
     #Move the robot up 100mm to around 195 above the ground
@@ -87,9 +93,10 @@ def restToStand(Steps = 20, Time = 0.03):
     gestureStatus = 1
     #print(legs)
 
-def Stand(Steps = 20, Time = 0.03):
+def stand(Steps = 20, Time = 0.03):
     global gestureStatus
     if gestureStatus == 0:
+        crouch(Steps, Time)
         restToStand(Steps, Time)
     elif gestureStatus == 2:
         crouch(Steps, Time)
@@ -103,7 +110,7 @@ def Stand(Steps = 20, Time = 0.03):
     gestureStatus = 1
     print(legs)
 
-def StandTall():
+def standTall():
     global gestureStatus
     legs.autoBalance = False
     legs.autoLevel = False
@@ -115,7 +122,7 @@ def StandTall():
     gestureStatus = 3
     print(legs)
 
-def Sit(Steps = 10, Time = 0.05):
+def sit(Steps = 10, Time = 0.05):
     global gestureStatus
     legs.autoBalance = False
     legs.autoLevel = False
