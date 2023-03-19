@@ -126,13 +126,13 @@ class Foot():
         self.arm.setOffset(90)
         self.wrist.setOffset(0)
         # Length between the Wrist joint and the foot
-        self.LWF = 124
+        self.LWF = 125
         # Length between the Arms joint and the Wrist joint
         self.LTW = 110
         # Length between the Shoulder joint and the center line of the Arm
         self.LST = 55 
         # Length between the center Y plane and the shoulder joint
-        self.LYS = 90    
+        self.LYS = 91    
         # Length between the center X plane and the shoulder joint
         self.LXS = 38
         # to help speed up the class, we will use some 
@@ -231,6 +231,16 @@ class Foot():
         self.wrist.syncServo()
         self.updateFK()
         self.imuUpdateFK()
+    
+    # When calibrating the servos using the servo service pages, 
+    # the Foot Classes can become out of sync with where the 
+    # min, max and rest positions are.  This update all the values.
+    # The above SyncSeroPosition only updates the current position.
+    def updateServos(self):
+        self.FL.updateServo()
+        self.FR.updateServo()
+        self.BL.updateServo()
+        self.BR.updateServo()
     
     # When we need to move the joints of the robot, using this 
     # function will make sure everything stays syncronized.
@@ -590,8 +600,9 @@ class Feet():
         # When set to 1, the robot will activly try to keep the 
         # body at the target pitch and roll.
         self.autoLevel = False
-        self.autoLevelBalanceTime = 0.5
         self.autoBalance = False
+        self.autoLevelBalanceTime = 0.05
+        self.maxAutoPitchRoll = 0.7854
         # Create the Auto Level Thread. 
         # We will start it when AutoLevel is enabled.
         self.alt = Thread(target=self.balanceLevelRobot)
@@ -688,6 +699,11 @@ class Feet():
         self.FR.setIMUdata(self.pitch, self.roll)
         self.BL.setIMUdata(self.pitch, self.roll)
         self.BR.setIMUdata(self.pitch, self.roll)
+        # if the roll or pitch get to high, then auto disable
+        # the balance and level controls.
+        if abs(pitch) > self.maxAutoPitchRoll or abs(roll) > self.maxAutoPitchRoll:
+            self.autoLevel = False
+            self.autoBalance = False
 
     # This is the start point for the balance/level thread.
     # It should not be called by user programs.  This routine 
