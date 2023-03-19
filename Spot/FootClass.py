@@ -894,8 +894,14 @@ class Feet():
 
     def levelRobot(self):
         pos = self.getRobotICoMXYZ()
+        # Calculate the roll first.
+        FLS = self.roll/2
+        BLS = FLS
+        FRS = -FLS
+        BRS = FRS
+        self.moveServos4D(FLS, 0, 0, FRS, 0, 0, BLS, 0, 0, BRS, 0, 0, Steps = 10, Time = 0.1)
         #self.moveRobotRPoR4D(0, 0, (math.sin(self.roll)*self.FL.LXS)-(math.sin(self.pitch)*self.FL.LYS), 0, 0, (-math.sin(self.roll)*self.FR.LXS)-(math.sin(self.pitch)*self.FR.LYS), 0, 0, (math.sin(self.roll)*self.BL.LXS)+(math.sin(self.pitch)*self.BL.LYS), 0, 0, (-math.sin(self.roll)*self.BR.LXS)+(math.sin(self.pitch)*self.BR.LYS))
-        self.moveRobotRPoR4D(0, 0, (math.sin(self.roll)*self.FL.LXS), 0, 0, (-math.sin(self.roll)*self.FR.LXS), 0, 0, (math.sin(self.roll)*self.BL.LXS), 0, 0, (-math.sin(self.roll)*self.BR.LXS))
+        #self.moveRobotRPoR4D(0, 0, (math.sin(self.roll)*self.FL.LXS), 0, 0, (-math.sin(self.roll)*self.FR.LXS), 0, 0, (math.sin(self.roll)*self.BL.LXS), 0, 0, (-math.sin(self.roll)*self.BR.LXS))
         #self.moveRobotRPoR4D(0, 0, (-(math.sin(self.pitch)*self.FL.LYS), 0, 0, -(math.sin(self.pitch)*self.FR.LYS), 0, 0, (math.sin(self.pitch)*self.BL.LYS), 0, 0, (math.sin(self.pitch)*self.BR.LYS))
         
     def calculateBalancePoint(self):
