@@ -895,7 +895,7 @@ class Feet():
     def levelRobot(self):
         pos = self.getRobotICoMXYZ()
         # Calculate the roll first.
-        FLS = self.roll/2
+        FLS = math.degrees(self.roll/2)
         BLS = FLS
         FRS = -FLS
         BRS = FRS
