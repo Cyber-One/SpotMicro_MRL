@@ -232,16 +232,6 @@ class Foot():
         self.updateFK()
         self.imuUpdateFK()
     
-    # When calibrating the servos using the servo service pages, 
-    # the Foot Classes can become out of sync with where the 
-    # min, max and rest positions are.  This update all the values.
-    # The above SyncSeroPosition only updates the current position.
-    def updateServos(self):
-        self.FL.updateServo()
-        self.FR.updateServo()
-        self.BL.updateServo()
-        self.BR.updateServo()
-    
     # When we need to move the joints of the robot, using this 
     # function will make sure everything stays syncronized.
     # the values pased are Absolute.  If you pass 90 the the 
@@ -689,6 +679,16 @@ class Feet():
         self.BL.syncServoPosition()
         self.BR.syncServoPosition()
 
+    # When calibrating the servos using the servo service pages, 
+    # the Foot Classes can become out of sync with where the 
+    # min, max and rest positions are.  This update all the values.
+    # The above SyncSeroPosition only updates the current position.
+    def updateServos(self):
+        self.FL.updateServo()
+        self.FR.updateServo()
+        self.BL.updateServo()
+        self.BR.updateServo()
+    
     # This routine updates the Pitch and Roll of each of the 
     # sub classes after applying the pitch and roll offset we 
     # need for the level position.
