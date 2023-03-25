@@ -899,18 +899,22 @@ class Feet():
         FRS = 0.0
         BLS = 0.0
         BRS = 0.0
+        adjust = 0
         # Calculate the roll first.
         if abs(self.roll + self.targetRoll) > self.rollTollerance:
             FLS = math.degrees((self.roll + self.targetRoll)/2)
             BLS = FLS
             FRS = -FLS
             BRS = FRS
+            adjust = 1
         if abs(self.pitch + self.targetPitch) > self.pitchTollerance:
             FLS = FLS + math.degrees((self.pitch+self.targetPitch)/2)
             FRS = FRS + math.degrees((self.pitch+self.targetPitch)/2)
             BLS = BLS - math.degrees((self.pitch+self.targetPitch)/2)
             BRS = BRS - math.degrees((self.pitch+self.targetPitch)/2)
-        self.moveServos4D(FLS, 0, 0, FRS, 0, 0, BLS, 0, 0, BRS, 0, 0, Steps = 10, Time = 0.1)
+            adjust = 1
+        if adjust == 1:
+            self.moveServos4D(FLS, 0, 0, FRS, 0, 0, BLS, 0, 0, BRS, 0, 0, Steps = 10, Time = 0.1)
         #self.moveRobotRPoR4D(0, 0, (math.sin(self.roll)*self.FL.LXS)-(math.sin(self.pitch)*self.FL.LYS), 0, 0, (-math.sin(self.roll)*self.FR.LXS)-(math.sin(self.pitch)*self.FR.LYS), 0, 0, (math.sin(self.roll)*self.BL.LXS)+(math.sin(self.pitch)*self.BL.LYS), 0, 0, (-math.sin(self.roll)*self.BR.LXS)+(math.sin(self.pitch)*self.BR.LYS))
         #self.moveRobotRPoR4D(0, 0, (math.sin(self.roll)*self.FL.LXS), 0, 0, (-math.sin(self.roll)*self.FR.LXS), 0, 0, (math.sin(self.roll)*self.BL.LXS), 0, 0, (-math.sin(self.roll)*self.BR.LXS))
         #self.moveRobotRPoR4D(0, 0, (-(math.sin(self.pitch)*self.FL.LYS), 0, 0, -(math.sin(self.pitch)*self.FR.LYS), 0, 0, (math.sin(self.pitch)*self.BL.LYS), 0, 0, (math.sin(self.pitch)*self.BR.LYS))
