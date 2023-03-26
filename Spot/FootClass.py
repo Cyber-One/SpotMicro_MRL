@@ -117,7 +117,11 @@ class Foot():
         self.shoulder = Servos(ShoulderServo)
         self.arm = Servos(ArmServo)
         self.wrist = Servos(WristServo)
-        #self.Wrist = self.WristRest
+        # The FootContact value could be controlled in software 
+        # or via hardware. It purpose is to allow the controller 
+        # to only use feet in contact with the ground when 
+        # working out the balance point.
+        self.footContact = True
         # Servo angle offsets. I'm assuming a servo range of 
         # 0 - 180 degrees the rotation of the servo body can 
         # give us a better usable range, but will upset the math, 
@@ -869,17 +873,46 @@ class Feet():
             print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + (X/steps), self.BR.ICoMPoR.Y + (Y/steps), self.BR.ICoMPoR.Z - (Z/steps)))
             sleep(Time)
 
+    # The getRobotXYZ() function returns the average position 
+    # of all the feet relative to the Robot Plane of Reference
     def getRobotXYZ(self):
         zHeight = (self.FL.RPoR.Z + self.FR.RPoR.Z + self.BL.RPoR.Z + self.BR.RPoR.Z)/4
         xOffset = (self.FL.RPoR.X + self.FR.RPoR.X + self.BL.RPoR.X + self.BR.RPoR.X)/4
         yOffset = (self.FL.RPoR.Y + self.FR.RPoR.Y + self.BL.RPoR.Y + self.BR.RPoR.Y)/4
         return {"X":xOffset, "Y":yOffset, "Z":zHeight}
 
+    # The getRobotXYZ() function returns the average position 
+    # of all the feet in contact with the ground relative to 
+    # the Inertial Center of Mass Plane of Reference
     def getRobotICoMXYZ(self):
-        zHeight = (self.FL.ICoMPoR.Z + self.FR.ICoMPoR.Z + self.BL.ICoMPoR.Z + self.BR.ICoMPoR.Z)/4
-        xOffset = (self.FL.ICoMPoR.X + self.FR.ICoMPoR.X + self.BL.ICoMPoR.X + self.BR.ICoMPoR.X)/4
-        yOffset = (self.FL.ICoMPoR.Y + self.FR.ICoMPoR.Y + self.BL.ICoMPoR.Y + self.BR.ICoMPoR.Y)/4
-        return {"X":xOffset, "Y":yOffset, "Z":zHeight}
+        zHeight = 0
+        xOffset = 0
+        yOffset = 0
+        contactFeet = 0
+        if self.FL.footContact = 1:
+            zHeight = zHeight + self.FL.ICoMPoR.Z
+            xOffset = xOffset + self.FL.ICoMPoR.X
+            yOffset = yOffset + self.FL.ICoMPoR.Y
+            contactFeet = contactFeet + 1
+        if self.FR.footContact = 1:
+            zHeight = zHeight + self.FR.ICoMPoR.Z
+            xOffset = xOffset + self.FR.ICoMPoR.X
+            yOffset = yOffset + self.FR.ICoMPoR.Y
+            contactFeet = contactFeet + 1
+        if self.BL.footContact = 1:
+            zHeight = zHeight + self.BL.ICoMPoR.Z
+            xOffset = xOffset + self.BL.ICoMPoR.X
+            yOffset = yOffset + self.BL.ICoMPoR.Y
+            contactFeet = contactFeet + 1
+        if self.BR.footContact = 1:
+            zHeight = zHeight + self.BR.ICoMPoR.Z
+            xOffset = xOffset + self.BR.ICoMPoR.X
+            yOffset = yOffset + self.BR.ICoMPoR.Y
+            contactFeet = contactFeet + 1
+        #zHeight = (self.FL.ICoMPoR.Z + self.FR.ICoMPoR.Z + self.BL.ICoMPoR.Z + self.BR.ICoMPoR.Z)/4
+        #xOffset = (self.FL.ICoMPoR.X + self.FR.ICoMPoR.X + self.BL.ICoMPoR.X + self.BR.ICoMPoR.X)/4
+        #yOffset = (self.FL.ICoMPoR.Y + self.FR.ICoMPoR.Y + self.BL.ICoMPoR.Y + self.BR.ICoMPoR.Y)/4
+        return {"X":xOffset / contactFeet, "Y":yOffset / contactFeet, "Z":zHeight / contactFeet}
 
     def centerToRPoR(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotXYZ()
@@ -900,18 +933,20 @@ class Feet():
         BLS = 0.0
         BRS = 0.0
         adjust = 0
+        roll = self.roll + self.targetRoll
+        pitch = self.pitch + self.targetPitch
         # Calculate the roll first.
-        if abs(self.roll + self.targetRoll) > self.rollTollerance:
-            FLS = math.degrees((self.roll + self.targetRoll)/2)
+        if abs(roll) > self.rollTollerance:
+            FLS = math.degrees(roll/2)
             BLS = FLS
             FRS = -FLS
             BRS = FRS
             adjust = 1
-        if abs(self.pitch + self.targetPitch) > self.pitchTollerance:
-            FLS = FLS + math.degrees((self.pitch+self.targetPitch)/2)
-            FRS = FRS + math.degrees((self.pitch+self.targetPitch)/2)
-            BLS = BLS - math.degrees((self.pitch+self.targetPitch)/2)
-            BRS = BRS - math.degrees((self.pitch+self.targetPitch)/2)
+        if abs(pitch) > self.pitchTollerance:
+            FLS = FLS + math.degrees(pitch/2)
+            FRS = FRS + math.degrees(pitch/2)
+            BLS = BLS - math.degrees(pitch/2)
+            BRS = BRS - math.degrees(pitch/2)
             adjust = 1
         if adjust == 1:
             self.moveServos4D(FLS, 0, 0, FRS, 0, 0, BLS, 0, 0, BRS, 0, 0, Steps = 10, Time = 0.1)
