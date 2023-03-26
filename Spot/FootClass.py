@@ -889,22 +889,22 @@ class Feet():
         xOffset = 0
         yOffset = 0
         contactFeet = 0
-        if self.FL.footContact = 1:
+        if self.FL.footContact == True:
             zHeight = zHeight + self.FL.ICoMPoR.Z
             xOffset = xOffset + self.FL.ICoMPoR.X
             yOffset = yOffset + self.FL.ICoMPoR.Y
             contactFeet = contactFeet + 1
-        if self.FR.footContact = 1:
+        if self.FR.footContact == True:
             zHeight = zHeight + self.FR.ICoMPoR.Z
             xOffset = xOffset + self.FR.ICoMPoR.X
             yOffset = yOffset + self.FR.ICoMPoR.Y
             contactFeet = contactFeet + 1
-        if self.BL.footContact = 1:
+        if self.BL.footContact == True:
             zHeight = zHeight + self.BL.ICoMPoR.Z
             xOffset = xOffset + self.BL.ICoMPoR.X
             yOffset = yOffset + self.BL.ICoMPoR.Y
             contactFeet = contactFeet + 1
-        if self.BR.footContact = 1:
+        if self.BR.footContact == True:
             zHeight = zHeight + self.BR.ICoMPoR.Z
             xOffset = xOffset + self.BR.ICoMPoR.X
             yOffset = yOffset + self.BR.ICoMPoR.Y
