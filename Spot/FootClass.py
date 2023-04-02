@@ -588,6 +588,12 @@ class Feet():
         # This value allows for a dead band in the IMU readings.
         self.rollTollerance = 0.0174533
         self.pitchTollerance = 0.0174533
+        # Centre of Mass offsets, this is the correction from 
+        # the physical center of the robot.
+        self.CoMxOffset = 0
+        self.CoMyOffset = 0
+        self.CoMzOffset = 0
+        self.updateRobotCOM()
         # This is where we want the current IMCoM X and Y offset.
         self.TargetBalanceX = 0.0
         self.TargetBalanceY = 0.0
@@ -673,6 +679,26 @@ class Feet():
     def setPitchOffset(self, PitchOffset):
         self.pitchOffset = PitchOffset
     
+    def setComXYZOffset(self, Xoffset, Yoffset, Zoffset):
+        self.CoMxOffset = Xoffset
+        self.CoMyOffset = Yoffset
+        self.CoMzOffset = Zoffset
+        self.updateRobotCOM()
+    
+    def updateRobotCOM(self):
+        self.FL.CoMxOffset = self.CoMxOffset
+        self.FR.CoMxOffset = self.CoMxOffset
+        self.BL.CoMxOffset = self.CoMxOffset
+        self.BR.CoMxOffset = self.CoMxOffset
+        self.FL.CoMyOffset = self.CoMyOffset
+        self.FR.CoMyOffset = self.CoMyOffset
+        self.BL.CoMyOffset = self.CoMyOffset
+        self.BR.CoMyOffset = self.CoMyOffset
+        self.FL.CoMzOffset = self.CoMzOffset
+        self.FR.CoMzOffset = self.CoMzOffset
+        self.BL.CoMzOffset = self.CoMzOffset
+        self.BR.CoMzOffset = self.CoMzOffset
+        
     def setLevel(self, pitch = 0.0, roll = 0.0):
         self.targetPitch = pitch
         self.targetRoll = roll
