@@ -104,6 +104,17 @@ legs.setRollOffset(0.066961)
 legs.setPitchOffset(0.079107)
 
 #################################################################
+# While from the outside the robot might look very symetrical,  #
+# the mass might not be.  Iff we add anything to the robot such #
+# as an arm or external PSU, this will move the center of mass. #
+# The following allows us to adjust where the center of mass is #
+# located relative to the center of the robot.                  #
+# In my case the center of mass is located a little towards the #
+# back of the robot.                                            #
+#################################################################
+legs.setComXYZOffset(0,-15, 0)
+
+#################################################################
 # When not activly executing a command, we don't want the       #
 # robot to just stand there,  This file is responsible for      #
 # giving our robot a bitof life.                                #
