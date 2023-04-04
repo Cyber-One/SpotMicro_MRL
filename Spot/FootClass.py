@@ -903,6 +903,15 @@ class Feet():
             print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + (X/steps), self.BR.ICoMPoR.Y + (Y/steps), self.BR.ICoMPoR.Z - (Z/steps)))
             sleep(Time)
 
+    def moveRobotICoMPoR4D(self, FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, steps = 10, Time = 0.01):
+        self.disableAutoDisable()
+        for i in range(steps):
+            print("FL", self.FL.moveToICoMPoR(self.FL.ICoMPoR.X + (FLX/steps), self.FL.ICoMPoR.Y + (FLY/steps), self.FL.ICoMPoR.Z - (FLZ/steps)))
+            print("FR", self.FR.moveToICoMPoR(self.FR.ICoMPoR.X + (FRX/steps), self.FR.ICoMPoR.Y + (FRY/steps), self.FR.ICoMPoR.Z - (FRZ/steps)))
+            print("BL", self.BL.moveToICoMPoR(self.BL.ICoMPoR.X + (BLX/steps), self.BL.ICoMPoR.Y + (BLY/steps), self.BL.ICoMPoR.Z - (BLZ/steps)))
+            print("BR", self.BR.moveToICoMPoR(self.BR.ICoMPoR.X + (BRX/steps), self.BR.ICoMPoR.Y + (BRY/steps), self.BR.ICoMPoR.Z - (BRZ/steps)))
+            sleep(Time)
+    
     # The getRobotXYZ() function returns the average position 
     # of all the feet relative to the Robot Plane of Reference
     def getRobotXYZ(self):
