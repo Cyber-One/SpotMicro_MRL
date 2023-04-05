@@ -875,12 +875,14 @@ class Feet():
             sleep(Time)
     
     # This allows each of the legs to be moved in different directions.
-    def moveRobotRPoR4D(self, FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ):
+    def moveRobotRPoR4D(self, FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZsteps = 10, Time = 0.01):
         self.disableAutoDisable()
-        self.FL.moveToRPoR(self.FL.RPoR.X + FLX, self.FL.RPoR.Y + FLY, self.FL.RPoR.Z - FLZ)
-        self.FR.moveToRPoR(self.FR.RPoR.X + FRX, self.FR.RPoR.Y + FRY, self.FR.RPoR.Z - FRZ)
-        self.BL.moveToRPoR(self.BL.RPoR.X + BLX, self.BL.RPoR.Y + BLY, self.BL.RPoR.Z - BLZ)
-        self.BR.moveToRPoR(self.BR.RPoR.X + BRX, self.BR.RPoR.Y + BRY, self.BR.RPoR.Z - BRZ)
+        for i in range(steps):
+            self.FL.moveToRPoR(self.FL.RPoR.X + (FLX/steps), self.FL.RPoR.Y + (FLY/steps), self.FL.RPoR.Z - (FLZ/steps))
+            self.FR.moveToRPoR(self.FR.RPoR.X + (FRX/steps), self.FR.RPoR.Y + (FRY/steps), self.FR.RPoR.Z - (FRZ/steps))
+            self.BL.moveToRPoR(self.BL.RPoR.X + (BLX/steps), self.BL.RPoR.Y + (BLY/steps), self.BL.RPoR.Z - (BLZ/steps))
+            self.BR.moveToRPoR(self.BR.RPoR.X + (BRX/steps), self.BR.RPoR.Y + (BRY/steps), self.BR.RPoR.Z - (BRZ/steps))
+            sleep(Time)
     
     # This routine calls the system to make a simle 4 leg 
     # linear movement relative to the ICoMPoR.
