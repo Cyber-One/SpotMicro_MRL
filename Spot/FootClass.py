@@ -875,7 +875,7 @@ class Feet():
             sleep(Time)
     
     # This allows each of the legs to be moved in different directions.
-    def moveRobotRPoR4D(self, FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZsteps = 10, Time = 0.01):
+    def moveRobotRPoR4D(self, FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, steps = 10, Time = 0.01):
         self.disableAutoDisable()
         for i in range(steps):
             self.FL.moveToRPoR(self.FL.RPoR.X + (FLX/steps), self.FL.RPoR.Y + (FLY/steps), self.FL.RPoR.Z - (FLZ/steps))
