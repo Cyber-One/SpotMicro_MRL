@@ -605,6 +605,7 @@ class Feet():
         # body at the target pitch and roll.
         self.autoLevel = False
         self.autoBalance = False
+        self.autoBalanceRate = 4
         self.autoLevelBalanceTime = 0.05
         self.maxAutoPitchRoll = 0.7854
         # Create the Auto Level Thread. 
@@ -631,7 +632,7 @@ class Feet():
         print("OffsetPitch:%.6f[%.3f] OffsetRoll:%.6f[%.3f] Radians[Degrees]" % (self.pitchOffset, math.degrees(self.pitchOffset), self.rollOffset, math.degrees(self.rollOffset)))
         RPoRdata = self.getRobotXYZ()
         print("Robot Plane of Reference, X:%.2f, Y:%.2f, Z:%.2f" % (RPoRdata.get("X"), RPoRdata.get("Y"), RPoRdata.get("Z")))
-        print("Target X & Y Offset for ICoM, X:%.2f, Y:%.2f, Balance/Level Time: %.3f seconds" %(self.TargetBalanceX, self.TargetBalanceY, self.autoLevelBalanceTime))
+        print("Target X & Y Offset for ICoM, X:%.2f, Y:%.2f, Balance/Level Time:%.3f seconds Balance Divisions:%.2f" %(self.TargetBalanceX, self.TargetBalanceY, self.autoLevelBalanceTime, self.autoBalanceRate))
         ICoMdata = self.getRobotICoMXYZ()
         print("Inertial Center of Mass Reference, X:%.2f, Y:%.2f, Z:%.2f" % (ICoMdata.get("X"), ICoMdata.get("Y"), ICoMdata.get("Z")))
         if self.autoLevel == True:
@@ -964,7 +965,7 @@ class Feet():
     def centerToICoM(self, Xoffset = 0, Yoffset = 0):
         pos = self.getRobotICoMXYZ()
         if abs((pos.get("X")+Xoffset)) > self.BalanceXTollerance or abs(-(pos.get("Y")+Yoffset)) > self.BalanceYTollerance:
-            self.moveRobotRPoR(-(pos.get("X")+Xoffset)/2, -(pos.get("Y")+Yoffset)/2, 0)
+            self.moveRobotRPoR(-(pos.get("X")+Xoffset)/self.autoBalanceRate, -(pos.get("Y")+Yoffset)/self.autoBalanceRate, 0)
 
     def levelRobot(self):
         pos = self.getRobotICoMXYZ()
