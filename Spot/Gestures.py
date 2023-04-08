@@ -131,17 +131,28 @@ def sit(Steps = 10, Time = 0.05):
     gestureStatus = 2
     print(legs)
 
-def startWalk(FWD = 5, Lift = 30, Steps = 10, Time = 0.01):
+def startWalk(FWD = 5, Lift = 30, Steps = 10, Time = 0.01, Lean = 20, LeanTime = 0.5):
     # Front Left Leg move forward.
-    legs.moveRobotRPoR4D(0, FWD*3, Lift, 0, -FWD, 0, 0, -FWD, 0, 0, -FWD, 0, Steps, Time)
-    legs.moveRobotRPoR4D(0, FWD*3, -Lift, 0, -FWD, 0, 0, -FWD, 0, 0, -FWD, 0, Steps, Time)
+    legs.TargetBalanceX = Lean
+    legs.TargetBalanceY = -Lean
+    sleep(LeanTime)
+    legs.moveRobotRPoR4D(0, FWD, -Lift, 0, 0, 0, 0, 0, 0, 0, 0, 0, Steps, Time)
+    legs.moveRobotRPoR4D(0, FWD, Lift, 0, 0, 0, 0, 0, 0, 0, 0, 0, Steps, Time)
     # Front Right Leg move forward.
-    legs.moveRobotRPoR4D(0, -FWD, 0, 0, FWD*3, Lift, 0, -FWD, 0, 0, -FWD, 0, Steps, Time)
-    legs.moveRobotRPoR4D(0, -FWD, 0, 0, FWD*3, -Lift, 0, -FWD, 0, 0, -FWD, 0, Steps, Time)
+    legs.TargetBalanceX = -Lean
+    legs.TargetBalanceY = -Lean
+    sleep(LeanTime)
+    legs.moveRobotRPoR4D(0, 0, 0, 0, FWD, -Lift, 0, 0, 0, 0, 0, 0, Steps, Time)
+    legs.moveRobotRPoR4D(0, 0, 0, 0, FWD, Lift, 0, 0, 0, 0, 0, 0, Steps, Time)
     # Back Left Leg move forward.
-    legs.moveRobotRPoR4D(0, -FWD, 0, 0, -FWD, 0, 0, FWD*3, Lift, 0, -FWD, 0, Steps, Time)
-    legs.moveRobotRPoR4D(0, -FWD, 0, 0, -FWD, 0, 0, FWD*3, -Lift, 0, -FWD, 0, Steps, Time)
+    legs.TargetBalanceX = Lean
+    legs.TargetBalanceY = Lean
+    sleep(LeanTime)
+    legs.moveRobotRPoR4D(0, 0, 0, 0, 0, 0, 0, FWD, -Lift, 0, 0, 0, Steps, Time)
+    legs.moveRobotRPoR4D(0, 0, 0, 0, 0, 0, 0, FWD, Lift, 0, 0, 0, Steps, Time)
     # Back Right Leg move forward.
-    legs.moveRobotRPoR4D(0, -FWD, 0, 0, -FWD, 0, 0, -FWD, 0, 0, FWD*3, Lift, Steps, Time)
-    legs.moveRobotRPoR4D(0, -FWD, 0, 0, -FWD, 0, 0, -FWD, 0, 0, FWD*3, -Lift, Steps, Time)
-    #moveRobotICoMPoR4D(FLX, FLY, FLZ, FRX, FRY, FRZ, BLX, BLY, BLZ, BRX, BRY, BRZ, Steps, Time)
+    legs.TargetBalanceX = -Lean
+    legs.TargetBalanceY = Lean
+    sleep(LeanTime)
+    legs.moveRobotRPoR4D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, FWD, -Lift, Steps, Time)
+    legs.moveRobotRPoR4D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, FWD, Lift, Steps, Time)
