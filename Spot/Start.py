@@ -106,8 +106,8 @@ if runtime.isStarted("MPU6050A"):
 # give the error amount. Subtract that from the currect set     #
 # values and restart the robot.                                 #
 #################################################################
-legs.setRollOffset(0.066961)
-legs.setPitchOffset(0.079107)
+legs.setRollOffset(0.0931409)
+legs.setPitchOffset(0.044200415)
 
 #################################################################
 # While from the outside the robot might look very symetrical,  #
