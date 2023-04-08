@@ -84,7 +84,13 @@ if runtime.isStarted("MPU6050A"):
     MPU6050A.setYGyroOffset(0)
     MPU6050A.setZGyroOffset(0)
     def updateOrientation(data):
-        legs.updateIMU(data.pitch, data.roll)
+        Xaxis = MPU6050A.getAccelerationX() / 16384.0
+        Yaxis = MPU6050A.getAccelerationY() / 16384.0
+        Zaxis = MPU6050A.getAccelerationZ() / 16384.0
+        acc_x_angle = (math.atan(Xaxis / math.sqrt((Yaxis * Yaxis) + (Zaxis * Zaxis)))) + 0.066961
+        acc_y_angle = (math.atan(Yaxis / math.sqrt((Xaxis * Xaxis) + (Zaxis * Zaxis)))) + 0.079107
+        legs.updateIMU(acc_y_angle, acc_x_angle)
+        #legs.updateIMU(data.pitch, data.roll)
     python.subscribe('MPU6050A', 'publishOrientation', 'python', 'updateOrientation')
 
 #################################################################
