@@ -3,6 +3,6 @@ address: '0x68'
 autoStartPeers: true
 bus: '1'
 controller: raspi
-sampleRate: 3.0
+sampleRate: 10.0
 start: true
 type: Mpu6050
