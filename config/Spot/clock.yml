@@ -1,5 +1,4 @@
 !!org.myrobotlab.service.config.ClockConfig
-autoStartPeers: true
 interval: 1000
 running: true
 type: Clock

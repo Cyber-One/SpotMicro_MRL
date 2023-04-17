@@ -1,5 +1,4 @@
 !!org.myrobotlab.service.config.Adafruit16CServoDriverConfig
-autoStartPeers: true
 controller: raspi
 deviceAddress: '0x41'
 deviceBus: '1'

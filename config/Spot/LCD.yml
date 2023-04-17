@@ -1,5 +1,4 @@
 !!org.myrobotlab.service.config.Hd44780Config
-autoStartPeers: true
 backlight: true
 controller: LCDPCF8574
 delay: null

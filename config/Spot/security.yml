@@ -1,3 +1,2 @@
 !!org.myrobotlab.service.config.ServiceConfig
-autoStartPeers: true
 type: Security

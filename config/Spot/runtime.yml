@@ -1,5 +1,4 @@
 !!org.myrobotlab.service.config.RuntimeConfig
-autoStartPeers: true
 enableCli: true
 locale: en-AU
 logLevel: null
