@@ -19,16 +19,6 @@
 print ("Starting the various Gestures Services")
 
 #################################################################
-# The following variable will help with the movement controls.  #
-# 0 = Rest Position.
-# 1 = Standing Position.
-# 2 = Sitting Position.
-# 3 = Stand Tall.
-# 4 = Crouch.
-#################################################################
-gestureStatus = 0
-
-#################################################################
 # This command returns all the servos to the starting rest      #
 # position and makes sure all the servos are updated.           #
 # Handy when calibrating.                                       #

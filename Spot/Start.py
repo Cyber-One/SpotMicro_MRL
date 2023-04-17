@@ -31,6 +31,30 @@ RuningFolder="data/Spot"
 RobotsName = "Spot"
 
 #################################################################
+# The following variable will help with the movement controls.  #
+# We store the current state here to it can be accessed all over#
+# 0 = Rest Position.                                            #
+# 1 = Standing Position.                                        #
+# 2 = Sitting Position.                                         #
+# 3 = Stand Tall.                                               #
+# 4 = Crouch.                                                   #
+#################################################################
+gestureStatus = 0
+def updateGestureName():
+    if gestureStatus == 0:
+        GestureName = "Rest   "
+    elif gestureStatus == 1:
+        GestureName = "Stand  "
+    elif gestureStatus == 2:
+        GestureName = "Sitting"
+    elif gestureStatus == 3:
+        GestureName = "Tall   "
+    elif gestureStatus == 4:
+        GestureName = "Crouch "
+    else:
+        GestureName = "Unknown"
+
+#################################################################
 # This next line is to correct a PWM Frequency error in my      #
 # PCA9685. This error may not effect you.                       #
 # The only true way to know is to measure the PWM signal        #
@@ -50,7 +74,8 @@ Back.setPWMFreq(1, 54)
 # fault is with the network interface.                          #
 #################################################################
 def LCD_DisplayTime(data):
-    LCD.display(RobotsName, 0)
+    updateGestureName()
+    LCD.display(RobotsName + GestureName, 0)
     format = "%I:%M:%S %p"
     LCD.display(time.strftime(format), 1)
     
