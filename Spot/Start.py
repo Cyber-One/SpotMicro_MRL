@@ -39,9 +39,11 @@ RobotsName = "Spot"
 # 3 = Stand Tall.                                               #
 # 4 = Crouch.                                                   #
 #################################################################
-gestureStatus = 0
+gestureStatus = 100
+GestureName = "Starting....."
 def updateGestureName():
     global gestureStatus
+    global GestureName
     if gestureStatus == 0:
         GestureName = "Rest   "
     elif gestureStatus == 1:
@@ -52,6 +54,8 @@ def updateGestureName():
         GestureName = "Tall   "
     elif gestureStatus == 4:
         GestureName = "Crouch "
+    elif gestureStatus == 100:
+        GestureName = "Starting..."
     else:
         GestureName = "Unknown"
 
@@ -75,9 +79,9 @@ Back.setPWMFreq(1, 54)
 # fault is with the network interface.                          #
 #################################################################
 def LCD_DisplayTime(data):
-    global gestureStatus
+    global GestureName
     updateGestureName()
-    LCD.display(RobotsName + GestureName, 0)
+    LCD.display(RobotsName + " - " + GestureName, 0)
     format = "%I:%M:%S %p"
     LCD.display(time.strftime(format), 1)
     
