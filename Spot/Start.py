@@ -41,6 +41,7 @@ RobotsName = "Spot"
 #################################################################
 gestureStatus = 0
 def updateGestureName():
+    global gestureStatus
     if gestureStatus == 0:
         GestureName = "Rest   "
     elif gestureStatus == 1:
@@ -74,6 +75,7 @@ Back.setPWMFreq(1, 54)
 # fault is with the network interface.                          #
 #################################################################
 def LCD_DisplayTime(data):
+    global gestureStatus
     updateGestureName()
     LCD.display(RobotsName + GestureName, 0)
     format = "%I:%M:%S %p"
