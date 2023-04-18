@@ -160,3 +160,9 @@ legs.setComXYZOffset(0,-15, 0)
 # robot appear to be alive.                                     #
 #################################################################
 execfile(RuningFolder+'/Gestures.py')
+
+#################################################################
+# Now that we have the robot all started up, lets set the robot #
+# into a know configuration.                                    #
+#################################################################
+rest(10, 0.03)
